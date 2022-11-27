@@ -100,7 +100,7 @@
 		1BC52EC623EDE7DF00B5B818 /* ExpenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC52EC523EDE7DF00B5B818 /* ExpenseView.swift */; };
 		1BC52EC823EDE9F800B5B818 /* NewIncomeSourceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC52EC723EDE9F800B5B818 /* NewIncomeSourceView.swift */; };
 		1BC52ECA23EDEA0500B5B818 /* NewExpenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC52EC923EDEA0500B5B818 /* NewExpenseView.swift */; };
-		1BD45D3427F25ED8008E07A9 /* My_Assets_iOS_App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD45D3327F25ED8008E07A9 /* My_Assets_iOS_App.swift */; };
+		1BD45D3427F25ED8008E07A9 /* MyAssetsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD45D3327F25ED8008E07A9 /* MyAssetsApp.swift */; };
 		1BD76D9F277CC2B200E499A8 /* Debt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD76D9E277CC2B200E499A8 /* Debt.swift */; };
 		1BE6303F23EE3C7700F1EB93 /* TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE6303E23EE3C7700F1EB93 /* TimeInterval.swift */; };
 /* End PBXBuildFile section */
@@ -162,7 +162,7 @@
 		1BC52EC523EDE7DF00B5B818 /* ExpenseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseView.swift; sourceTree = "<group>"; };
 		1BC52EC723EDE9F800B5B818 /* NewIncomeSourceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewIncomeSourceView.swift; sourceTree = "<group>"; };
 		1BC52EC923EDEA0500B5B818 /* NewExpenseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewExpenseView.swift; sourceTree = "<group>"; };
-		1BD45D3327F25ED8008E07A9 /* My_Assets_iOS_App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = My_Assets_iOS_App.swift; sourceTree = "<group>"; };
+		1BD45D3327F25ED8008E07A9 /* MyAssetsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyAssetsApp.swift; sourceTree = "<group>"; };
 		1BD76D9E277CC2B200E499A8 /* Debt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Debt.swift; sourceTree = "<group>"; };
 		1BE6303E23EE3C7700F1EB93 /* TimeInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeInterval.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -284,7 +284,7 @@
 			isa = PBXGroup;
 			children = (
 				1BB2F27223EE3B5E00A4478C /* My Assets.entitlements */,
-				1BD45D3327F25ED8008E07A9 /* My_Assets_iOS_App.swift */,
+				1BD45D3327F25ED8008E07A9 /* MyAssetsApp.swift */,
 				1B31BA9F23EC823F00B6E63A /* RootTabView.swift */,
 				1BC0DC2D251B0B5900B51FDD /* DoubleField.swift */,
 				1B31BAB923ECFE6300B6E63A /* OptionalDoubleField.swift */,
@@ -508,7 +508,7 @@
 				1BA2CC382729ECE2009F3D40 /* Symbol.swift in Sources */,
 				1BA2CC30272900C7009F3D40 /* Period.swift in Sources */,
 				1BC0DC2A251B063F00B51FDD /* StockView.swift in Sources */,
-				1BD45D3427F25ED8008E07A9 /* My_Assets_iOS_App.swift in Sources */,
+				1BD45D3427F25ED8008E07A9 /* MyAssetsApp.swift in Sources */,
 				1B085B2423EDC95B0008724A /* IncomeView.swift in Sources */,
 				1B31BAA023EC823F00B6E63A /* RootTabView.swift in Sources */,
 				1B3F74852721058900E53FF0 /* PieChart.swift in Sources */,
@@ -766,6 +766,7 @@
 				DEVELOPMENT_TEAM = VA3SY54YU8;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "My Assets/Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -792,6 +793,7 @@
 				DEVELOPMENT_TEAM = VA3SY54YU8;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "My Assets/Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

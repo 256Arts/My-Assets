@@ -77,7 +77,7 @@ final class InsightsGenerator {
         return netWorthPercentile(householdNetWorth: householdNetWorth, at: .now, locale: .current)
     }
     func netWorthPercentile(householdNetWorth: Double, at date: Date, locale: Locale) -> Double? {
-        guard let conversionRate = WorldFinanceStats.shared.conversionRates[locale.currencyCode ?? ""] else { return nil }
+        guard let conversionRate = WorldFinanceStats.shared.conversionRates[locale.currency?.identifier ?? ""] else { return nil }
         
         let myNetWorth = householdNetWorth * conversionRate
         var myBracket = WorldFinanceStats.Bracket(percentile: 0.0, money: myNetWorth)
@@ -144,9 +144,9 @@ final class InsightsGenerator {
         guard let netWorthPercentile = netWorthPercentile() else { return nil }
         
         if netWorthPercentile < 0.5 {
-            return "bottom \(percentFormatter.string(from: NSNumber(value: netWorthPercentile))!)"
+            return "Bottom \(percentFormatter.string(from: NSNumber(value: netWorthPercentile))!)"
         } else {
-            return "top \(percentFormatter.string(from: NSNumber(value: 1 - netWorthPercentile))!)"
+            return "Top \(percentFormatter.string(from: NSNumber(value: 1 - netWorthPercentile))!)"
         }
     }
     

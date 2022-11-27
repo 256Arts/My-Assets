@@ -18,7 +18,7 @@ struct ExpensesView: View {
     }
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
                 Section {
                     ForEach(data.expenses.filter({ $0.fromDebt })) { expense in
@@ -29,8 +29,8 @@ struct ExpensesView: View {
                             Text(currencyFormatter.string(from: NSNumber(value: expense.monthlyCost))!)
                         }
                     }
-                    ForEach($data.nonDebtExpenses) { $expense in
-                        NavigationLink(destination: ExpenseView(expense: $expense)) {
+                    ForEach(data.nonDebtExpenses) { expense in
+                        NavigationLink(value: expense) {
                             VStack(spacing: 8) {
                                 HStack {
                                     SymbolImage(symbol: expense.symbol)
@@ -83,10 +83,14 @@ struct ExpensesView: View {
                     }
                 }
             }
+            .navigationDestination(for: Expense.self) { expense in
+                ExpenseView(expense: expense)
+            }
         }
-        .navigationViewStyle(StackNavigationViewStyle())
         .sheet(isPresented: self.$showingDetail) {
-            NewExpenseView(parentExpense: .constant(nil))
+            NavigationStack {
+                NewExpenseView(parentExpense: nil)
+            }
         }
     }
     

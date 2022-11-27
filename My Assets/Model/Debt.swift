@@ -18,7 +18,7 @@ struct Debt: Comparable, Identifiable, Codable {
     var symbol: Symbol
     var colorHex: String
     var id: String {
-        name
+        name + symbol.rawValue + colorHex + String(annualInterestFraction)
     }
     var annualInterestFraction: Double
     var monthlyPayment: Double

@@ -1,5 +1,5 @@
 //
-//  My_Assets_iOS_App.swift
+//  MyAssetsApp.swift
 //  My Assets
 //
 //  Created by Jayden Irwin on 2022-03-28.
@@ -11,7 +11,7 @@ import SwiftUI
 let appWhatsNewVersion = 1
 
 @main
-struct My_Assets_iOS_App: App {
+struct MyAssetsApp: App {
     
     init() {
         UserDefaults.standard.register()

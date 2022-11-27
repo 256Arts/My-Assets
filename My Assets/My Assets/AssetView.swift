@@ -48,7 +48,8 @@ struct AssetView: View {
                 SymbolPicker(selected: $asset.symbol)
             }
         }
-        .navigationTitle(nameCopy)
+        .navigationTitle("Asset")
+        .navigationBarTitleDisplayMode(.inline)
         .onDisappear {
             asset.name = nameCopy
             data.nonStockAssets.sort(by: >)

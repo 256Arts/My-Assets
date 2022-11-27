@@ -21,7 +21,7 @@ struct PieChart: View {
         ZStack {
             ForEach(data.indices, id: \.self) { index in
                 PieSlice(startAngle: trimLocations(index: index).start, endAngle: trimLocations(index: index).end)
-                    .fill(data[index].color)
+                    .fill(data[index].color.gradient)
             }
         }
     }

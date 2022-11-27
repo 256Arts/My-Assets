@@ -20,55 +20,52 @@ struct NewDebtView: View {
     @State var monthlyPayment: Double?
     
     var body: some View {
-        NavigationView {
-            Form {
-                Section {
-                    TextField("Name", text: $debt.name)
-                        .textInputAutocapitalization(.words)
-                    OptionalDoubleField("Value ($)", value: $value, formatter: currencyFormatter) { inFocus in
-                        guard let value = value else { return }
-                        if let interest = interest {
-                            debt.annualInterestFraction = interest
-                            debt.currentValue = value
-                        }
-                    }
-                    OptionalDoubleField("Annual Interest (%)", value: $interest, formatter: percentFormatter, onEditingChanged: { inFocus in
-                        guard let interest = interest, let value = value else { return }
+        Form {
+            Section {
+                TextField("Name", text: $debt.name)
+                    .textInputAutocapitalization(.words)
+                OptionalDoubleField("Value ($)", value: $value, formatter: currencyFormatter) { inFocus in
+                    guard let value = value else { return }
+                    if let interest = interest {
                         debt.annualInterestFraction = interest
                         debt.currentValue = value
-                    })
-                    OptionalDoubleField("Monthly Payment ($)", value: $monthlyPayment, formatter: currencyFormatter) { inFocus in
-                        guard let monthlyPayment = monthlyPayment else { return }
-                        debt.monthlyPayment = monthlyPayment
                     }
                 }
-                Section {
-                    SymbolPicker(selected: $debt.symbol)
+                OptionalDoubleField("Annual Interest (%)", value: $interest, formatter: percentFormatter, onEditingChanged: { inFocus in
+                    guard let interest = interest, let value = value else { return }
+                    debt.annualInterestFraction = interest
+                    debt.currentValue = value
+                })
+                OptionalDoubleField("Monthly Payment ($)", value: $monthlyPayment, formatter: currencyFormatter) { inFocus in
+                    guard let monthlyPayment = monthlyPayment else { return }
+                    debt.monthlyPayment = monthlyPayment
                 }
             }
-            .navigationTitle("Add Debt")
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
-                        dismiss()
-                    }
-                }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") {
-                        if let value = self.value {
-                            let interest = self.interest ?? 0.0
-                            self.debt.annualInterestFraction = interest
-                            self.debt.currentValue = value
-                            self.data.debts.append(self.debt)
-                            self.data.debts.sort(by: { $0 > $1 })
-                            self.dismiss()
-                        }
-                    }
-                    .disabled(value == nil)
-                }
+            Section {
+                SymbolPicker(selected: $debt.symbol)
             }
         }
-        .navigationViewStyle(StackNavigationViewStyle())
+        .navigationTitle("Add Debt")
+        .toolbar {
+            ToolbarItem(placement: .cancellationAction) {
+                Button("Cancel") {
+                    dismiss()
+                }
+            }
+            ToolbarItem(placement: .confirmationAction) {
+                Button("Done") {
+                    if let value = self.value {
+                        let interest = self.interest ?? 0.0
+                        self.debt.annualInterestFraction = interest
+                        self.debt.currentValue = value
+                        self.data.debts.append(self.debt)
+                        self.data.debts.sort(by: { $0 > $1 })
+                        self.dismiss()
+                    }
+                }
+                .disabled(value == nil)
+            }
+        }
         .onChange(of: debt.symbol) { newValue in
             if debt.name.isEmpty {
                 debt.name = newValue.suggestedTitle

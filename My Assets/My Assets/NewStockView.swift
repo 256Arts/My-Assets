@@ -18,28 +18,25 @@ struct NewStockView: View {
     @State var stockShares = 0
     
     var body: some View {
-        NavigationView {
-            Form {
-                TextField("Symbol", text: $stockSymbol)
-                    .autocapitalization(.allCharacters)
-                    .disableAutocorrection(true)
-                TextField("Number Of Shares", value: $stockShares, formatter: NumberFormatter())
-            }
-                .navigationTitle("Add Stock")
-                .navigationBarItems(leading: Button(action: {
-                    self.dismiss()
-                }, label: {
-                    Text("Cancel")
-                }), trailing: Button(action: {
-                    let stock = Stock(symbol: self.stockSymbol, shares: self.stockShares)
-                    stock.fetchPrices()
-                    self.data.stocks.append(stock)
-                    self.dismiss()
-                }, label: {
-                    Text("Done")
-                }))
+        Form {
+            TextField("Symbol", text: $stockSymbol)
+                .autocapitalization(.allCharacters)
+                .disableAutocorrection(true)
+            TextField("Number Of Shares", value: $stockShares, formatter: NumberFormatter())
         }
-            .navigationViewStyle(StackNavigationViewStyle())
+            .navigationTitle("Add Stock")
+            .navigationBarItems(leading: Button(action: {
+                self.dismiss()
+            }, label: {
+                Text("Cancel")
+            }), trailing: Button(action: {
+                let stock = Stock(symbol: self.stockSymbol, shares: self.stockShares)
+                stock.fetchPrices()
+                self.data.stocks.append(stock)
+                self.dismiss()
+            }, label: {
+                Text("Done")
+            }))
     }
 }
 

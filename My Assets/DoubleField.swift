@@ -70,10 +70,16 @@ struct DoubleField: View {
                     // We don't have a usable `textValue` yet -- bail out.
                     return
                 }
-                // This is the only place we update `value`.
-                self.value = self.formatter.number(from: $0)?.doubleValue ?? 0.0
+                // This is the only place we update `value`; `formatter.number(from:)` will not work with "$"
+                if let val = self.formatter.number(from: $0)?.doubleValue {
+                    self.value = val
+                } else if formatter.numberStyle == .percent, let val = try? Double($0, format: .percent) {
+                    self.value = val
+                } else if let val = try? Double($0, format: .number) {
+                    self.value = val
+                }
             }
-            .onAppear(){ // Otherwise textfield is empty when view appears
+            .onAppear { // Otherwise textfield is empty when view appears
                 self.hasInitialTextValue = true
                 // Any `textValue` from this point on is considered valid and
                 // should be synced with `value`.

@@ -40,7 +40,7 @@ struct Asset: Comparable, Identifiable, Codable {
     var symbol: Symbol
     var colorHex: String
     var id: String {
-        name
+        name + symbol.rawValue + colorHex + compoundFrequency.rawValue
     }
     var isLiquid: Bool
     var compoundFrequency: CompoundFrequency

@@ -28,7 +28,7 @@ struct IncomeView: View {
     }
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
                 Section {
                     HStack {
@@ -131,9 +131,10 @@ struct IncomeView: View {
                 }
             }
         }
-        .navigationViewStyle(StackNavigationViewStyle())
         .sheet(isPresented: self.$showingDetail) {
-            NewIncomeSourceView()
+            NavigationStack {
+                NewIncomeSourceView()
+            }
         }
     }
     

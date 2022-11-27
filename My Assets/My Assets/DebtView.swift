@@ -35,7 +35,8 @@ struct DebtView: View {
                 SymbolPicker(selected: $debt.symbol)
             }
         }
-        .navigationTitle(nameCopy)
+        .navigationTitle("Debt")
+        .navigationBarTitleDisplayMode(.inline)
         .onDisappear {
             debt.name = nameCopy
             data.debts.sort(by: >)

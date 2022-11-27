@@ -35,7 +35,8 @@ struct IncomeSourceView: View {
                 SymbolPicker(selected: $income.symbol)
             }
         }
-        .navigationTitle(nameCopy)
+        .navigationTitle("Income Source")
+        .navigationBarTitleDisplayMode(.inline)
         .onDisappear {
             income.name = nameCopy
             data.nonAssetIncome.sort(by: >)

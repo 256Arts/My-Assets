@@ -16,7 +16,8 @@ struct StockView: View {
         Form {
             TextField("Number Of Shares", value: $stock.numberOfShares, formatter: NumberFormatter())
         }
-        .navigationTitle(stock.symbol)
+        .navigationTitle("Stock")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 

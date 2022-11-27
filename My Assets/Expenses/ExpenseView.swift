@@ -12,15 +12,15 @@ struct ExpenseView: View {
     
     @EnvironmentObject var data: FinancialData
     
-    @Binding var expense: Expense
+    @ObservedObject var expense: Expense
     
     // Bug workaround: Editing name causes view to pop
     @State var nameCopy: String
     @State var showingSubexpense = false
     
-    init(expense: Binding<Expense>) {
-        _expense = expense
-        _nameCopy = State(initialValue: expense.wrappedValue.name)
+    init(expense: Expense) {
+        self.expense = expense
+        _nameCopy = State(initialValue: expense.name)
     }
     
     var body: some View {
@@ -36,10 +36,8 @@ struct ExpenseView: View {
                 } label: {
                     Label("Add", systemImage: "plus.circle")
                 }
-                ForEach($expense.children) { $child in
-                    NavigationLink {
-                        ExpenseView(expense: $child)
-                    } label: {
+                ForEach(expense.children) { child in
+                    NavigationLink(value: child) {
                         HStack {
                             SymbolImage(symbol: child.symbol)
                             Text(child.name)
@@ -56,15 +54,12 @@ struct ExpenseView: View {
                 SymbolPicker(selected: $expense.symbol)
             }
         }
-        .navigationTitle(nameCopy)
+        .navigationTitle("Expense")
+        .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: self.$showingSubexpense) {
-            NewExpenseView(parentExpense: Binding(get: {
-                expense
-            }, set: { newValue in
-                if let newValue = newValue {
-                    expense = newValue
-                }
-            }))
+            NavigationStack {
+                NewExpenseView(parentExpense: expense)
+            }
         }
         .onDisappear {
             expense.name = nameCopy
@@ -82,6 +77,6 @@ struct ExpenseView: View {
 
 struct ExpenseView_Previews: PreviewProvider {
     static var previews: some View {
-        ExpenseView(expense: .constant(Expense(name: "", symbol: Symbol.defaultSymbol, monthlyCost: 9.99)))
+        ExpenseView(expense: Expense(name: "", symbol: Symbol.defaultSymbol, monthlyCost: 9.99))
     }
 }

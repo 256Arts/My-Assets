@@ -28,6 +28,7 @@ struct MyAssetsView: View {
     @AppStorage(UserDefaults.Key.amountMarqueeShowAsCombinedValue) var showAsCombinedValue = false
     
     @EnvironmentObject var data: FinancialData
+    @Environment(\.horizontalSizeClass) private var hSizeClass
 
     @State var chartDataSource: ChartDataSource = .balance
     @State var showingSettings = false
@@ -54,6 +55,23 @@ struct MyAssetsView: View {
             return ValueAtDate(value: value, date: $0)
         }
     }
+    var chartInflationData: [ValueAtDate] {
+        let startingValue: Double
+        switch chartDataSource {
+        case .netAssets:
+            startingValue = data.netAssetsValue(at: .now)
+        case .balance:
+            startingValue = data.balance(at: .now)
+        case .netWorth:
+            startingValue = data.netWorth(at: .now)
+        }
+        let nowThrough5Years = (0...5)
+        return nowThrough5Years.map {
+            let value = startingValue * pow(1 + WorldFinanceStats.shared.averageAnnualUSInflation, Double($0))
+            let date = Date.now + TimeInterval($0) * .year
+            return ValueAtDate(value: value, date: date)
+        }
+    }
     var chartYoYString: String {
         let fraction: Double = {
             switch chartDataSource {
@@ -76,7 +94,7 @@ struct MyAssetsView: View {
     }
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
                 Section {
                     TimelineView(.periodic(from: Date(), by: 1.0)) { context in
@@ -144,16 +162,25 @@ struct MyAssetsView: View {
                     }
                     .pickerStyle(.segmented)
                     
-                    Chart(chartData) {
-                        LineMark(x: .value("Date", $0.date), y: .value("Value", $0.value))
-                            .interpolationMethod(.cardinal)
-                            .foregroundStyle(Color.green)
+                    Chart {
+                        ForEach(chartData) { datum in
+                            LineMark(x: .value("Date", datum.date), y: .value("Value", datum.value), series: .value("Data", chartDataSource.rawValue))
+                                .interpolationMethod(.cardinal)
+                                .foregroundStyle(Color.green)
+                        }
+                        ForEach(chartInflationData) { datum in
+                            LineMark(x: .value("Date", datum.date), y: .value("Value", datum.value), series: .value("Data", "Inflation"))
+                                .interpolationMethod(.cardinal)
+                                .foregroundStyle(Color.secondary)
+                                .lineStyle(StrokeStyle(lineWidth: 2, lineCap: .round, dash: [0.01, 4]))
+                        }
                     }
                     .frame(height: 200)
                     .overlay(alignment: .topLeading) {
                         Text(chartYoYString)
                             .font(.headline)
                     }
+                    .padding(.top, 4)
                     
                     ForEach(Array(insights.generate().enumerated()), id: \.0) { (_, string) in
                         Text(string)
@@ -176,13 +203,19 @@ struct MyAssetsView: View {
                     }
                     
                     if let netWorthPercentile = insights.netWorthPercentile() {
-                        Gauge(value: netWorthPercentile) {
-                            Text("Net Worth Percentile")
-                        } currentValueLabel: {
-                            Text("Net Worth Percentile: \(percentFormatter.string(from: NSNumber(value: netWorthPercentile))!)")
+                        HStack {
+                            Text("Net Worth:")
+                                .bold()
+                                .accessibilityHidden(true)
+                            Spacer()
+                            Gauge(value: netWorthPercentile) {
+                                Text("Net Worth Percentile")
+                            } currentValueLabel: {
+                                Text(insights.netWorthPercentileString ?? "")
+                            }
+                            .gaugeStyle(.accessoryLinear)
+                            .tint(LinearGradient(colors: [.red, .gray, .green], startPoint: .leading, endPoint: .trailing))
                         }
-                        .gaugeStyle(.accessoryLinear)
-                        .tint(LinearGradient(colors: [.red, .gray, .green], startPoint: .leading, endPoint: .trailing))
                     }
                 } header: {
                     Text("My Net Worth")
@@ -217,15 +250,20 @@ struct MyAssetsView: View {
                 }
             }
         }
-        .navigationViewStyle(.stack)
         .sheet(isPresented: self.$showingSettings) {
-            SettingsView()
+            NavigationStack {
+                SettingsView()
+            }
         }
         .sheet(isPresented: self.$showingNewAsset) {
-            NewAssetView()
+            NavigationStack {
+                NewAssetView()
+            }
         }
         .sheet(isPresented: self.$showingNewDebt) {
-            NewDebtView()
+            NavigationStack {
+                NewDebtView()
+            }
         }
     }
     

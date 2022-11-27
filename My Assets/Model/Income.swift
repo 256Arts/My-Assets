@@ -18,7 +18,7 @@ struct Income: Comparable, Identifiable, Codable {
     var symbol: Symbol
     var colorHex: String
     var id: String {
-        name
+        name + symbol.rawValue + colorHex + String(monthlyEarnings)
     }
     var isLiquid: Bool
     var monthlyEarnings: Double

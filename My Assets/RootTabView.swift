@@ -57,7 +57,7 @@ struct RootTabView: View {
                     return .red
                 }
             }())
-            .onAppear() {
+            .onAppear {
                 if whatsNewVersion < appWhatsNewVersion {
                     showingWelcome = true
                 }
@@ -73,6 +73,7 @@ struct RootTabView: View {
         } else {
             ProgressView()
                 .progressViewStyle(.circular)
+                .controlSize(.large)
         }
     }
 }

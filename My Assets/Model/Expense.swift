@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Expense: ObservableObject, Comparable, Identifiable, Codable {
+class Expense: ObservableObject, Hashable, Comparable, Identifiable, Codable {
     
     static func == (lhs: Expense, rhs: Expense) -> Bool {
         lhs.id == rhs.id
@@ -22,7 +22,7 @@ class Expense: ObservableObject, Comparable, Identifiable, Codable {
     @Published var symbol: Symbol
     @Published var colorHex: String
     var id: String {
-        name + symbol.rawValue
+        name + symbol.rawValue + colorHex + String(baseMonthlyCost)
     }
     @Published var baseMonthlyCost: Double
     var monthlyCost: Double {
@@ -47,6 +47,10 @@ class Expense: ObservableObject, Comparable, Identifiable, Codable {
         baseMonthlyCost = debt.monthlyPayment
         fromDebt = true
         children = []
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
     
     enum CodingKeys: String, CodingKey {
