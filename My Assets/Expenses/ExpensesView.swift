@@ -22,31 +22,16 @@ struct ExpensesView: View {
             List {
                 Section {
                     ForEach(data.expenses.filter({ $0.fromDebt })) { expense in
-                        HStack {
-                            SymbolImage(symbol: expense.symbol)
-                            Text(expense.name)
-                            Spacer()
-                            Text(currencyFormatter.string(from: NSNumber(value: expense.monthlyCost))!)
-                        }
+                        AmountRow(symbol: expense.symbol, label: expense.name, amount: expense.monthlyCost)
                     }
                     ForEach(data.nonDebtExpenses) { expense in
                         NavigationLink(value: expense) {
                             VStack(spacing: 8) {
-                                HStack {
-                                    SymbolImage(symbol: expense.symbol)
-                                    Text(expense.name)
-                                    Spacer()
-                                    Text(currencyFormatter.string(from: NSNumber(value: expense.monthlyCost))!)
-                                }
+                                AmountRow(symbol: expense.symbol, label: expense.name, amount: expense.monthlyCost)
                                 ForEach(expense.children) { child in
-                                    HStack {
-                                        SymbolImage(symbol: child.symbol)
-                                        Text(child.name)
-                                        Spacer()
-                                        Text(currencyFormatter.string(from: NSNumber(value: child.monthlyCost))!)
-                                    }
-                                    .foregroundColor(.secondary)
-                                    .padding(.leading, 32)
+                                    AmountRow(symbol: child.symbol, label: child.name, amount: child.monthlyCost)
+                                        .foregroundColor(.secondary)
+                                        .padding(.leading, 32)
                                 }
                             }
                         }

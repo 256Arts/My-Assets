@@ -49,7 +49,7 @@ struct NewIncomeSourceView: View {
             }
         }
         .navigationTitle(income.name)
-        .onChange(of: income.symbol) { newValue in
+        .onChange(of: income.symbol) { _, newValue in
             if income.name.isEmpty {
                 income.name = newValue.suggestedTitle
             }

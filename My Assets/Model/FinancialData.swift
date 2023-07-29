@@ -8,11 +8,6 @@
 
 import SwiftUI
 
-var fileURL: URL {
-    let directoryURL = FileManager.default.url(forUbiquityContainerIdentifier: nil) ?? FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-    return directoryURL.appendingPathComponent("Financial Data", isDirectory: false).appendingPathExtension("json")
-}
-
 final class FinancialData: Codable, ObservableObject {
     
     static let newestFileVersion = 1
@@ -65,11 +60,6 @@ final class FinancialData: Codable, ObservableObject {
     var totalExpenses: Double {
         expenses.reduce(0, { $0 + $1.monthlyCost })
     }
-    
-    func netAssetsValue(at date: Date) -> Double {
-        assets.reduce(0, { $0 + $1.currentValue(at: date) }) +
-        debts.reduce(0, { $0 + $1.currentValue(at: date) })
-    }
 
     func balance(at date: Date) -> Double {
         assets.filter({ $0.isLiquid }).reduce(0, { $0 + $1.currentValue(at: date) })
@@ -115,7 +105,7 @@ final class FinancialData: Codable, ObservableObject {
     func save() {
         do {
             let encoded = try JSONEncoder().encode(self)
-            try encoded.write(to: fileURL, options: .atomic)
+            try encoded.write(to: CloudController.shared.fileURL, options: .atomic)
         } catch {
             print("Failed to save")
         }

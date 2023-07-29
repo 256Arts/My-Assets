@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 55;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -43,10 +43,12 @@
 		1B3823DF280226510037BAFE /* UserType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3823DE280226510037BAFE /* UserType.swift */; };
 		1B3823E0280226510037BAFE /* UserType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3823DE280226510037BAFE /* UserType.swift */; };
 		1B39058F27BCBC5B005599AB /* AmountMarquee.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B39058E27BCBC5B005599AB /* AmountMarquee.swift */; };
-		1B3F74852721058900E53FF0 /* PieChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3F74842721058900E53FF0 /* PieChart.swift */; };
-		1B3F748727210C8E00E53FF0 /* PieSlice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3F748627210C8E00E53FF0 /* PieSlice.swift */; };
 		1B3F748A2722041D00E53FF0 /* WelcomeKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1B3F74892722041D00E53FF0 /* WelcomeKit */; };
 		1B3F748C2722072400E53FF0 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3F748B2722072400E53FF0 /* UserDefaults.swift */; };
+		1B520E862A749BD300DBA34A /* AmountRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B520E852A749BD300DBA34A /* AmountRow.swift */; };
+		1B520E872A749BD300DBA34A /* AmountRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B520E852A749BD300DBA34A /* AmountRow.swift */; };
+		1B520E882A749BD300DBA34A /* AmountRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B520E852A749BD300DBA34A /* AmountRow.swift */; };
+		1B520E8A2A74A53900DBA34A /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B520E892A74A53900DBA34A /* RootTabView.swift */; };
 		1B7A38E827F26A80009FE1B6 /* CloudController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B7A38E727F26A80009FE1B6 /* CloudController.swift */; };
 		1B7A38E927F26A80009FE1B6 /* CloudController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B7A38E727F26A80009FE1B6 /* CloudController.swift */; };
 		1B8C86DD283F289300EEC921 /* JaydenCodeGenerator in Frameworks */ = {isa = PBXBuildFile; productRef = 1B8C86DC283F289300EEC921 /* JaydenCodeGenerator */; };
@@ -56,6 +58,16 @@
 		1BA2CC362729D35F009F3D40 /* DebtView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA2CC352729D35F009F3D40 /* DebtView.swift */; };
 		1BA2CC382729ECE2009F3D40 /* Symbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA2CC372729ECE2009F3D40 /* Symbol.swift */; };
 		1BA2CC3E274D45A0009F3D40 /* SymbolImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA2CC3D274D45A0009F3D40 /* SymbolImage.swift */; };
+		1BAB384E2A7496F600FC9543 /* MyAssetsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BAB384D2A7496F600FC9543 /* MyAssetsView.swift */; };
+		1BAB384F2A74981F00FC9543 /* Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B31BABB23ED17C400B6E63A /* Asset.swift */; };
+		1BAB38502A74982200FC9543 /* Debt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD76D9E277CC2B200E499A8 /* Debt.swift */; };
+		1BAB38512A74982400FC9543 /* Stock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BB2F26C23EE11AE00A4478C /* Stock.swift */; };
+		1BAB38522A74982700FC9543 /* Income.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BB2F26E23EE11C700A4478C /* Income.swift */; };
+		1BAB38532A74982900FC9543 /* Expense.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BB2F27023EE11DE00A4478C /* Expense.swift */; };
+		1BAB38542A74984600FC9543 /* Symbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA2CC372729ECE2009F3D40 /* Symbol.swift */; };
+		1BAB38552A74984900FC9543 /* Period.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA2CC2F272900C7009F3D40 /* Period.swift */; };
+		1BAB38562A74985800FC9543 /* TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE6303E23EE3C7700F1EB93 /* TimeInterval.swift */; };
+		1BAB38572A74989B00FC9543 /* UserType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3823DE280226510037BAFE /* UserType.swift */; };
 		1BB2F26D23EE11AE00A4478C /* Stock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BB2F26C23EE11AE00A4478C /* Stock.swift */; };
 		1BB2F26F23EE11C700A4478C /* Income.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BB2F26E23EE11C700A4478C /* Income.swift */; };
 		1BB2F27123EE11DE00A4478C /* Expense.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BB2F27023EE11DE00A4478C /* Expense.swift */; };
@@ -86,13 +98,11 @@
 		1BB7E59B27F010C400D51084 /* AssetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B31BAB323EC9CAF00B6E63A /* AssetView.swift */; };
 		1BB7E59C27F010C400D51084 /* StockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC0DC29251B063F00B51FDD /* StockView.swift */; };
 		1BB7E59D27F010C400D51084 /* MyAssetsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B31BAAF23EC85C300B6E63A /* MyAssetsView.swift */; };
-		1BB7E59E27F010C800D51084 /* PieSlice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3F748627210C8E00E53FF0 /* PieSlice.swift */; };
 		1BB7E59F27F010C800D51084 /* DoubleField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC0DC2D251B0B5900B51FDD /* DoubleField.swift */; };
 		1BB7E5A027F010C800D51084 /* SymbolPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA2CC3127290294009F3D40 /* SymbolPicker.swift */; };
 		1BB7E5A127F010C800D51084 /* SymbolImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA2CC3D274D45A0009F3D40 /* SymbolImage.swift */; };
 		1BB7E5A427F010C800D51084 /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B31BA9F23EC823F00B6E63A /* RootTabView.swift */; };
 		1BB7E5A527F010C800D51084 /* OptionalDoubleField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B31BAB923ECFE6300B6E63A /* OptionalDoubleField.swift */; };
-		1BB7E5A627F010C800D51084 /* PieChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3F74842721058900E53FF0 /* PieChart.swift */; };
 		1BB7E5AB27F0116700D51084 /* WelcomeKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1BB7E5AA27F0116700D51084 /* WelcomeKit */; };
 		1BC0DC2A251B063F00B51FDD /* StockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC0DC29251B063F00B51FDD /* StockView.swift */; };
 		1BC0DC2E251B0B5900B51FDD /* DoubleField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC0DC2D251B0B5900B51FDD /* DoubleField.swift */; };
@@ -102,6 +112,14 @@
 		1BC52ECA23EDEA0500B5B818 /* NewExpenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC52EC923EDEA0500B5B818 /* NewExpenseView.swift */; };
 		1BD45D3427F25ED8008E07A9 /* MyAssetsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD45D3327F25ED8008E07A9 /* MyAssetsApp.swift */; };
 		1BD76D9F277CC2B200E499A8 /* Debt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD76D9E277CC2B200E499A8 /* Debt.swift */; };
+		1BE162422A74928B00E4907D /* My_Assets__watchOS_App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE162412A74928B00E4907D /* My_Assets__watchOS_App.swift */; };
+		1BE162462A74928D00E4907D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1BE162452A74928D00E4907D /* Assets.xcassets */; };
+		1BE162492A74928D00E4907D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1BE162482A74928D00E4907D /* Preview Assets.xcassets */; };
+		1BE1624C2A74928D00E4907D /* My Assets.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 1BE1623F2A74928B00E4907D /* My Assets.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		1BE162512A74954B00E4907D /* CloudController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B7A38E727F26A80009FE1B6 /* CloudController.swift */; };
+		1BE162522A74954F00E4907D /* FinancialData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B31BAB123EC874D00B6E63A /* FinancialData.swift */; };
+		1BE162532A74955600E4907D /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3F748B2722072400E53FF0 /* UserDefaults.swift */; };
+		1BE162542A74963700E4907D /* SymbolImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA2CC3D274D45A0009F3D40 /* SymbolImage.swift */; };
 		1BE6303F23EE3C7700F1EB93 /* TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE6303E23EE3C7700F1EB93 /* TimeInterval.swift */; };
 /* End PBXBuildFile section */
 
@@ -113,7 +131,28 @@
 			remoteGlobalIDString = 1B31BA9723EC823F00B6E63A;
 			remoteInfo = "My Assets";
 		};
+		1BE1624A2A74928D00E4907D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1B31BA9023EC823F00B6E63A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1BE1623E2A74928B00E4907D;
+			remoteInfo = "My Assets (watchOS) Watch App";
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		1BE1624D2A74928D00E4907D /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				1BE1624C2A74928D00E4907D /* My Assets.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		1B085B2323EDC95B0008724A /* IncomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomeView.swift; sourceTree = "<group>"; };
@@ -137,9 +176,9 @@
 		1B3823DB280225B30037BAFE /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		1B3823DE280226510037BAFE /* UserType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserType.swift; sourceTree = "<group>"; };
 		1B39058E27BCBC5B005599AB /* AmountMarquee.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmountMarquee.swift; sourceTree = "<group>"; };
-		1B3F74842721058900E53FF0 /* PieChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PieChart.swift; sourceTree = "<group>"; };
-		1B3F748627210C8E00E53FF0 /* PieSlice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PieSlice.swift; sourceTree = "<group>"; };
 		1B3F748B2722072400E53FF0 /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
+		1B520E852A749BD300DBA34A /* AmountRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AmountRow.swift; sourceTree = "<group>"; };
+		1B520E892A74A53900DBA34A /* RootTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabView.swift; sourceTree = "<group>"; };
 		1B7A38E727F26A80009FE1B6 /* CloudController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudController.swift; sourceTree = "<group>"; };
 		1BA2CC2F272900C7009F3D40 /* Period.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Period.swift; sourceTree = "<group>"; };
 		1BA2CC3127290294009F3D40 /* SymbolPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbolPicker.swift; sourceTree = "<group>"; };
@@ -147,6 +186,8 @@
 		1BA2CC352729D35F009F3D40 /* DebtView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebtView.swift; sourceTree = "<group>"; };
 		1BA2CC372729ECE2009F3D40 /* Symbol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Symbol.swift; sourceTree = "<group>"; };
 		1BA2CC3D274D45A0009F3D40 /* SymbolImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbolImage.swift; sourceTree = "<group>"; };
+		1BAB384D2A7496F600FC9543 /* MyAssetsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyAssetsView.swift; sourceTree = "<group>"; };
+		1BAB38582A749A1600FC9543 /* My Assets (watchOS) Watch App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "My Assets (watchOS) Watch App.entitlements"; sourceTree = "<group>"; };
 		1BB2F26C23EE11AE00A4478C /* Stock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stock.swift; sourceTree = "<group>"; };
 		1BB2F26E23EE11C700A4478C /* Income.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Income.swift; sourceTree = "<group>"; };
 		1BB2F27023EE11DE00A4478C /* Expense.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Expense.swift; sourceTree = "<group>"; };
@@ -164,6 +205,10 @@
 		1BC52EC923EDEA0500B5B818 /* NewExpenseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewExpenseView.swift; sourceTree = "<group>"; };
 		1BD45D3327F25ED8008E07A9 /* MyAssetsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyAssetsApp.swift; sourceTree = "<group>"; };
 		1BD76D9E277CC2B200E499A8 /* Debt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Debt.swift; sourceTree = "<group>"; };
+		1BE1623F2A74928B00E4907D /* My Assets.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "My Assets.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1BE162412A74928B00E4907D /* My_Assets__watchOS_App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = My_Assets__watchOS_App.swift; sourceTree = "<group>"; };
+		1BE162452A74928D00E4907D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		1BE162482A74928D00E4907D /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		1BE6303E23EE3C7700F1EB93 /* TimeInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeInterval.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -189,6 +234,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				1BB7E5AB27F0116700D51084 /* WelcomeKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1BE1623C2A74928B00E4907D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -265,6 +317,7 @@
 				1B31BA9A23EC823F00B6E63A /* My Assets */,
 				1BB7E57827F00E8900D51084 /* My Assets (macOS) */,
 				1B31939F282DDCDF00AA2038 /* My AssetsTests */,
+				1BE162402A74928B00E4907D /* My Assets (watchOS) Watch App */,
 				1B31BA9923EC823F00B6E63A /* Products */,
 				1BB7E5A927F0116700D51084 /* Frameworks */,
 			);
@@ -276,6 +329,7 @@
 				1B31BA9823EC823F00B6E63A /* My Assets.app */,
 				1BB7E57727F00E8900D51084 /* My Assets (macOS).app */,
 				1B31939E282DDCDF00AA2038 /* My AssetsTests.xctest */,
+				1BE1623F2A74928B00E4907D /* My Assets.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -288,10 +342,9 @@
 				1B31BA9F23EC823F00B6E63A /* RootTabView.swift */,
 				1BC0DC2D251B0B5900B51FDD /* DoubleField.swift */,
 				1B31BAB923ECFE6300B6E63A /* OptionalDoubleField.swift */,
-				1B3F74842721058900E53FF0 /* PieChart.swift */,
-				1B3F748627210C8E00E53FF0 /* PieSlice.swift */,
 				1BA2CC3127290294009F3D40 /* SymbolPicker.swift */,
 				1BA2CC3D274D45A0009F3D40 /* SymbolImage.swift */,
+				1B520E852A749BD300DBA34A /* AmountRow.swift */,
 				1B3823DB280225B30037BAFE /* SettingsView.swift */,
 				1B085B2123EDC9170008724A /* My Assets */,
 				1B085B2723EDC96F0008724A /* Income */,
@@ -330,6 +383,27 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		1BE162402A74928B00E4907D /* My Assets (watchOS) Watch App */ = {
+			isa = PBXGroup;
+			children = (
+				1BAB38582A749A1600FC9543 /* My Assets (watchOS) Watch App.entitlements */,
+				1BE162412A74928B00E4907D /* My_Assets__watchOS_App.swift */,
+				1B520E892A74A53900DBA34A /* RootTabView.swift */,
+				1BAB384D2A7496F600FC9543 /* MyAssetsView.swift */,
+				1BE162452A74928D00E4907D /* Assets.xcassets */,
+				1BE162472A74928D00E4907D /* Preview Content */,
+			);
+			path = "My Assets (watchOS) Watch App";
+			sourceTree = "<group>";
+		};
+		1BE162472A74928D00E4907D /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				1BE162482A74928D00E4907D /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -358,10 +432,12 @@
 				1B31BA9423EC823F00B6E63A /* Sources */,
 				1B31BA9523EC823F00B6E63A /* Frameworks */,
 				1B31BA9623EC823F00B6E63A /* Resources */,
+				1BE1624D2A74928D00E4907D /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				1BE1624B2A74928D00E4907D /* PBXTargetDependency */,
 			);
 			name = "My Assets";
 			packageProductDependencies = (
@@ -392,14 +468,32 @@
 			productReference = 1BB7E57727F00E8900D51084 /* My Assets (macOS).app */;
 			productType = "com.apple.product-type.application";
 		};
+		1BE1623E2A74928B00E4907D /* My Assets (watchOS) Watch App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1BE162502A74928D00E4907D /* Build configuration list for PBXNativeTarget "My Assets (watchOS) Watch App" */;
+			buildPhases = (
+				1BE1623B2A74928B00E4907D /* Sources */,
+				1BE1623C2A74928B00E4907D /* Frameworks */,
+				1BE1623D2A74928B00E4907D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "My Assets (watchOS) Watch App";
+			productName = "My Assets (watchOS) Watch App";
+			productReference = 1BE1623F2A74928B00E4907D /* My Assets.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		1B31BA9023EC823F00B6E63A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1330;
-				LastUpgradeCheck = 1400;
+				BuildIndependentTargetsInParallel = YES;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
 				ORGANIZATIONNAME = "Jayden Irwin";
 				TargetAttributes = {
 					1B31939D282DDCDF00AA2038 = {
@@ -412,10 +506,13 @@
 					1BB7E57627F00E8900D51084 = {
 						CreatedOnToolsVersion = 13.3;
 					};
+					1BE1623E2A74928B00E4907D = {
+						CreatedOnToolsVersion = 15.0;
+					};
 				};
 			};
 			buildConfigurationList = 1B31BA9323EC823F00B6E63A /* Build configuration list for PBXProject "My Assets" */;
-			compatibilityVersion = "Xcode 13.0";
+			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -434,6 +531,7 @@
 				1B31BA9723EC823F00B6E63A /* My Assets */,
 				1BB7E57627F00E8900D51084 /* My Assets (macOS) */,
 				1B31939D282DDCDF00AA2038 /* My AssetsTests */,
+				1BE1623E2A74928B00E4907D /* My Assets (watchOS) Watch App */,
 			);
 		};
 /* End PBXProject section */
@@ -461,6 +559,15 @@
 			files = (
 				1BB7E58127F00E8A00D51084 /* Preview Assets.xcassets in Resources */,
 				1BB7E57E27F00E8A00D51084 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1BE1623D2A74928B00E4907D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1BE162492A74928D00E4907D /* Preview Assets.xcassets in Resources */,
+				1BE162462A74928D00E4907D /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -511,13 +618,11 @@
 				1BD45D3427F25ED8008E07A9 /* MyAssetsApp.swift in Sources */,
 				1B085B2423EDC95B0008724A /* IncomeView.swift in Sources */,
 				1B31BAA023EC823F00B6E63A /* RootTabView.swift in Sources */,
-				1B3F74852721058900E53FF0 /* PieChart.swift in Sources */,
 				1BA2CC362729D35F009F3D40 /* DebtView.swift in Sources */,
 				1B3823D62802120F0037BAFE /* WorldFinanceStats.swift in Sources */,
 				1B3823DC280225B30037BAFE /* SettingsView.swift in Sources */,
 				1B31BABA23ECFE6300B6E63A /* OptionalDoubleField.swift in Sources */,
 				1BA2CC3E274D45A0009F3D40 /* SymbolImage.swift in Sources */,
-				1B3F748727210C8E00E53FF0 /* PieSlice.swift in Sources */,
 				1B7A38E827F26A80009FE1B6 /* CloudController.swift in Sources */,
 				1B085B2623EDC9660008724A /* ExpensesView.swift in Sources */,
 				1B39058F27BCBC5B005599AB /* AmountMarquee.swift in Sources */,
@@ -525,6 +630,7 @@
 				1B31BAB823ECEE2100B6E63A /* NewStockView.swift in Sources */,
 				1BC52ECA23EDEA0500B5B818 /* NewExpenseView.swift in Sources */,
 				1BC52EC823EDE9F800B5B818 /* NewIncomeSourceView.swift in Sources */,
+				1B520E862A749BD300DBA34A /* AmountRow.swift in Sources */,
 				1B31BAB423EC9CAF00B6E63A /* AssetView.swift in Sources */,
 				1B3823DF280226510037BAFE /* UserType.swift in Sources */,
 				1BA2CC3227290294009F3D40 /* SymbolPicker.swift in Sources */,
@@ -538,7 +644,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				1BB7E59D27F010C400D51084 /* MyAssetsView.swift in Sources */,
-				1BB7E5A627F010C800D51084 /* PieChart.swift in Sources */,
 				1BB7E5A027F010C800D51084 /* SymbolPicker.swift in Sources */,
 				1BB7E5A427F010C800D51084 /* RootTabView.swift in Sources */,
 				1BB7E59627F010C400D51084 /* NewDebtView.swift in Sources */,
@@ -560,7 +665,6 @@
 				1B3823D72802120F0037BAFE /* WorldFinanceStats.swift in Sources */,
 				1B3823DD280225B30037BAFE /* SettingsView.swift in Sources */,
 				1BB7E59427F010C100D51084 /* IncomeSourceView.swift in Sources */,
-				1BB7E59E27F010C800D51084 /* PieSlice.swift in Sources */,
 				1BB7E58D27F010AC00D51084 /* Period.swift in Sources */,
 				1B7A38E927F26A80009FE1B6 /* CloudController.swift in Sources */,
 				1BB7E59027F010BE00D51084 /* ExpensesView.swift in Sources */,
@@ -569,11 +673,36 @@
 				1BB7E59A27F010C400D51084 /* DebtView.swift in Sources */,
 				1BB7E59727F010C400D51084 /* AmountMarquee.swift in Sources */,
 				1BB7E59327F010C100D51084 /* NewIncomeSourceView.swift in Sources */,
+				1B520E872A749BD300DBA34A /* AmountRow.swift in Sources */,
 				1BB7E58727F010AC00D51084 /* Income.swift in Sources */,
 				1B3823E0280226510037BAFE /* UserType.swift in Sources */,
 				1BB7E59B27F010C400D51084 /* AssetView.swift in Sources */,
 				1BB7E5A127F010C800D51084 /* SymbolImage.swift in Sources */,
 				1BB7E57A27F00E8900D51084 /* My_Assets_macOS_App.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1BE1623B2A74928B00E4907D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1BAB38532A74982900FC9543 /* Expense.swift in Sources */,
+				1BE162532A74955600E4907D /* UserDefaults.swift in Sources */,
+				1BAB384F2A74981F00FC9543 /* Asset.swift in Sources */,
+				1B520E882A749BD300DBA34A /* AmountRow.swift in Sources */,
+				1BE162542A74963700E4907D /* SymbolImage.swift in Sources */,
+				1BE162422A74928B00E4907D /* My_Assets__watchOS_App.swift in Sources */,
+				1BAB38542A74984600FC9543 /* Symbol.swift in Sources */,
+				1B520E8A2A74A53900DBA34A /* RootTabView.swift in Sources */,
+				1BAB38502A74982200FC9543 /* Debt.swift in Sources */,
+				1BAB38562A74985800FC9543 /* TimeInterval.swift in Sources */,
+				1BAB384E2A7496F600FC9543 /* MyAssetsView.swift in Sources */,
+				1BE162512A74954B00E4907D /* CloudController.swift in Sources */,
+				1BE162522A74954F00E4907D /* FinancialData.swift in Sources */,
+				1BAB38572A74989B00FC9543 /* UserType.swift in Sources */,
+				1BAB38552A74984900FC9543 /* Period.swift in Sources */,
+				1BAB38522A74982700FC9543 /* Income.swift in Sources */,
+				1BAB38512A74982400FC9543 /* Stock.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -584,6 +713,11 @@
 			isa = PBXTargetDependency;
 			target = 1B31BA9723EC823F00B6E63A /* My Assets */;
 			targetProxy = 1B3193A2282DDCDF00AA2038 /* PBXContainerItemProxy */;
+		};
+		1BE1624B2A74928D00E4907D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1BE1623E2A74928B00E4907D /* My Assets (watchOS) Watch App */;
+			targetProxy = 1BE1624A2A74928D00E4907D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -608,7 +742,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = VA3SY54YU8;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jaydenirwin.My-AssetsTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -628,7 +762,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = VA3SY54YU8;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jaydenirwin.My-AssetsTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -676,6 +810,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -690,7 +825,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -737,6 +873,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -745,7 +882,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -758,6 +896,7 @@
 		1B31BAAD23EC824200B6E63A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "My Assets/My Assets.entitlements";
 				CODE_SIGN_STYLE = Automatic;
@@ -767,7 +906,7 @@
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "My Assets/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -785,6 +924,7 @@
 		1B31BAAE23EC824200B6E63A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "My Assets/My Assets.entitlements";
 				CODE_SIGN_STYLE = Automatic;
@@ -794,7 +934,7 @@
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "My Assets/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -832,7 +972,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jaydenirwin.myassets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -865,13 +1005,82 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jaydenirwin.myassets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		1BE1624E2A74928D00E4907D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_ENTITLEMENTS = "My Assets (watchOS) Watch App/My Assets (watchOS) Watch App.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"My Assets (watchOS) Watch App/Preview Content\"";
+				DEVELOPMENT_TEAM = VA3SY54YU8;
+				ENABLE_PREVIEWS = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.jaydenirwin.myassets;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jaydenirwin.myassets.watchkitapp;
+				PRODUCT_NAME = "My Assets";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Debug;
+		};
+		1BE1624F2A74928D00E4907D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_ENTITLEMENTS = "My Assets (watchOS) Watch App/My Assets (watchOS) Watch App.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"My Assets (watchOS) Watch App/Preview Content\"";
+				DEVELOPMENT_TEAM = VA3SY54YU8;
+				ENABLE_PREVIEWS = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.jaydenirwin.myassets;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jaydenirwin.myassets.watchkitapp;
+				PRODUCT_NAME = "My Assets";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
 			};
 			name = Release;
 		};
@@ -910,6 +1119,15 @@
 			buildConfigurations = (
 				1BB7E58327F00E8A00D51084 /* Debug */,
 				1BB7E58427F00E8A00D51084 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1BE162502A74928D00E4907D /* Build configuration list for PBXNativeTarget "My Assets (watchOS) Watch App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1BE1624E2A74928D00E4907D /* Debug */,
+				1BE1624F2A74928D00E4907D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Income: Comparable, Identifiable, Codable {
+struct Income: Comparable, Hashable, Identifiable, Codable {
     
     static func < (lhs: Income, rhs: Income) -> Bool {
         lhs.monthlyEarnings < rhs.monthlyEarnings

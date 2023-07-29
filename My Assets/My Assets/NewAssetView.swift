@@ -117,7 +117,7 @@ struct NewAssetView: View {
             }
             Button("OK", role: .cancel, action: { })
         }
-        .onChange(of: asset.symbol) { newValue in
+        .onChange(of: asset.symbol) { _, newValue in
             if asset.name.isEmpty {
                 asset.name = newValue.suggestedTitle
             }

@@ -53,11 +53,10 @@ struct NewExpenseView: View {
                 }
             }
         }
-    }
-    .navigationTitle(expense.name)
-    .onChange(of: expense.symbol) { newValue in
-        if expense.name.isEmpty {
-            expense.name = newValue.suggestedTitle
+        .onChange(of: expense.symbol) { _, newValue in
+            if expense.name.isEmpty {
+                expense.name = newValue.suggestedTitle
+            }
         }
     }
 }

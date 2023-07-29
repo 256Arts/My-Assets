@@ -16,35 +16,72 @@ final class CloudController: ObservableObject {
     
     static let shared = CloudController()
     
-    let metadataQuery = NSMetadataQuery()
+    var filename: String {
+        UserDefaults.standard.bool(forKey: UserDefaults.Key.showDebugData) ? "Financial Data (Debug).json" : "Financial Data.json"
+    }
+    var fileURL: URL {
+        let directoryURL = FileManager.default.url(forUbiquityContainerIdentifier: nil) ?? FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        return directoryURL.appending(path: filename, directoryHint: .notDirectory)
+    }
+    
+    let finishGatheringQuery = NSMetadataQuery()
+    let updateQuery = NSMetadataQuery()
 
     @Published var financialData: FinancialData?
+    @Published var decodeError: Error?
     
     init() {
-        metadataQuery.notificationBatchingInterval = 1
-        metadataQuery.searchScopes = [NSMetadataQueryUbiquitousDataScope]
-        metadataQuery.predicate = NSPredicate(format: "%K LIKE 'Financial Data.json'", NSMetadataItemFSNameKey)
-        
         NotificationCenter.default.addObserver(self,
-            selector: #selector(metadataQueryDidFinishGathering),
+            selector: #selector(queryDidFinishGathering),
             name: Notification.Name.NSMetadataQueryDidFinishGathering,
-            object: metadataQuery)
-        metadataQuery.start()
+            object: finishGatheringQuery)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(queryDidUpdate),
+            name: NSNotification.Name.NSMetadataQueryDidUpdate,
+            object: updateQuery)
+        
+        finishGatheringQuery.notificationBatchingInterval = 1
+        finishGatheringQuery.searchScopes = [NSMetadataQueryUbiquitousDataScope]
+        finishGatheringQuery.predicate = NSPredicate(format: "%K LIKE '\(filename)'", NSMetadataItemFSNameKey)
+        finishGatheringQuery.start()
+        
+        updateQuery.searchScopes = [NSMetadataQueryUbiquitousDataScope]
+        updateQuery.valueListAttributes = [NSMetadataUbiquitousItemPercentDownloadedKey, NSMetadataUbiquitousItemDownloadingStatusKey]
+        updateQuery.predicate = NSPredicate(format: "%K LIKE '\(filename)'", NSMetadataItemFSNameKey)
+        updateQuery.start()
     }
 
-    @objc func metadataQueryDidFinishGathering(_ notification: Notification) {
-        metadataQuery.disableUpdates()
-        if metadataQuery.results.isEmpty {
+    @objc func queryDidFinishGathering(_ notification: Notification) {
+        finishGatheringQuery.disableUpdates()
+        if finishGatheringQuery.results.isEmpty {
             print("No cloud files found. Creating new file.")
             financialData = FinancialData(fileVersion: FinancialData.newestFileVersion, nonStockAssets: [], stocks: [], debts: [], nonAssetIncome: [], nonDebtExpenses: [])
         } else {
             do {
                 financialData = try fetchFinancialData()
             } catch {
+                decodeError = error
                 print("Failed to fetch data after query gather")
             }
         }
-        metadataQuery.enableUpdates()
+        finishGatheringQuery.enableUpdates()
+    }
+    
+    @objc func queryDidUpdate(_ notification: Notification) {
+        updateQuery.disableUpdates()
+        if updateQuery.results.isEmpty {
+            print("No cloud files found. Creating new file.")
+            financialData = FinancialData(fileVersion: FinancialData.newestFileVersion, nonStockAssets: [], stocks: [], debts: [], nonAssetIncome: [], nonDebtExpenses: [])
+        } else {
+            do {
+                financialData = try fetchFinancialData()
+            } catch {
+                decodeError = error
+                print("Failed to fetch data after query gather")
+            }
+        }
+        updateQuery.enableUpdates()
     }
     
     func fetchFinancialData() throws -> FinancialData? {

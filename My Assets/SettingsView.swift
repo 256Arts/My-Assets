@@ -13,6 +13,13 @@ struct SettingsView: View {
     @Environment(\.dismiss) var dismiss
     
     @AppStorage(UserDefaults.Key.userType) var userTypeValue = UserType.individual.rawValue
+    #if DEBUG
+    @AppStorage(UserDefaults.Key.showDebugData) var showDebugData = false {
+        didSet {
+            exit(0) // Quit app to reset `CloudController`
+        }
+    }
+    #endif
     
     @State var birthday = Date(timeIntervalSinceReferenceDate: UserDefaults.standard.double(forKey: UserDefaults.Key.birthday))
     
@@ -28,9 +35,17 @@ struct SettingsView: View {
             } footer: {
                 Text("Net worth percentiles are based on 2020 data from the USA, adjusted for inflation, and converted to your currency. If you are an individual, we assume your household has twice the net worth as you.")
             }
+            
 //                Section {
 //                    DatePicker("Birthday", selection: $birthday, in: ...Date.now, displayedComponents: .date)
 //                }
+            
+            #if DEBUG
+            Section {
+                Toggle("Debug Data", isOn: $showDebugData)
+            }
+            #endif
+            
             Section {
                 Link(destination: URL(string: "https://www.jaydenirwin.com/")!) {
                     Label("Developer Website", systemImage: "safari")
@@ -51,7 +66,7 @@ struct SettingsView: View {
                 }
             }
         }
-        .onChange(of: birthday) { newValue in
+        .onChange(of: birthday) { _, newValue in
             UserDefaults.standard.set(newValue.timeIntervalSinceReferenceDate, forKey: UserDefaults.Key.birthday)
         }
     }

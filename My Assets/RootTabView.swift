@@ -70,6 +70,11 @@ struct RootTabView: View {
                 WelcomeView(isFirstLaunch: whatsNewVersion == 0, appName: "My Assets", features: welcomeFeatures)
             })
             .environmentObject(financialData)
+        } else if cloudController.decodeError != nil {
+            VStack {
+                Image(systemName: "exclamationmark.triangle")
+                Text("Failed to load data.")
+            }
         } else {
             ProgressView()
                 .progressViewStyle(.circular)

@@ -42,18 +42,22 @@ struct AmountMarquee: View {
                         Text(currencyDeltaFormatter.string(from: NSNumber(value: monthlyIncome * period.months))!)
                             .font(Font.system(size: 22, weight: .medium, design: .rounded))
                             .foregroundColor(.green)
+                            .accessibilityLabel("\(period.rawValue) Income")
                         Text("\(period.rawValue) Income")
                             .font(.caption)
                             .foregroundColor(Color(uiColor: UIColor.tertiaryLabel))
+                            .accessibilityHidden(true)
                     }
                     Spacer()
                     VStack {
                         Text(currencyDeltaFormatter.string(from: NSNumber(value: -monthlyExpenses * period.months))!)
                             .font(Font.system(size: 22, weight: .medium, design: .rounded))
                             .foregroundColor(.red)
+                            .accessibilityLabel("\(period.rawValue) Expenses")
                         Text("\(period.rawValue) Expenses")
                             .font(.caption)
                             .foregroundColor(Color(uiColor: UIColor.tertiaryLabel))
+                            .accessibilityHidden(true)
                     }
                 }
             }

@@ -17,7 +17,6 @@ struct MyAssetsView: View {
         var id: Date { date }
     }
     enum ChartDataSource: String, Identifiable, CaseIterable {
-        case netAssets = "Net Assets"
         case balance = "Balance"
         case netWorth = "Net Worth"
         
@@ -45,8 +44,6 @@ struct MyAssetsView: View {
         return nowThrough5Years.map {
             let value: Double
             switch chartDataSource {
-            case .netAssets:
-                value = data.netAssetsValue(at: $0)
             case .balance:
                 value = data.balance(at: $0)
             case .netWorth:
@@ -58,8 +55,6 @@ struct MyAssetsView: View {
     var chartInflationData: [ValueAtDate] {
         let startingValue: Double
         switch chartDataSource {
-        case .netAssets:
-            startingValue = data.netAssetsValue(at: .now)
         case .balance:
             startingValue = data.balance(at: .now)
         case .netWorth:
@@ -72,11 +67,9 @@ struct MyAssetsView: View {
             return ValueAtDate(value: value, date: date)
         }
     }
-    var chartYoYString: String {
+    var chartYoYString: String? {
         let fraction: Double = {
             switch chartDataSource {
-            case .netAssets:
-                return insights.avgAnnualAssetsInterest
             case .balance:
                 return insights.avgAnnualBalanceInterest
             case .netWorth:
@@ -84,9 +77,9 @@ struct MyAssetsView: View {
             }
         }()
         if 0 < fraction {
-            return "YoY: \(percentFormatter.string(from: NSNumber(value: fraction))!)"
+            return percentFormatter.string(from: NSNumber(value: fraction))!
         } else {
-            return ""
+            return nil
         }
     }
     var insights: InsightsGenerator {
@@ -115,12 +108,7 @@ struct MyAssetsView: View {
                 Section {
                     ForEach($data.nonStockAssets) { $asset in
                         NavigationLink(destination: AssetView(asset: $asset)) {
-                            HStack {
-                                SymbolImage(symbol: asset.symbol)
-                                Text(asset.name)
-                                Spacer()
-                                Text(currencyFormatter.string(from: NSNumber(value: asset.currentValue))!)
-                            }
+                            AmountRow(symbol: asset.symbol, label: asset.name, amount: asset.currentValue)
                         }
                     }
                     .onDelete(perform: deleteAsset)
@@ -136,12 +124,7 @@ struct MyAssetsView: View {
                 Section {
                     ForEach($data.debts) { $debt in
                         NavigationLink(destination: DebtView(debt: $debt)) {
-                            HStack {
-                                SymbolImage(symbol: debt.symbol)
-                                Text(debt.name)
-                                Spacer()
-                                Text(currencyFormatter.string(from: NSNumber(value: debt.currentValue))!)
-                            }
+                            AmountRow(symbol: debt.symbol, label: debt.name, amount: debt.currentValue)
                         }
                     }
                     .onDelete(perform: deleteDebt)
@@ -177,8 +160,14 @@ struct MyAssetsView: View {
                     }
                     .frame(height: 200)
                     .overlay(alignment: .topLeading) {
-                        Text(chartYoYString)
-                            .font(.headline)
+                        if let chartYoYString {
+                            Text("YoY: \(chartYoYString)")
+                                .font(.headline)
+                                .accessibilityRepresentation {
+                                    Text(chartYoYString)
+                                        .accessibilityLabel("Year over Year")
+                                }
+                        }
                     }
                     .padding(.top, 4)
                     
@@ -215,6 +204,7 @@ struct MyAssetsView: View {
                             }
                             .gaugeStyle(.accessoryLinear)
                             .tint(LinearGradient(colors: [.red, .gray, .green], startPoint: .leading, endPoint: .trailing))
+                            .accessibilityHidden(true)
                         }
                     }
                 } header: {

@@ -17,6 +17,10 @@ extension UserDefaults {
         static let birthday = "birthday"
         static let amountMarqueePeriod = "amountMarqueePeriod"
         static let amountMarqueeShowAsCombinedValue = "amountMarqueeShowAsCombinedValue"
+        
+        #if DEBUG
+        static let showDebugData = "showDebugData"
+        #endif
     }
     
     func register() {

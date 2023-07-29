@@ -23,3 +23,26 @@ struct MyAssetsApp: App {
         }
     }
 }
+
+let currencyFormatter: NumberFormatter = {
+    let formatter = NumberFormatter()
+    formatter.numberStyle = .currency
+    formatter.maximumFractionDigits = 2
+    return formatter
+}()
+
+let currencyDeltaFormatter: NumberFormatter = {
+    let formatter = NumberFormatter()
+    formatter.numberStyle = .currency
+    formatter.maximumFractionDigits = 2
+    formatter.positivePrefix = "+"
+    return formatter
+}()
+
+let percentFormatter: NumberFormatter = {
+    let formatter = NumberFormatter()
+    formatter.numberStyle = .percent
+    formatter.minimumFractionDigits = 0
+    formatter.maximumFractionDigits = 1
+    return formatter
+}()

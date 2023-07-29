@@ -11,6 +11,13 @@ import Charts
 
 struct IncomeView: View {
     
+    struct SectorData: Identifiable {
+        let effort: String
+        var id: String { effort }
+        let color: Color
+        let income: Double
+    }
+    
     @EnvironmentObject var data: FinancialData
     @State var showingDetail = false
 
@@ -23,6 +30,13 @@ struct IncomeView: View {
     var passiveNonLiquidIncome: Double {
         data.income.filter({ $0.isPassive && !$0.isLiquid }).reduce(0, { $0 + $1.monthlyEarnings })
     }
+    var pieChartData: [SectorData] {
+        [
+            .init(effort: "Working", color: .gray, income: workingIncome),
+            .init(effort: "Passive", color: .green, income: passiveLiquidIncome),
+            .init(effort: "Passive (Non-Liquid)", color: Color(red: 0, green: 0.5, blue: 0), income: passiveNonLiquidIncome)
+        ]
+    }
     var spentIncome: Double {
         data.totalExpenses / data.totalLiquidIncome
     }
@@ -31,36 +45,13 @@ struct IncomeView: View {
         NavigationStack {
             List {
                 Section {
-                    HStack {
-                        PieChart(data: [
-                            .init(value: workingIncome, color: .gray),
-                            .init(value: passiveLiquidIncome, color: .green),
-                            .init(value: passiveNonLiquidIncome, color: Color(red: 0, green: 0.5, blue: 0))
-                        ])
-                        VStack(alignment: .trailing) {
-                            HStack {
-                                Image(systemName: "circle")
-                                    .foregroundColor(.gray)
-                                Text("Working: " + currencyFormatter.string(from: NSNumber(value: workingIncome))!)
-                            }
-                            .fixedSize()
-                            HStack {
-                                Image(systemName: "circle")
-                                    .foregroundColor(.green)
-                                Text("Passive: " + currencyFormatter.string(from: NSNumber(value: passiveLiquidIncome))!)
-                            }
-                            .fixedSize()
-                            HStack {
-                                Image(systemName: "circle")
-                                    .foregroundColor(Color(red: 0, green: 0.5, blue: 0))
-                                Text("Passive (Non-Liquid): " + currencyFormatter.string(from: NSNumber(value: passiveNonLiquidIncome))!)
-                            }
-                            .fixedSize()
-                        }
-                        .symbolVariant(.fill)
-                        .imageScale(.small)
-                        .padding(.vertical, 20)
+                    Chart(pieChartData) { sector in
+                        SectorMark(angle: .value("Value", sector.income))
+                            .foregroundStyle(by: .value("Effort", sector.effort))
                     }
+                    .chartLegend(position: .trailing)
+                    .chartForegroundStyleScale(range: pieChartData.map({ $0.color }))
+                    .frame(height: 100)
                 }
                 Section {
                     ForEach($data.nonAssetIncome) { $income in
@@ -75,12 +66,10 @@ struct IncomeView: View {
                     }
                     .onDelete(perform: delete)
                     ForEach(data.income.filter({ $0.fromAsset && $0.isLiquid })) { income in
-                        HStack {
-                            SymbolImage(symbol: income.symbol)
-                            Text(income.name)
-                            Spacer()
-                            Text(currencyFormatter.string(from: NSNumber(value: income.monthlyEarnings))!)
-                        }
+                        AmountRow(symbol: income.symbol, label: income.name, amount: income.monthlyEarnings)
+                            .accessibilityElement()
+                            .accessibilityLabel(income.name)
+                            .accessibilityValue(currencyFormatter.string(from: NSNumber(value: income.monthlyEarnings))!)
                     }
                     HStack {
                         Text("Total")
@@ -88,16 +77,17 @@ struct IncomeView: View {
                         Text(currencyFormatter.string(from: NSNumber(value: data.totalLiquidIncome))!)
                     }
                         .font(Font.headline)
+                        .accessibilityElement()
+                        .accessibilityLabel("Total")
+                        .accessibilityValue(currencyFormatter.string(from: NSNumber(value: data.totalLiquidIncome))!)
                 }
                 if data.income.contains(where: { $0.fromAsset && !$0.isLiquid }) {
                     Section {
                         ForEach(data.income.filter({ $0.fromAsset && !$0.isLiquid })) { income in
-                            HStack {
-                                SymbolImage(symbol: income.symbol)
-                                Text(income.name)
-                                Spacer()
-                                Text(currencyFormatter.string(from: NSNumber(value: income.monthlyEarnings))!)
-                            }
+                            AmountRow(symbol: income.symbol, label: income.name, amount: income.monthlyEarnings)
+                                .accessibilityElement()
+                                .accessibilityLabel(income.name)
+                                .accessibilityValue(currencyFormatter.string(from: NSNumber(value: income.monthlyEarnings))!)
                         }
                         HStack {
                             Text("Total (With Non-Liquid)")
@@ -105,6 +95,9 @@ struct IncomeView: View {
                             Text(currencyFormatter.string(from: NSNumber(value: data.totalIncome))!)
                         }
                         .font(Font.headline)
+                        .accessibilityElement()
+                        .accessibilityLabel("Total (With Non-Liquid)")
+                        .accessibilityValue(currencyFormatter.string(from: NSNumber(value: data.totalIncome))!)
                     }
                 }
                 if spentIncome.isFinite {
