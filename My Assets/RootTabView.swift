@@ -7,6 +7,7 @@
 //
 
 import WelcomeKit
+import SwiftData
 import SwiftUI
 
 struct RootTabView: View {
@@ -22,64 +23,60 @@ struct RootTabView: View {
     ]
     
     @AppStorage(UserDefaults.Key.whatsNewVersion) var whatsNewVersion = 0
-
-    @ObservedObject var cloudController: CloudController = .shared
+    @Query var assets: [Asset]
+    @Query var debts: [Debt]
+    @Query var stocks: [Stock]
+    @Query var nonAssetIncome: [Income]
+    @Query var nonDebtExpenses: [Expense]
     
     @State var selectedTab: Tab = .myAssets
     @State var showingWelcome = false
     
     var body: some View {
-        if let financialData = cloudController.financialData {
-            TabView(selection: $selectedTab) {
-                MyAssetsView()
-                    .tabItem {
-                        Label("My Assets", systemImage: "banknote")
-                    }
-                    .tag(Tab.myAssets)
-                IncomeView()
-                    .tabItem {
-                        Label("Income", systemImage: "tray.and.arrow.down")
-                    }
-                    .tag(Tab.income)
-                ExpensesView()
-                    .tabItem {
-                        Label("Expenses", systemImage: "tray.and.arrow.up")
-                    }
-                    .tag(Tab.expenses)
-            }
-            .accentColor({
-                switch selectedTab {
-                case .myAssets:
-                    return nil
-                case .income:
-                    return .green
-                case .expenses:
-                    return .red
+        TabView(selection: $selectedTab) {
+            MyAssetsView()
+                .tabItem {
+                    Label("My Assets", systemImage: "banknote")
                 }
-            }())
-            .onAppear {
-                if whatsNewVersion < appWhatsNewVersion {
-                    showingWelcome = true
+                .tag(Tab.myAssets)
+            IncomeView()
+                .tabItem {
+                    Label("Income", systemImage: "tray.and.arrow.down")
                 }
-            }
-            .sheet(isPresented: $showingWelcome, onDismiss: {
-                if whatsNewVersion < appWhatsNewVersion {
-                    whatsNewVersion = appWhatsNewVersion
+                .tag(Tab.income)
+            ExpensesView()
+                .tabItem {
+                    Label("Expenses", systemImage: "tray.and.arrow.up")
                 }
-            }, content: {
-                WelcomeView(isFirstLaunch: whatsNewVersion == 0, appName: "My Assets", features: welcomeFeatures)
-            })
-            .environmentObject(financialData)
-        } else if cloudController.decodeError != nil {
-            VStack {
-                Image(systemName: "exclamationmark.triangle")
-                Text("Failed to load data.")
-            }
-        } else {
-            ProgressView()
-                .progressViewStyle(.circular)
-                .controlSize(.large)
+                .tag(Tab.expenses)
         }
+        .accentColor({
+            switch selectedTab {
+            case .myAssets:
+                return nil
+            case .income:
+                return .green
+            case .expenses:
+                return .red
+            }
+        }())
+        .onAppear {
+            if whatsNewVersion < appWhatsNewVersion {
+                showingWelcome = true
+            }
+        }
+        .sheet(isPresented: $showingWelcome, onDismiss: {
+            if whatsNewVersion < appWhatsNewVersion {
+                whatsNewVersion = appWhatsNewVersion
+            }
+        }, content: {
+            WelcomeView(isFirstLaunch: whatsNewVersion == 0, appName: "My Assets", features: welcomeFeatures)
+        })
+        .environmentObject(financialData)
+    }
+    
+    private var financialData: FinancialData {
+        FinancialData(nonStockAssets: assets, stocks: stocks, debts: debts, nonAssetIncome: nonAssetIncome, nonDebtExpenses: nonDebtExpenses)
     }
 }
 

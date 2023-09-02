@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 let appWhatsNewVersion = 1
 
@@ -21,6 +22,7 @@ struct MyAssetsApp: App {
         WindowGroup {
             RootTabView()
         }
+        .modelContainer(for: [Asset.self, Debt.self, Stock.self, Income.self, Expense.self])
     }
 }
 

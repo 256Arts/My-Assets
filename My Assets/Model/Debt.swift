@@ -7,21 +7,23 @@
 //
 
 import Foundation
+import SwiftData
 
-struct Debt: Comparable, Identifiable, Codable {
+@Model
+class Debt: Comparable {
     
     static func < (lhs: Debt, rhs: Debt) -> Bool {
         lhs.currentValue < rhs.currentValue
     }
     
-    var name: String
-    var symbol: Symbol
-    var colorHex: String
+    var name: String?
+    var symbol: Symbol?
+    var colorHex: String?
     var id: String {
-        name + symbol.rawValue + colorHex + String(annualInterestFraction)
+        (name ?? "") + (symbol?.rawValue ?? "") + (colorHex ?? "") + String(annualInterestFraction ?? 0)
     }
-    var annualInterestFraction: Double
-    var monthlyPayment: Double
+    var annualInterestFraction: Double?
+    var monthlyPayment: Double?
     
     var currentValue: Double {
         get {
@@ -33,8 +35,8 @@ struct Debt: Comparable, Identifiable, Codable {
         }
     }
     
-    private var prevValue: Double
-    private var prevDate: Date
+    private var prevValue: Double?
+    private var prevDate: Date?
     
     init() {
         self.name = ""
@@ -47,6 +49,8 @@ struct Debt: Comparable, Identifiable, Codable {
     }
     
     func currentValue(at date: Date) -> Double {
+        guard let prevDate, let prevValue, let annualInterestFraction, let monthlyPayment else { return .nan }
+        
         let monthsSinceDate = date.timeIntervalSince(prevDate) / TimeInterval.month
         let i = annualInterestFraction / 12
         let value = prevValue * pow(1 + i, monthsSinceDate) - (monthlyPayment / i) * (pow(1 + i, monthsSinceDate) - 1)

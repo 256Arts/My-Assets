@@ -6,28 +6,26 @@
 //  Copyright © 2023 Jayden Irwin. All rights reserved.
 //
 
+import SwiftData
 import SwiftUI
 
 struct RootTabView: View {
     
-    @ObservedObject var cloudController: CloudController = .shared
+    @Query var assets: [Asset]
+    @Query var debts: [Debt]
+    @Query var stocks: [Stock]
+    @Query var nonAssetIncome: [Income]
+    @Query var nonDebtExpenses: [Expense]
     
     var body: some View {
-        if let financialData = cloudController.financialData {
-            TabView {
-                MyAssetsView()
-            }
-            .environmentObject(financialData)
-        } else if cloudController.decodeError != nil {
-            VStack {
-                Image(systemName: "exclamationmark.triangle")
-                Text("Failed to load data.")
-            }
-        } else {
-            ProgressView()
-                .progressViewStyle(.circular)
-                .controlSize(.large)
+        TabView {
+            MyAssetsView()
         }
+        .environmentObject(financialData)
+    }
+    
+    private var financialData: FinancialData {
+        FinancialData(nonStockAssets: assets, stocks: stocks, debts: debts, nonAssetIncome: nonAssetIncome, nonDebtExpenses: nonDebtExpenses)
     }
 }
 

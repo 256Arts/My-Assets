@@ -19,7 +19,7 @@ struct DebtView: View {
     
     init(debt: Binding<Debt>) {
         _debt = debt
-        _nameCopy = State(initialValue: debt.wrappedValue.name)
+        _nameCopy = State(initialValue: debt.wrappedValue.name ?? "")
     }
     
     var body: some View {
@@ -27,12 +27,24 @@ struct DebtView: View {
             Section {
                 TextField("Name", text: $nameCopy)
                     .textInputAutocapitalization(.words)
-                DoubleField("Interest", value: $debt.annualInterestFraction, formatter: percentFormatter)
+                DoubleField("Interest", value: Binding(get: {
+                    debt.annualInterestFraction ?? 0
+                }, set: { newValue in
+                    debt.annualInterestFraction = newValue
+                }), formatter: percentFormatter)
                 DoubleField("Amount", value: $debt.currentValue, formatter: currencyFormatter)
-                DoubleField("Monthly Payment", value: $debt.monthlyPayment, formatter: currencyFormatter)
+                DoubleField("Monthly Payment", value: Binding(get: {
+                    debt.monthlyPayment ?? 0
+                }, set: { newValue in
+                    debt.monthlyPayment = newValue
+                }), formatter: currencyFormatter)
             }
             Section {
-                SymbolPicker(selected: $debt.symbol)
+                SymbolPicker(selected: Binding(get: {
+                    debt.symbol ?? .defaultSymbol
+                }, set: { newValue in
+                    debt.symbol = newValue
+                }))
             }
         }
         .navigationTitle("Debt")

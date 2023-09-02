@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct My_Assets__watchOS__Watch_AppApp: App {
@@ -14,6 +15,7 @@ struct My_Assets__watchOS__Watch_AppApp: App {
         WindowGroup {
             RootTabView()
         }
+        .modelContainer(for: [Asset.self, Debt.self, Stock.self, Income.self, Expense.self])
     }
 }
 

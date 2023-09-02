@@ -18,28 +18,26 @@ final class InsightsGenerator {
     
     var avgAnnualAssetsInterest: Double {
         // Uses weighted average
-        let totalAssets = data.assets.filter({ $0.isLiquid }).reduce(0.0, { $0 + $1.currentValue }) // Excludes debts
-        let avgAnnualAssetInterest = data.assets.filter({ $0.isLiquid }).reduce(0.0, { $0 + $1.effectiveAnnualInterestFraction * ($1.currentValue / totalAssets) })
-        let avgAnnualDebtInterest = data.debts.reduce(0.0, { $0 + $1.annualInterestFraction * ($1.currentValue / totalAssets) })
+        let totalAssets = data.assets.filter({ $0.isLiquid! }).reduce(0.0, { $0 + $1.currentValue }) // Excludes debts
+        let avgAnnualAssetInterest = data.assets.filter({ $0.isLiquid! }).reduce(0.0, { $0 + $1.effectiveAnnualInterestFraction * ($1.currentValue / totalAssets) })
+        let avgAnnualDebtInterest = data.debts.reduce(0.0, { $0 + $1.annualInterestFraction! * ($1.currentValue / totalAssets) })
         return avgAnnualAssetInterest - avgAnnualDebtInterest
     }
     var avgAnnualBalanceInterest: Double {
         let interest = (data.balance(at: Date(timeIntervalSinceNow: .year)) / data.balance(at: .now)) - 1.0
         return interest.isFinite ? interest : 0
     }
-    var avgAnnualNetWorthInterest: Double {
-        let interest = (data.netWorth(at: Date(timeIntervalSinceNow: .year)) / data.netWorth(at: .now)) - 1.0
-        return interest.isFinite ? interest : 0
-    }
     var liveOffMonths: Double {
         guard 0 < data.balance(at: .now) else { return 0.0 }
-        let passiveIncome = data.income.filter { $0.isPassive }
-        let totalPassiveIncome = passiveIncome.reduce(0.0, { $0 + $1.monthlyEarnings })
+        let passiveIncome = data.income.filter { $0.isPassive! }
+        let totalPassiveIncome = passiveIncome.reduce(0.0, { $0 + $1.monthlyEarnings! })
         guard totalPassiveIncome < data.totalExpenses else { return .infinity }
         
         // Static = Same amount every month
-        let totalStaticExpenses = data.expenses.filter { !$0.fromDebt }.reduce(0.0, { $0 + $1.monthlyCost })
-        let totalStaticPassiveIncome = passiveIncome.filter { !$0.fromAsset }.reduce(0.0, { $0 + $1.monthlyEarnings })
+        // Exclude debt interest since it's included in `avgAnnualBalanceInterest`
+        let totalStaticExpenses = data.expenses.filter { !$0.fromDebt! }.reduce(0.0, { $0 + $1.monthlyCost })
+        // Exclude asset interest since it's included in `avgAnnualBalanceInterest`
+        let totalStaticPassiveIncome = passiveIncome.filter { !$0.fromAsset! }.reduce(0.0, { $0 + $1.monthlyEarnings! })
         let staticMonthlyDrain = totalStaticExpenses - totalStaticPassiveIncome
         
         // Dynamic = Different amount every month based on interest percentages
@@ -73,7 +71,8 @@ final class InsightsGenerator {
     
     func netWorthPercentile() -> Double? {
         let userType = UserType(rawValue: UserDefaults.standard.string(forKey: UserDefaults.Key.userType) ?? "") ?? .individual
-        let householdNetWorth = data.netWorth(at: .now) * (userType == .individual ? 2 : 1)
+        let otherHouseholdNetWorth = (userType == .individual ? UserDefaults.standard.double(forKey: UserDefaults.Key.otherHouseholdNetWorth) : 0)
+        let householdNetWorth = data.netWorth(at: .now, passive: false) + otherHouseholdNetWorth
         return netWorthPercentile(householdNetWorth: householdNetWorth, at: .now, locale: .current)
     }
     func netWorthPercentile(householdNetWorth: Double, at date: Date, locale: Locale) -> Double? {
@@ -102,14 +101,17 @@ final class InsightsGenerator {
     var avgAnnualBalanceInterestString: String {
         percentFormatter.string(from: NSNumber(value: avgAnnualBalanceInterest))!
     }
+    var avgAnnualPassiveNetWorthInterestString: String {
+        percentFormatter.string(from: NSNumber(value: data.avgAnnualNetWorthInterest(passive: true)))!
+    }
     var avgAnnualNetWorthInterestString: String {
-        percentFormatter.string(from: NSNumber(value: avgAnnualNetWorthInterest))!
+        percentFormatter.string(from: NSNumber(value: data.avgAnnualNetWorthInterest(passive: false)))!
     }
     var balanceIn5YearsString: String {
         currencyFormatter.string(from: NSNumber(value: data.balance(at: .now + 5 * TimeInterval.year)))!
     }
     var netWorthIn5YearsString: String {
-        currencyFormatter.string(from: NSNumber(value: data.netWorth(at: .now + 5 * TimeInterval.year)))!
+        currencyFormatter.string(from: NSNumber(value: data.netWorth(at: .now + 5 * TimeInterval.year, passive: false)))!
     }
     var retirementBalanceString: String? {
         guard let retirementBalance = retirementBalance else { return nil }
@@ -133,8 +135,8 @@ final class InsightsGenerator {
     var requiredBalanceToLiveOffString: String? {
         guard 0 < avgAnnualBalanceInterest else { return nil }
         
-        let totalStaticExpenses = data.expenses.filter { !$0.fromDebt }.reduce(0.0, { $0 + $1.monthlyCost })
-        let totalStaticPassiveIncome = data.income.filter { $0.isPassive && !$0.fromAsset }.reduce(0.0, { $0 + $1.monthlyEarnings })
+        let totalStaticExpenses = data.expenses.filter { !$0.fromDebt! }.reduce(0.0, { $0 + $1.monthlyCost })
+        let totalStaticPassiveIncome = data.income.filter { $0.isPassive! && !$0.fromAsset! }.reduce(0.0, { $0 + $1.monthlyEarnings! })
         let staticMonthlyDrain = totalStaticExpenses - totalStaticPassiveIncome
         
         let requiredNewAssets = staticMonthlyDrain / (avgAnnualBalanceInterest / 12)
@@ -152,14 +154,16 @@ final class InsightsGenerator {
     
     func generate() -> [AttributedString] {
         var insights: [AttributedString] = []
-        if 0 < liveOffMonths {
-            insights.append(try! AttributedString(markdown: "You could live off your \(0 < data.income.filter { $0.isPassive && !$0.fromAsset }.count ? "passive income" : "assets") for **\(liveOffTimeString)**."))
-        }
-        if liveOffTimeString != "forever", let requiredBalanceToLiveOffString = requiredBalanceToLiveOffString {
-            insights.append(try! AttributedString(markdown: "You need **\(requiredBalanceToLiveOffString)** to live off of your passive income forever."))
+        if !data.expenses.isEmpty {
+            if 0 < liveOffMonths {
+                insights.append(try! AttributedString(markdown: "You could live off your \(0 < data.income.filter { $0.isPassive! && !$0.fromAsset! }.count ? "passive income" : "assets") for **\(liveOffTimeString)**."))
+            }
+            if liveOffTimeString != "forever", let requiredBalanceToLiveOffString = requiredBalanceToLiveOffString {
+                insights.append(try! AttributedString(markdown: "You need **\(requiredBalanceToLiveOffString)** to live off of your passive income forever."))
+            }
         }
         if let retirementBalanceString = retirementBalanceString, let adjustedRetirementBalanceString = adjustedRetirementBalanceString {
-//            insights.append(try! AttributedString(markdown: "At retirement, your balance could be **\(retirementBalanceString)**. (**\(adjustedRetirementBalanceString)** adjusted for inflation.)"))
+            insights.append(try! AttributedString(markdown: "At retirement, your balance could be **\(retirementBalanceString)**. (**\(adjustedRetirementBalanceString)** adjusted for inflation.)"))
         }
         return insights
     }

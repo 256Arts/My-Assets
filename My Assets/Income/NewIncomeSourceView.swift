@@ -10,6 +10,7 @@ import SwiftUI
 
 struct NewIncomeSourceView: View {
     
+    @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) var dismiss
     
     @EnvironmentObject var data: FinancialData
@@ -20,14 +21,30 @@ struct NewIncomeSourceView: View {
     var body: some View {
         Form {
             Section {
-                TextField("Name", text: $income.name)
+                TextField("Name", text: Binding(get: {
+                    income.name ?? ""
+                }, set: { newValue in
+                    income.name = newValue
+                }))
                     .textInputAutocapitalization(.words)
                 OptionalDoubleField("Monthly Earnings ($)", value: $earnings, formatter: currencyFormatter)
-                Toggle("Liquid", isOn: $income.isLiquid)
-                Toggle("Passive", isOn: $income.isPassive)
+                Toggle("Liquid", isOn: Binding(get: {
+                    income.isLiquid ?? true
+                }, set: { newValue in
+                    income.isLiquid = newValue
+                }))
+                Toggle("Passive", isOn: Binding(get: {
+                    income.isPassive ?? false
+                }, set: { newValue in
+                    income.isPassive = newValue
+                }))
             }
             Section {
-                SymbolPicker(selected: $income.symbol)
+                SymbolPicker(selected: Binding(get: {
+                    income.symbol ?? .defaultSymbol
+                }, set: { newValue in
+                    income.symbol = newValue
+                }))
             }
         }
         .navigationTitle("Add Income")
@@ -41,6 +58,7 @@ struct NewIncomeSourceView: View {
                 Button("Done") {
                     if let earnings = self.earnings {
                         self.income.monthlyEarnings = earnings
+                        modelContext.insert(income)
                         self.data.nonAssetIncome.append(self.income)
                         self.data.nonAssetIncome.sort(by: { $0 > $1 })
                         self.dismiss()
@@ -48,10 +66,10 @@ struct NewIncomeSourceView: View {
                 }
             }
         }
-        .navigationTitle(income.name)
+        .navigationTitle(income.name ?? "")
         .onChange(of: income.symbol) { _, newValue in
-            if income.name.isEmpty {
-                income.name = newValue.suggestedTitle
+            if (income.name ?? "").isEmpty {
+                income.name = newValue?.suggestedTitle
             }
         }
     }

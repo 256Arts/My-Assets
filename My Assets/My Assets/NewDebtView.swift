@@ -12,6 +12,7 @@ struct NewDebtView: View {
     
     @Environment(\.dismiss) var dismiss
     
+    @Environment(\.modelContext) private var modelContext
     @EnvironmentObject var data: FinancialData
     
     @State var debt = Debt()
@@ -22,7 +23,11 @@ struct NewDebtView: View {
     var body: some View {
         Form {
             Section {
-                TextField("Name", text: $debt.name)
+                TextField("Name", text: Binding(get: {
+                    debt.name ?? ""
+                }, set: { newValue in
+                    debt.name = newValue
+                }))
                     .textInputAutocapitalization(.words)
                 OptionalDoubleField("Value ($)", value: $value, formatter: currencyFormatter) { inFocus in
                     guard let value = value else { return }
@@ -42,7 +47,11 @@ struct NewDebtView: View {
                 }
             }
             Section {
-                SymbolPicker(selected: $debt.symbol)
+                SymbolPicker(selected: Binding(get: {
+                    debt.symbol ?? .defaultSymbol
+                }, set: { newValue in
+                    debt.symbol = newValue
+                }))
             }
         }
         .navigationTitle("Add Debt")
@@ -58,6 +67,7 @@ struct NewDebtView: View {
                         let interest = self.interest ?? 0.0
                         self.debt.annualInterestFraction = interest
                         self.debt.currentValue = value
+                        modelContext.insert(debt)
                         self.data.debts.append(self.debt)
                         self.data.debts.sort(by: { $0 > $1 })
                         self.dismiss()
@@ -66,9 +76,9 @@ struct NewDebtView: View {
                 .disabled(value == nil)
             }
         }
-        .onChange(of: debt.symbol) { newValue in
-            if debt.name.isEmpty {
-                debt.name = newValue.suggestedTitle
+        .onChange(of: debt.symbol) { _, newValue in
+            if (debt.name ?? "").isEmpty {
+                debt.name = newValue?.suggestedTitle
             }
         }
     }

@@ -19,7 +19,7 @@ struct AssetView: View {
     
     init(asset: Binding<Asset>) {
         _asset = asset
-        _nameCopy = State(initialValue: asset.wrappedValue.name)
+        _nameCopy = State(initialValue: asset.wrappedValue.name ?? "")
     }
     
     var body: some View {
@@ -28,24 +28,36 @@ struct AssetView: View {
                 TextField("Name", text: $nameCopy)
                     .textInputAutocapitalization(.words)
                 DoubleField("Amount", value: $asset.currentValue, formatter: currencyFormatter)
-                Toggle("Liquid", isOn: $asset.isLiquid)
+                Toggle("Liquid", isOn: Binding(get: {
+                    asset.isLiquid ?? true
+                }, set: { newValue in
+                    asset.isLiquid = newValue
+                }))
             }
             Section {
-                DoubleField("Interest", value: $asset.annualInterestFraction, formatter: percentFormatter)
+                DoubleField("Interest", value: Binding(get: {
+                    asset.annualInterestFraction ?? 0
+                }, set: { newValue in
+                    asset.annualInterestFraction = newValue
+                }), formatter: percentFormatter)
                 Picker("Compound Frequency", selection: $asset.compoundFrequency) {
                     ForEach(Asset.CompoundFrequency.allCases) { freq in
                         Text(freq.rawValue.capitalized)
                             .tag(freq)
                     }
                 }
-                if asset.compoundFrequency.timeInterval != .year {
+                if (asset.compoundFrequency ?? .monthly).timeInterval != .year {
                     Text("Effective Rate: \(percentFormatter.string(from: NSNumber(value: asset.effectiveAnnualInterestFraction))!)")
                 }
             } header: {
                 Text("Interest")
             }
             Section {
-                SymbolPicker(selected: $asset.symbol)
+                SymbolPicker(selected: Binding(get: {
+                    asset.symbol ?? .defaultSymbol
+                }, set: { newValue in
+                    asset.symbol = newValue
+                }))
             }
         }
         .navigationTitle("Asset")

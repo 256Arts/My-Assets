@@ -10,19 +10,20 @@ import SwiftUI
 
 struct NewStockView: View {
     
+    @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) var dismiss
     
     @EnvironmentObject var data: FinancialData
     
     @State var stockSymbol = ""
-    @State var stockShares = 0
+    @State var stockShares = 0.0
     
     var body: some View {
         Form {
             TextField("Symbol", text: $stockSymbol)
                 .autocapitalization(.allCharacters)
                 .disableAutocorrection(true)
-            TextField("Number Of Shares", value: $stockShares, formatter: NumberFormatter())
+            DoubleField("Number Of Shares", value: $stockShares, formatter: NumberFormatter())
         }
             .navigationTitle("Add Stock")
             .navigationBarItems(leading: Button(action: {
@@ -32,6 +33,7 @@ struct NewStockView: View {
             }), trailing: Button(action: {
                 let stock = Stock(symbol: self.stockSymbol, shares: self.stockShares)
                 stock.fetchPrices()
+                modelContext.insert(stock)
                 self.data.stocks.append(stock)
                 self.dismiss()
             }, label: {

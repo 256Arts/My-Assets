@@ -11,25 +11,14 @@ import Charts
 
 struct MyAssetsView: View {
     
-    struct ValueAtDate: Identifiable {
-        let value: Double
-        let date: Date
-        var id: Date { date }
-    }
-    enum ChartDataSource: String, Identifiable, CaseIterable {
-        case balance = "Balance"
-        case netWorth = "Net Worth"
-        
-        var id: Self { self }
-    }
-    
     @AppStorage(UserDefaults.Key.amountMarqueePeriod) var periodRawValue = "Month"
     @AppStorage(UserDefaults.Key.amountMarqueeShowAsCombinedValue) var showAsCombinedValue = false
     
+    @Environment(\.modelContext) private var modelContext
     @EnvironmentObject var data: FinancialData
     @Environment(\.horizontalSizeClass) private var hSizeClass
 
-    @State var chartDataSource: ChartDataSource = .balance
+    @State var chartDataSource: FiveYearChart.ChartDataSource = .balance
     @State var showingSettings = false
     @State var showingNewAsset = false
     @State var showingNewDebt = false
@@ -39,49 +28,6 @@ struct MyAssetsView: View {
         }
     }
     
-    var chartData: [ValueAtDate] {
-        let nowThrough5Years = (0...5).map { Date.now + TimeInterval($0) * .year }
-        return nowThrough5Years.map {
-            let value: Double
-            switch chartDataSource {
-            case .balance:
-                value = data.balance(at: $0)
-            case .netWorth:
-                value = data.netWorth(at: $0)
-            }
-            return ValueAtDate(value: value, date: $0)
-        }
-    }
-    var chartInflationData: [ValueAtDate] {
-        let startingValue: Double
-        switch chartDataSource {
-        case .balance:
-            startingValue = data.balance(at: .now)
-        case .netWorth:
-            startingValue = data.netWorth(at: .now)
-        }
-        let nowThrough5Years = (0...5)
-        return nowThrough5Years.map {
-            let value = startingValue * pow(1 + WorldFinanceStats.shared.averageAnnualUSInflation, Double($0))
-            let date = Date.now + TimeInterval($0) * .year
-            return ValueAtDate(value: value, date: date)
-        }
-    }
-    var chartYoYString: String? {
-        let fraction: Double = {
-            switch chartDataSource {
-            case .balance:
-                return insights.avgAnnualBalanceInterest
-            case .netWorth:
-                return insights.avgAnnualNetWorthInterest
-            }
-        }()
-        if 0 < fraction {
-            return percentFormatter.string(from: NSNumber(value: fraction))!
-        } else {
-            return nil
-        }
-    }
     var insights: InsightsGenerator {
         .init(data: data)
     }
@@ -108,7 +54,7 @@ struct MyAssetsView: View {
                 Section {
                     ForEach($data.nonStockAssets) { $asset in
                         NavigationLink(destination: AssetView(asset: $asset)) {
-                            AmountRow(symbol: asset.symbol, label: asset.name, amount: asset.currentValue)
+                            AmountRow(symbol: asset.symbol ?? .defaultSymbol, label: asset.name ?? "", amount: asset.currentValue)
                         }
                     }
                     .onDelete(perform: deleteAsset)
@@ -124,7 +70,7 @@ struct MyAssetsView: View {
                 Section {
                     ForEach($data.debts) { $debt in
                         NavigationLink(destination: DebtView(debt: $debt)) {
-                            AmountRow(symbol: debt.symbol, label: debt.name, amount: debt.currentValue)
+                            AmountRow(symbol: debt.symbol ?? .defaultSymbol, label: debt.name ?? "", amount: debt.currentValue)
                         }
                     }
                     .onDelete(perform: deleteDebt)
@@ -138,38 +84,15 @@ struct MyAssetsView: View {
                 }
                 Section {
                     Picker("Chart Data", selection: $chartDataSource) {
-                        ForEach(ChartDataSource.allCases) {
+                        ForEach(FiveYearChart.ChartDataSource.allCases) {
                             Text($0.rawValue)
                                 .tag($0)
                         }
                     }
                     .pickerStyle(.segmented)
                     
-                    Chart {
-                        ForEach(chartData) { datum in
-                            LineMark(x: .value("Date", datum.date), y: .value("Value", datum.value), series: .value("Data", chartDataSource.rawValue))
-                                .interpolationMethod(.cardinal)
-                                .foregroundStyle(Color.green)
-                        }
-                        ForEach(chartInflationData) { datum in
-                            LineMark(x: .value("Date", datum.date), y: .value("Value", datum.value), series: .value("Data", "Inflation"))
-                                .interpolationMethod(.cardinal)
-                                .foregroundStyle(Color.secondary)
-                                .lineStyle(StrokeStyle(lineWidth: 2, lineCap: .round, dash: [0.01, 4]))
-                        }
-                    }
-                    .frame(height: 200)
-                    .overlay(alignment: .topLeading) {
-                        if let chartYoYString {
-                            Text("YoY: \(chartYoYString)")
-                                .font(.headline)
-                                .accessibilityRepresentation {
-                                    Text(chartYoYString)
-                                        .accessibilityLabel("Year over Year")
-                                }
-                        }
-                    }
-                    .padding(.top, 4)
+                    FiveYearChart(chartDataSource: $chartDataSource)
+                        .padding(.top, 4)
                     
                     ForEach(Array(insights.generate().enumerated()), id: \.0) { (_, string) in
                         Text(string)
@@ -179,7 +102,7 @@ struct MyAssetsView: View {
                 }
                 Section {
                     TimelineView(.periodic(from: Date(), by: 1.0)) { context in
-                        AmountMarquee(period: $period, showAsCombinedValue: $showAsCombinedValue, currentValue: data.netWorth(at: .now), monthlyIncome: data.totalIncome, monthlyExpenses: data.totalExpenses)
+                        AmountMarquee(period: $period, showAsCombinedValue: $showAsCombinedValue, currentValue: data.netWorth(at: context.date, passive: false), monthlyIncome: data.totalIncome, monthlyExpenses: data.totalExpenses)
                     }
                     .contextMenu {
                         Picker("Period", selection: $period) {
@@ -261,8 +184,10 @@ struct MyAssetsView: View {
         for offset in offsets {
             let asset = self.data.assets[offset]
             if let index = self.data.nonStockAssets.firstIndex(of: asset) {
+                modelContext.delete(asset)
                 self.data.nonStockAssets.remove(at: index)
             } else if let index = self.data.stocks.firstIndex(where: { $0.symbol == asset.name }) {
+                modelContext.delete(data.stocks[index])
                 self.data.stocks.remove(at: index)
             }
         }
@@ -270,6 +195,7 @@ struct MyAssetsView: View {
     
     func deleteDebt(at offsets: IndexSet) {
         for offset in offsets {
+            modelContext.delete(data.debts[offset])
             data.debts.remove(at: offset)
         }
     }

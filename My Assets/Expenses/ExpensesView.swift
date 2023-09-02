@@ -10,6 +10,7 @@ import SwiftUI
 
 struct ExpensesView: View {
     
+    @Environment(\.modelContext) private var modelContext
     @EnvironmentObject var data: FinancialData
     @State var showingDetail = false
     
@@ -21,15 +22,15 @@ struct ExpensesView: View {
         NavigationStack {
             List {
                 Section {
-                    ForEach(data.expenses.filter({ $0.fromDebt })) { expense in
-                        AmountRow(symbol: expense.symbol, label: expense.name, amount: expense.monthlyCost)
+                    ForEach(data.expenses.filter({ $0.fromDebt! })) { expense in
+                        AmountRow(symbol: expense.symbol ?? .defaultSymbol, label: expense.name ?? "", amount: expense.monthlyCost)
                     }
                     ForEach(data.nonDebtExpenses) { expense in
                         NavigationLink(value: expense) {
                             VStack(spacing: 8) {
-                                AmountRow(symbol: expense.symbol, label: expense.name, amount: expense.monthlyCost)
-                                ForEach(expense.children) { child in
-                                    AmountRow(symbol: child.symbol, label: child.name, amount: child.monthlyCost)
+                                AmountRow(symbol: expense.symbol ?? .defaultSymbol, label: expense.name ?? "", amount: expense.monthlyCost)
+                                ForEach(expense.children ?? []) { child in
+                                    AmountRow(symbol: child.symbol ?? .defaultSymbol, label: child.name ?? "", amount: child.monthlyCost)
                                         .foregroundColor(.secondary)
                                         .padding(.leading, 32)
                                 }
@@ -81,6 +82,7 @@ struct ExpensesView: View {
     
     func delete(at offsets: IndexSet) {
         for offset in offsets {
+            modelContext.delete(data.nonDebtExpenses[offset])
             data.nonDebtExpenses.remove(at: offset)
         }
     }

@@ -10,9 +10,10 @@ import SwiftUI
 
 struct ExpenseView: View {
     
+    @Environment(\.modelContext) private var modelContext
     @EnvironmentObject var data: FinancialData
     
-    @ObservedObject var expense: Expense
+    @Bindable var expense: Expense
     
     // Bug workaround: Editing name causes view to pop
     @State var nameCopy: String
@@ -20,7 +21,7 @@ struct ExpenseView: View {
     
     init(expense: Expense) {
         self.expense = expense
-        _nameCopy = State(initialValue: expense.name)
+        _nameCopy = State(initialValue: expense.name ?? "")
     }
     
     var body: some View {
@@ -28,7 +29,11 @@ struct ExpenseView: View {
             Section {
                 TextField("Name", text: $nameCopy)
                     .textInputAutocapitalization(.words)
-                DoubleField("Monthly Cost ($)", value: $expense.baseMonthlyCost, formatter: currencyFormatter)
+                DoubleField("Monthly Cost ($)", value: Binding(get: {
+                    expense.baseMonthlyCost ?? 0
+                }, set: { newValue in
+                    expense.baseMonthlyCost = newValue
+                }), formatter: currencyFormatter)
             }
             Section {
                 Button {
@@ -36,14 +41,9 @@ struct ExpenseView: View {
                 } label: {
                     Label("Add", systemImage: "plus.circle")
                 }
-                ForEach(expense.children) { child in
+                ForEach(expense.children ?? []) { child in
                     NavigationLink(value: child) {
-                        HStack {
-                            SymbolImage(symbol: child.symbol)
-                            Text(child.name)
-                            Spacer()
-                            Text(currencyFormatter.string(from: NSNumber(value: child.monthlyCost))!)
-                        }
+                        AmountRow(symbol: child.symbol ?? .defaultSymbol, label: child.name ?? "", amount: child.monthlyCost)
                     }
                 }
                 .onDelete(perform: delete)
@@ -51,7 +51,11 @@ struct ExpenseView: View {
                 Text("Subexpenses")
             }
             Section {
-                SymbolPicker(selected: $expense.symbol)
+                SymbolPicker(selected: Binding(get: {
+                    expense.symbol ?? .defaultSymbol
+                }, set: { newValue in
+                    expense.symbol = newValue
+                }))
             }
         }
         .navigationTitle("Expense")
@@ -69,7 +73,10 @@ struct ExpenseView: View {
     
     func delete(at offsets: IndexSet) {
         for offset in offsets {
-            expense.children.remove(at: offset)
+            if let children = expense.children {
+                modelContext.delete(children[offset])
+            }
+//            expense.children.remove(at: offset)
         }
     }
     

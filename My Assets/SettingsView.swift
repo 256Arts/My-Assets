@@ -13,6 +13,7 @@ struct SettingsView: View {
     @Environment(\.dismiss) var dismiss
     
     @AppStorage(UserDefaults.Key.userType) var userTypeValue = UserType.individual.rawValue
+    @AppStorage(UserDefaults.Key.otherHouseholdNetWorth) var otherHouseholdNetWorth = 0.0
     #if DEBUG
     @AppStorage(UserDefaults.Key.showDebugData) var showDebugData = false {
         didSet {
@@ -32,13 +33,16 @@ struct SettingsView: View {
                             .tag(userType.rawValue)
                     }
                 }
+                if userTypeValue == UserType.individual.rawValue {
+                    DoubleField("Other Household Net Worth", value: $otherHouseholdNetWorth, formatter: NumberFormatter())
+                }
             } footer: {
-                Text("Net worth percentiles are based on 2020 data from the USA, adjusted for inflation, and converted to your currency. If you are an individual, we assume your household has twice the net worth as you.")
+                Text("Net worth percentiles are based on 2020 data from the USA, adjusted for inflation, and converted to your currency.")
             }
             
-//                Section {
-//                    DatePicker("Birthday", selection: $birthday, in: ...Date.now, displayedComponents: .date)
-//                }
+            Section {
+                DatePicker("Birthday", selection: $birthday, in: ...Date.now, displayedComponents: .date)
+            }
             
             #if DEBUG
             Section {

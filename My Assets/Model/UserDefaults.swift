@@ -14,6 +14,7 @@ extension UserDefaults {
         static let whatsNewVersion = "whatsNewVersion"
         static let financialData = "financialData" // iCloud
         static let userType = "userType"
+        static let otherHouseholdNetWorth = "otherHouseholdNetWorth"
         static let birthday = "birthday"
         static let amountMarqueePeriod = "amountMarqueePeriod"
         static let amountMarqueeShowAsCombinedValue = "amountMarqueeShowAsCombinedValue"
@@ -27,6 +28,7 @@ extension UserDefaults {
         register(defaults: [
             Key.whatsNewVersion: 0,
             Key.userType: UserType.individual.rawValue,
+            Key.otherHouseholdNetWorth: 0.0,
             Key.amountMarqueePeriod: Period.month.rawValue,
             Key.amountMarqueeShowAsCombinedValue: false
         ])

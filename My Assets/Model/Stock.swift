@@ -7,16 +7,18 @@
 //
 
 import Foundation
+import SwiftData
 
-class Stock: Identifiable, Codable {
+@Model
+class Stock {
     
     static let apiKey = "MZ4NGAVYGGF4NACP"
     
-    let symbol: String
+    let symbol: String?
     var id: String {
-        symbol
+        symbol ?? ""
     }
-    var numberOfShares: Int
+    var numberOfShares: Double?
     var price: Double?
     var annualInterestFraction: Double? {
         guard let prevD = prevDate, let prevP = prevPrice, let curr = price else { return nil }
@@ -27,7 +29,7 @@ class Stock: Identifiable, Codable {
     private var prevPrice: Double?
     private var prevDate: Date?
     
-    init(symbol: String, shares: Int) {
+    init(symbol: String, shares: Double) {
         self.symbol = symbol
         self.numberOfShares = shares
         self.price = nil
@@ -36,7 +38,7 @@ class Stock: Identifiable, Codable {
     }
     
     func fetchPrices() {
-        let url = URL(string: "https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=\(symbol)&apikey=\(Stock.apiKey)")!
+        let url = URL(string: "https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=\(symbol ?? "")&apikey=\(Stock.apiKey)")!
         let task = URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
             if let error = error {
                 print(error)
@@ -86,7 +88,7 @@ class Stock: Identifiable, Codable {
                 self?.prevPrice = aYearAgoClose
                 df.dateFormat = "yyyy-MM-dd"
                 self?.prevDate = df.date(from: aYearAgoKey)!
-                CloudController.shared.financialData?.save()
+//                CloudController.shared.financialData?.save()
                 print(self?.price, self?.prevPrice)
             } catch {
                 print("error")
@@ -96,7 +98,7 @@ class Stock: Identifiable, Codable {
     }
     
     func fetchExchange() {
-        let url = URL(string: "https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_MONTHLY&symbol=\(symbol)&market=USD&apikey=\(Stock.apiKey)")!
+        let url = URL(string: "https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_MONTHLY&symbol=\(symbol ?? "")&market=USD&apikey=\(Stock.apiKey)")!
             let task = URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
                 if let error = error {
     //                self.handleClientError(error)
@@ -140,7 +142,7 @@ class Stock: Identifiable, Codable {
                     self?.prevPrice = aYearAgoClose
                     df.dateFormat = "yyyy-MM-dd"
                     self?.prevDate = df.date(from: aYearAgoKey)!
-                    CloudController.shared.financialData?.save()
+//                    CloudController.shared.financialData?.save()
                     print(self?.price, self?.prevPrice)
                 } catch {
                     print("error")

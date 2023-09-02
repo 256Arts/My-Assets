@@ -23,7 +23,6 @@
 		1B3193B1282DDF4C00AA2038 /* UserType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3823DE280226510037BAFE /* UserType.swift */; };
 		1B3193B2282DDF5200AA2038 /* Symbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA2CC372729ECE2009F3D40 /* Symbol.swift */; };
 		1B3193B3282DDF6300AA2038 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3F748B2722072400E53FF0 /* UserDefaults.swift */; };
-		1B3193B4282DE22600AA2038 /* CloudController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B7A38E727F26A80009FE1B6 /* CloudController.swift */; };
 		1B31BAA023EC823F00B6E63A /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B31BA9F23EC823F00B6E63A /* RootTabView.swift */; };
 		1B31BAA223EC824200B6E63A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1B31BAA123EC824200B6E63A /* Assets.xcassets */; };
 		1B31BAA823EC824200B6E63A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1B31BAA623EC824200B6E63A /* LaunchScreen.storyboard */; };
@@ -43,14 +42,12 @@
 		1B3823DF280226510037BAFE /* UserType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3823DE280226510037BAFE /* UserType.swift */; };
 		1B3823E0280226510037BAFE /* UserType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3823DE280226510037BAFE /* UserType.swift */; };
 		1B39058F27BCBC5B005599AB /* AmountMarquee.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B39058E27BCBC5B005599AB /* AmountMarquee.swift */; };
-		1B3F748A2722041D00E53FF0 /* WelcomeKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1B3F74892722041D00E53FF0 /* WelcomeKit */; };
 		1B3F748C2722072400E53FF0 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3F748B2722072400E53FF0 /* UserDefaults.swift */; };
 		1B520E862A749BD300DBA34A /* AmountRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B520E852A749BD300DBA34A /* AmountRow.swift */; };
 		1B520E872A749BD300DBA34A /* AmountRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B520E852A749BD300DBA34A /* AmountRow.swift */; };
 		1B520E882A749BD300DBA34A /* AmountRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B520E852A749BD300DBA34A /* AmountRow.swift */; };
 		1B520E8A2A74A53900DBA34A /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B520E892A74A53900DBA34A /* RootTabView.swift */; };
-		1B7A38E827F26A80009FE1B6 /* CloudController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B7A38E727F26A80009FE1B6 /* CloudController.swift */; };
-		1B7A38E927F26A80009FE1B6 /* CloudController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B7A38E727F26A80009FE1B6 /* CloudController.swift */; };
+		1B75883E2AA2C94500206201 /* FiveYearChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B75883D2AA2C94500206201 /* FiveYearChart.swift */; };
 		1B8C86DD283F289300EEC921 /* JaydenCodeGenerator in Frameworks */ = {isa = PBXBuildFile; productRef = 1B8C86DC283F289300EEC921 /* JaydenCodeGenerator */; };
 		1BA2CC30272900C7009F3D40 /* Period.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA2CC2F272900C7009F3D40 /* Period.swift */; };
 		1BA2CC3227290294009F3D40 /* SymbolPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA2CC3127290294009F3D40 /* SymbolPicker.swift */; };
@@ -103,20 +100,19 @@
 		1BB7E5A127F010C800D51084 /* SymbolImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA2CC3D274D45A0009F3D40 /* SymbolImage.swift */; };
 		1BB7E5A427F010C800D51084 /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B31BA9F23EC823F00B6E63A /* RootTabView.swift */; };
 		1BB7E5A527F010C800D51084 /* OptionalDoubleField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B31BAB923ECFE6300B6E63A /* OptionalDoubleField.swift */; };
-		1BB7E5AB27F0116700D51084 /* WelcomeKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1BB7E5AA27F0116700D51084 /* WelcomeKit */; };
 		1BC0DC2A251B063F00B51FDD /* StockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC0DC29251B063F00B51FDD /* StockView.swift */; };
 		1BC0DC2E251B0B5900B51FDD /* DoubleField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC0DC2D251B0B5900B51FDD /* DoubleField.swift */; };
 		1BC52EC423EDE7D000B5B818 /* IncomeSourceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC52EC323EDE7D000B5B818 /* IncomeSourceView.swift */; };
 		1BC52EC623EDE7DF00B5B818 /* ExpenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC52EC523EDE7DF00B5B818 /* ExpenseView.swift */; };
 		1BC52EC823EDE9F800B5B818 /* NewIncomeSourceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC52EC723EDE9F800B5B818 /* NewIncomeSourceView.swift */; };
 		1BC52ECA23EDEA0500B5B818 /* NewExpenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC52EC923EDEA0500B5B818 /* NewExpenseView.swift */; };
+		1BC6FE2C2A841DB200DD10FB /* WelcomeKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1BC6FE2B2A841DB200DD10FB /* WelcomeKit */; };
 		1BD45D3427F25ED8008E07A9 /* MyAssetsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD45D3327F25ED8008E07A9 /* MyAssetsApp.swift */; };
 		1BD76D9F277CC2B200E499A8 /* Debt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD76D9E277CC2B200E499A8 /* Debt.swift */; };
 		1BE162422A74928B00E4907D /* My_Assets__watchOS_App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE162412A74928B00E4907D /* My_Assets__watchOS_App.swift */; };
 		1BE162462A74928D00E4907D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1BE162452A74928D00E4907D /* Assets.xcassets */; };
 		1BE162492A74928D00E4907D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1BE162482A74928D00E4907D /* Preview Assets.xcassets */; };
 		1BE1624C2A74928D00E4907D /* My Assets.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 1BE1623F2A74928B00E4907D /* My Assets.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		1BE162512A74954B00E4907D /* CloudController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B7A38E727F26A80009FE1B6 /* CloudController.swift */; };
 		1BE162522A74954F00E4907D /* FinancialData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B31BAB123EC874D00B6E63A /* FinancialData.swift */; };
 		1BE162532A74955600E4907D /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3F748B2722072400E53FF0 /* UserDefaults.swift */; };
 		1BE162542A74963700E4907D /* SymbolImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA2CC3D274D45A0009F3D40 /* SymbolImage.swift */; };
@@ -179,7 +175,8 @@
 		1B3F748B2722072400E53FF0 /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
 		1B520E852A749BD300DBA34A /* AmountRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AmountRow.swift; sourceTree = "<group>"; };
 		1B520E892A74A53900DBA34A /* RootTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabView.swift; sourceTree = "<group>"; };
-		1B7A38E727F26A80009FE1B6 /* CloudController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudController.swift; sourceTree = "<group>"; };
+		1B704A422A799599006D701E /* My-Assets--watchOS--Watch-App-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "My-Assets--watchOS--Watch-App-Info.plist"; sourceTree = SOURCE_ROOT; };
+		1B75883D2AA2C94500206201 /* FiveYearChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiveYearChart.swift; sourceTree = "<group>"; };
 		1BA2CC2F272900C7009F3D40 /* Period.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Period.swift; sourceTree = "<group>"; };
 		1BA2CC3127290294009F3D40 /* SymbolPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbolPicker.swift; sourceTree = "<group>"; };
 		1BA2CC332729D2C5009F3D40 /* NewDebtView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewDebtView.swift; sourceTree = "<group>"; };
@@ -224,8 +221,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1BC6FE2C2A841DB200DD10FB /* WelcomeKit in Frameworks */,
 				1B8C86DD283F289300EEC921 /* JaydenCodeGenerator in Frameworks */,
-				1B3F748A2722041D00E53FF0 /* WelcomeKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -233,7 +230,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1BB7E5AB27F0116700D51084 /* WelcomeKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -252,6 +248,7 @@
 			children = (
 				1B31BAAF23EC85C300B6E63A /* MyAssetsView.swift */,
 				1B39058E27BCBC5B005599AB /* AmountMarquee.swift */,
+				1B75883D2AA2C94500206201 /* FiveYearChart.swift */,
 				1B31BAB323EC9CAF00B6E63A /* AssetView.swift */,
 				1BA2CC352729D35F009F3D40 /* DebtView.swift */,
 				1BC0DC29251B063F00B51FDD /* StockView.swift */,
@@ -265,7 +262,6 @@
 		1B085B2223EDC9340008724A /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				1B7A38E727F26A80009FE1B6 /* CloudController.swift */,
 				1B31BAB123EC874D00B6E63A /* FinancialData.swift */,
 				1B3823D52802120F0037BAFE /* WorldFinanceStats.swift */,
 				1B3823D82802187D0037BAFE /* InsightsGenerator.swift */,
@@ -386,6 +382,7 @@
 		1BE162402A74928B00E4907D /* My Assets (watchOS) Watch App */ = {
 			isa = PBXGroup;
 			children = (
+				1B704A422A799599006D701E /* My-Assets--watchOS--Watch-App-Info.plist */,
 				1BAB38582A749A1600FC9543 /* My Assets (watchOS) Watch App.entitlements */,
 				1BE162412A74928B00E4907D /* My_Assets__watchOS_App.swift */,
 				1B520E892A74A53900DBA34A /* RootTabView.swift */,
@@ -441,8 +438,8 @@
 			);
 			name = "My Assets";
 			packageProductDependencies = (
-				1B3F74892722041D00E53FF0 /* WelcomeKit */,
 				1B8C86DC283F289300EEC921 /* JaydenCodeGenerator */,
+				1BC6FE2B2A841DB200DD10FB /* WelcomeKit */,
 			);
 			productName = "My Assets";
 			productReference = 1B31BA9823EC823F00B6E63A /* My Assets.app */;
@@ -462,7 +459,6 @@
 			);
 			name = "My Assets (macOS)";
 			packageProductDependencies = (
-				1BB7E5AA27F0116700D51084 /* WelcomeKit */,
 			);
 			productName = "My Assets (macOS)";
 			productReference = 1BB7E57727F00E8900D51084 /* My Assets (macOS).app */;
@@ -521,8 +517,8 @@
 			);
 			mainGroup = 1B31BA8F23EC823F00B6E63A;
 			packageReferences = (
-				1B3F74882722041D00E53FF0 /* XCRemoteSwiftPackageReference "WelcomeKit" */,
 				1B8C86DB283F289300EEC921 /* XCRemoteSwiftPackageReference "JaydenCodeGenerator" */,
+				1BC6FE2A2A841DB200DD10FB /* XCRemoteSwiftPackageReference "WelcomeKit" */,
 			);
 			productRefGroup = 1B31BA9923EC823F00B6E63A /* Products */;
 			projectDirPath = "";
@@ -588,7 +584,6 @@
 				1B3193A9282DDE8100AA2038 /* WorldFinanceStats.swift in Sources */,
 				1B3193AC282DDF3F00AA2038 /* Stock.swift in Sources */,
 				1B3193AA282DDF3A00AA2038 /* Asset.swift in Sources */,
-				1B3193B4282DE22600AA2038 /* CloudController.swift in Sources */,
 				1B3193AE282DDF4400AA2038 /* Expense.swift in Sources */,
 				1B3193A7282DDE7900AA2038 /* FinancialData.swift in Sources */,
 				1B3193B3282DDF6300AA2038 /* UserDefaults.swift in Sources */,
@@ -611,6 +606,7 @@
 				1B3F748C2722072400E53FF0 /* UserDefaults.swift in Sources */,
 				1BB2F26F23EE11C700A4478C /* Income.swift in Sources */,
 				1BC52EC623EDE7DF00B5B818 /* ExpenseView.swift in Sources */,
+				1B75883E2AA2C94500206201 /* FiveYearChart.swift in Sources */,
 				1B31BAB223EC874D00B6E63A /* FinancialData.swift in Sources */,
 				1BA2CC382729ECE2009F3D40 /* Symbol.swift in Sources */,
 				1BA2CC30272900C7009F3D40 /* Period.swift in Sources */,
@@ -623,7 +619,6 @@
 				1B3823DC280225B30037BAFE /* SettingsView.swift in Sources */,
 				1B31BABA23ECFE6300B6E63A /* OptionalDoubleField.swift in Sources */,
 				1BA2CC3E274D45A0009F3D40 /* SymbolImage.swift in Sources */,
-				1B7A38E827F26A80009FE1B6 /* CloudController.swift in Sources */,
 				1B085B2623EDC9660008724A /* ExpensesView.swift in Sources */,
 				1B39058F27BCBC5B005599AB /* AmountMarquee.swift in Sources */,
 				1B31BAB623ECB96700B6E63A /* NewAssetView.swift in Sources */,
@@ -666,7 +661,6 @@
 				1B3823DD280225B30037BAFE /* SettingsView.swift in Sources */,
 				1BB7E59427F010C100D51084 /* IncomeSourceView.swift in Sources */,
 				1BB7E58D27F010AC00D51084 /* Period.swift in Sources */,
-				1B7A38E927F26A80009FE1B6 /* CloudController.swift in Sources */,
 				1BB7E59027F010BE00D51084 /* ExpensesView.swift in Sources */,
 				1BB7E58C27F010AC00D51084 /* Debt.swift in Sources */,
 				1BB7E58827F010AC00D51084 /* FinancialData.swift in Sources */,
@@ -697,7 +691,6 @@
 				1BAB38502A74982200FC9543 /* Debt.swift in Sources */,
 				1BAB38562A74985800FC9543 /* TimeInterval.swift in Sources */,
 				1BAB384E2A7496F600FC9543 /* MyAssetsView.swift in Sources */,
-				1BE162512A74954B00E4907D /* CloudController.swift in Sources */,
 				1BE162522A74954F00E4907D /* FinancialData.swift in Sources */,
 				1BAB38572A74989B00FC9543 /* UserType.swift in Sources */,
 				1BAB38552A74984900FC9543 /* Period.swift in Sources */,
@@ -957,6 +950,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CODE_SIGN_ENTITLEMENTS = "My Assets (macOS)/My_Assets__macOS_.entitlements";
 				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 2;
@@ -990,6 +984,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CODE_SIGN_ENTITLEMENTS = "My Assets (macOS)/My_Assets__macOS_.entitlements";
 				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 2;
@@ -1030,6 +1025,7 @@
 				ENABLE_PREVIEWS = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "My-Assets--watchOS--Watch-App-Info.plist";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.jaydenirwin.myassets;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1065,6 +1061,7 @@
 				ENABLE_PREVIEWS = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "My-Assets--watchOS--Watch-App-Info.plist";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.jaydenirwin.myassets;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1135,14 +1132,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		1B3F74882722041D00E53FF0 /* XCRemoteSwiftPackageReference "WelcomeKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/JaydenIrwin/WelcomeKit";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
-			};
-		};
 		1B8C86DB283F289300EEC921 /* XCRemoteSwiftPackageReference "JaydenCodeGenerator" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/JaydenIrwin/JaydenCodeGenerator";
@@ -1151,22 +1140,25 @@
 				kind = branch;
 			};
 		};
+		1BC6FE2A2A841DB200DD10FB /* XCRemoteSwiftPackageReference "WelcomeKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/256Arts/WelcomeKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		1B3F74892722041D00E53FF0 /* WelcomeKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1B3F74882722041D00E53FF0 /* XCRemoteSwiftPackageReference "WelcomeKit" */;
-			productName = WelcomeKit;
-		};
 		1B8C86DC283F289300EEC921 /* JaydenCodeGenerator */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 1B8C86DB283F289300EEC921 /* XCRemoteSwiftPackageReference "JaydenCodeGenerator" */;
 			productName = JaydenCodeGenerator;
 		};
-		1BB7E5AA27F0116700D51084 /* WelcomeKit */ = {
+		1BC6FE2B2A841DB200DD10FB /* WelcomeKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 1B3F74882722041D00E53FF0 /* XCRemoteSwiftPackageReference "WelcomeKit" */;
+			package = 1BC6FE2A2A841DB200DD10FB /* XCRemoteSwiftPackageReference "WelcomeKit" */;
 			productName = WelcomeKit;
 		};
 /* End XCSwiftPackageProductDependency section */

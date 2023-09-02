@@ -7,8 +7,10 @@
 //
 
 import Foundation
+import SwiftData
 
-struct Asset: Comparable, Identifiable, Codable {
+@Model
+class Asset: Comparable {
     
     enum CompoundFrequency: String, CaseIterable, Identifiable, Codable {
         case yearly
@@ -22,7 +24,7 @@ struct Asset: Comparable, Identifiable, Codable {
             case .monthly:
                 return .month
             case .biweekly:
-                return .month / 2
+                return .year / 26
             case .yearly, .none:
                 return .year
             }
@@ -36,20 +38,22 @@ struct Asset: Comparable, Identifiable, Codable {
         lhs.currentValue < rhs.currentValue
     }
     
-    var name: String
-    var symbol: Symbol
-    var colorHex: String
+    var name: String?
+    var symbol: Symbol?
+    var colorHex: String?
     var id: String {
-        name + symbol.rawValue + colorHex + compoundFrequency.rawValue
+        (name ?? "") + (symbol?.rawValue ?? "") + (colorHex ?? "") + (compoundFrequency?.rawValue ?? "")
     }
-    var isLiquid: Bool
-    var compoundFrequency: CompoundFrequency
-    var annualInterestFraction: Double
+    var isLiquid: Bool?
+    var compoundFrequency: CompoundFrequency?
+    var annualInterestFraction: Double?
     var effectiveAnnualInterestFraction: Double {
-        if compoundFrequency.timeInterval == .year {
-            return annualInterestFraction
-        } else {
+        guard let annualInterestFraction else { return .nan }
+        
+        if let compoundFrequency, compoundFrequency.timeInterval != .year {
             return pow(1 + (annualInterestFraction / compoundFrequency.periodsPerYear), compoundFrequency.periodsPerYear) - 1
+        } else {
+            return annualInterestFraction
         }
     }
     var currentValue: Double {
@@ -62,18 +66,18 @@ struct Asset: Comparable, Identifiable, Codable {
         }
     }
     var monthlyEarnings: Double {
-        (currentValue * pow(1 + annualInterestFraction/12, 1)) - currentValue
+        (currentValue * pow(1 + effectiveAnnualInterestFraction/12, 1)) - currentValue
     }
     
-    private var prevValue: Double
-    private var prevDate: Date
+    private var prevValue: Double?
+    private var prevDate: Date?
     
     init() {
         self.name = ""
         self.symbol = Symbol.defaultSymbol
         self.colorHex = "000000"
         self.isLiquid = true
-        self.compoundFrequency = .none
+        self.compoundFrequency = Asset.CompoundFrequency.none
         self.annualInterestFraction = 0
         self.prevValue = 0
         self.prevDate = Date()
@@ -84,9 +88,9 @@ struct Asset: Comparable, Identifiable, Codable {
         symbol = Symbol.stocks
         colorHex = "000000"
         isLiquid = true
-        compoundFrequency = .none
+        compoundFrequency = Asset.CompoundFrequency.none
         annualInterestFraction = stock.annualInterestFraction ?? 0.0
-        prevValue = stock.price ?? 0.00 * Double(stock.numberOfShares)
+        prevValue = stock.price ?? 0.00 * Double(stock.numberOfShares ?? 1)
         prevDate = Date()
     }
 
@@ -101,13 +105,15 @@ struct Asset: Comparable, Identifiable, Codable {
         symbol = try values.decode(Symbol.self, forKey: .symbol)
         colorHex = try values.decode(String.self, forKey: .colorHex)
         isLiquid = (try? values.decode(Bool.self, forKey: .isLiquid)) ?? true
-        compoundFrequency = (try? values.decode(CompoundFrequency.self, forKey: .compoundFrequency)) ?? .none
+        compoundFrequency = (try? values.decode(CompoundFrequency.self, forKey: .compoundFrequency)) ?? Asset.CompoundFrequency.none
         annualInterestFraction = try values.decode(Double.self, forKey: .annualInterestFraction)
         prevValue = try values.decode(Double.self, forKey: .prevValue)
         prevDate = try values.decode(Date.self, forKey: .prevDate)
     }
     
     func currentValue(at date: Date) -> Double {
+        guard let prevDate, let prevValue, let compoundFrequency, let annualInterestFraction else { return .nan }
+        
         let periodsSinceDate = date.timeIntervalSince(prevDate) / compoundFrequency.timeInterval
         return prevValue * pow(1 + (annualInterestFraction / compoundFrequency.periodsPerYear), periodsSinceDate)
     }

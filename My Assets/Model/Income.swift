@@ -6,24 +6,25 @@
 //  Copyright © 2020 Jayden Irwin. All rights reserved.
 //
 
-import Foundation
+import SwiftData
 
-struct Income: Comparable, Hashable, Identifiable, Codable {
+@Model
+class Income: Comparable, Hashable {
     
     static func < (lhs: Income, rhs: Income) -> Bool {
-        lhs.monthlyEarnings < rhs.monthlyEarnings
+        lhs.monthlyEarnings ?? 0 < rhs.monthlyEarnings ?? 0
     }
     
-    var name: String
-    var symbol: Symbol
-    var colorHex: String
+    var name: String?
+    var symbol: Symbol?
+    var colorHex: String?
     var id: String {
-        name + symbol.rawValue + colorHex + String(monthlyEarnings)
+        (name ?? "") + (symbol?.rawValue ?? "") + (colorHex ?? "") + String(monthlyEarnings ?? 0)
     }
-    var isLiquid: Bool
-    var monthlyEarnings: Double
-    var isPassive: Bool
-    let fromAsset: Bool
+    var isLiquid: Bool?
+    var monthlyEarnings: Double?
+    var isPassive: Bool?
+    let fromAsset: Bool?
     
     init(name: String, symbol: Symbol, isLiquid: Bool, monthlyEarnings: Double, isPassive: Bool) {
         self.name = name
@@ -43,36 +44,6 @@ struct Income: Comparable, Hashable, Identifiable, Codable {
         monthlyEarnings = asset.monthlyEarnings
         isPassive = true
         fromAsset = true
-    }
-    
-    enum CodingKeys: String, CodingKey {
-        case name, symbol, colorHex, isLiquid, monthlyEarnings, isPassive
-    }
-    enum CodingError: Error {
-        case isFromAsset
-    }
-    
-    init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        name = try values.decode(String.self, forKey: .name)
-        let symbolName = try values.decode(String.self, forKey: .symbol)
-        symbol = .init(rawValue: symbolName) ?? .init(rawValue: Symbol.defaultSymbol.rawValue)!
-        colorHex = try values.decode(String.self, forKey: .colorHex)
-        isLiquid = (try? values.decode(Bool.self, forKey: .isLiquid)) ?? true
-        monthlyEarnings = try values.decode(Double.self, forKey: .monthlyEarnings)
-        isPassive = try values.decode(Bool.self, forKey: .isPassive)
-        fromAsset = false
-    }
-    
-    func encode(to encoder: Encoder) throws {
-        guard !fromAsset else { throw CodingError.isFromAsset }
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(name, forKey: .name)
-        try container.encode(symbol.rawValue, forKey: .symbol)
-        try container.encode(colorHex, forKey: .colorHex)
-        try container.encode(isLiquid, forKey: .isLiquid)
-        try container.encode(monthlyEarnings, forKey: .monthlyEarnings)
-        try container.encode(isPassive, forKey: .isPassive)
     }
     
 }

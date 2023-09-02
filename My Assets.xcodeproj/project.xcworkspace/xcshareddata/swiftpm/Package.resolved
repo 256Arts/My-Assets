@@ -12,10 +12,10 @@
     {
       "identity" : "welcomekit",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/JaydenIrwin/WelcomeKit",
+      "location" : "https://github.com/256Arts/WelcomeKit",
       "state" : {
-        "revision" : "6d699f12ef3c119582519e76465671593a4d6bbd",
-        "version" : "1.6.3"
+        "revision" : "ba92399d329eda1b456821092965f2e342c1fd10",
+        "version" : "1.0.0"
       }
     }
   ],

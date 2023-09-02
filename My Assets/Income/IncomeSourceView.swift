@@ -19,7 +19,7 @@ struct IncomeSourceView: View {
     
     init(income: Binding<Income>) {
         _income = income
-        _nameCopy = State(initialValue: income.wrappedValue.name)
+        _nameCopy = State(initialValue: income.wrappedValue.name ?? "")
     }
     
     var body: some View {
@@ -27,12 +27,28 @@ struct IncomeSourceView: View {
             Section {
                 TextField("Name", text: $nameCopy)
                     .textInputAutocapitalization(.words)
-                DoubleField("Monthly Earnings ($)", value: $income.monthlyEarnings, formatter: currencyFormatter)
-                Toggle("Liquid", isOn: $income.isLiquid)
-                Toggle("Passive", isOn: $income.isPassive)
+                DoubleField("Monthly Earnings ($)", value: Binding(get: {
+                    income.monthlyEarnings ?? 0
+                }, set: { newValue in
+                    income.monthlyEarnings = newValue
+                }), formatter: currencyFormatter)
+                Toggle("Liquid", isOn: Binding(get: {
+                    income.isLiquid ?? true
+                }, set: { newValue in
+                    income.isLiquid = newValue
+                }))
+                Toggle("Passive", isOn: Binding(get: {
+                    income.isPassive ?? false
+                }, set: { newValue in
+                    income.isPassive = newValue
+                }))
             }
             Section {
-                SymbolPicker(selected: $income.symbol)
+                SymbolPicker(selected: Binding(get: {
+                    income.symbol ?? .defaultSymbol
+                }, set: { newValue in
+                    income.symbol = newValue
+                }))
             }
         }
         .navigationTitle("Income Source")

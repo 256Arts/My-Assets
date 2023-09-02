@@ -12,22 +12,31 @@ struct NewExpenseView: View {
     
     var parentExpense: Expense?
     
+    @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) var dismiss
     
     @EnvironmentObject var data: FinancialData
     
-    @StateObject var expense = Expense(name: "", symbol: Symbol.defaultSymbol, monthlyCost: 0)
+    @Bindable var expense = Expense(name: "", symbol: Symbol.defaultSymbol, monthlyCost: 0)
     @State var cost: Double?
     
     var body: some View {
         Form {
             Section {
-                TextField("Name", text: $expense.name)
+                TextField("Name", text: Binding(get: {
+                    expense.name ?? ""
+                }, set: { newValue in
+                    expense.name = newValue
+                }))
                     .textInputAutocapitalization(.words)
                 OptionalDoubleField("Monthly Cost ($)", value: $cost, formatter: currencyFormatter)
             }
             Section {
-                SymbolPicker(selected: $expense.symbol)
+                SymbolPicker(selected: Binding(get: {
+                    expense.symbol ?? .defaultSymbol
+                }, set: { newValue in
+                    expense.symbol = newValue
+                }))
             }
         }
         .navigationTitle("Add Expense")
@@ -41,9 +50,11 @@ struct NewExpenseView: View {
                 Button("Done") {
                     if let cost = self.cost {
                         self.expense.baseMonthlyCost = cost
+                        modelContext.insert(expense)
                         if let parentExpense = self.parentExpense {
-                            parentExpense.children.append(self.expense)
-                            parentExpense.children.sort(by: { $0 > $1 })
+                            expense.parent = parentExpense
+//                            parentExpense.children.append(self.expense)
+//                            parentExpense.children.sort(by: { $0 > $1 })
                         } else {
                             self.data.nonDebtExpenses.append(self.expense)
                             self.data.nonDebtExpenses.sort(by: { $0 > $1 })
@@ -54,8 +65,8 @@ struct NewExpenseView: View {
             }
         }
         .onChange(of: expense.symbol) { _, newValue in
-            if expense.name.isEmpty {
-                expense.name = newValue.suggestedTitle
+            if (expense.name ?? "").isEmpty {
+                expense.name = newValue?.suggestedTitle
             }
         }
     }

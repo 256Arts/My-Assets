@@ -18,17 +18,18 @@ struct IncomeView: View {
         let income: Double
     }
     
+    @Environment(\.modelContext) private var modelContext
     @EnvironmentObject var data: FinancialData
     @State var showingDetail = false
 
     var workingIncome: Double {
-        data.income.filter({ !$0.isPassive }).reduce(0, { $0 + $1.monthlyEarnings })
+        data.income.filter({ !$0.isPassive! }).reduce(0, { $0 + $1.monthlyEarnings! })
     }
     var passiveLiquidIncome: Double {
-        data.income.filter({ $0.isPassive && $0.isLiquid }).reduce(0, { $0 + $1.monthlyEarnings })
+        data.income.filter({ $0.isPassive! && $0.isLiquid! }).reduce(0, { $0 + $1.monthlyEarnings! })
     }
     var passiveNonLiquidIncome: Double {
-        data.income.filter({ $0.isPassive && !$0.isLiquid }).reduce(0, { $0 + $1.monthlyEarnings })
+        data.income.filter({ $0.isPassive! && !$0.isLiquid! }).reduce(0, { $0 + $1.monthlyEarnings! })
     }
     var pieChartData: [SectorData] {
         [
@@ -56,20 +57,18 @@ struct IncomeView: View {
                 Section {
                     ForEach($data.nonAssetIncome) { $income in
                         NavigationLink(destination: IncomeSourceView(income: $income)) {
-                            HStack {
-                                SymbolImage(symbol: income.symbol)
-                                Text(income.name)
-                                Spacer()
-                                Text(currencyFormatter.string(from: NSNumber(value: income.monthlyEarnings))!)
-                            }
+                            AmountRow(symbol: income.symbol ?? .defaultSymbol, label: income.name ?? "", amount: income.monthlyEarnings!)
+                                .accessibilityElement()
+                                .accessibilityLabel(income.name ?? "")
+                                .accessibilityValue(currencyFormatter.string(from: NSNumber(value: income.monthlyEarnings!))!)
                         }
                     }
                     .onDelete(perform: delete)
-                    ForEach(data.income.filter({ $0.fromAsset && $0.isLiquid })) { income in
-                        AmountRow(symbol: income.symbol, label: income.name, amount: income.monthlyEarnings)
+                    ForEach(data.income.filter({ $0.fromAsset! && $0.isLiquid! })) { income in
+                        AmountRow(symbol: income.symbol ?? .defaultSymbol, label: income.name ?? "", amount: income.monthlyEarnings!)
                             .accessibilityElement()
-                            .accessibilityLabel(income.name)
-                            .accessibilityValue(currencyFormatter.string(from: NSNumber(value: income.monthlyEarnings))!)
+                            .accessibilityLabel(income.name ?? "")
+                            .accessibilityValue(currencyFormatter.string(from: NSNumber(value: income.monthlyEarnings!))!)
                     }
                     HStack {
                         Text("Total")
@@ -81,13 +80,13 @@ struct IncomeView: View {
                         .accessibilityLabel("Total")
                         .accessibilityValue(currencyFormatter.string(from: NSNumber(value: data.totalLiquidIncome))!)
                 }
-                if data.income.contains(where: { $0.fromAsset && !$0.isLiquid }) {
+                if data.income.contains(where: { $0.fromAsset! && !$0.isLiquid! }) {
                     Section {
-                        ForEach(data.income.filter({ $0.fromAsset && !$0.isLiquid })) { income in
-                            AmountRow(symbol: income.symbol, label: income.name, amount: income.monthlyEarnings)
+                        ForEach(data.income.filter({ $0.fromAsset! && !$0.isLiquid! })) { income in
+                            AmountRow(symbol: income.symbol ?? .defaultSymbol, label: income.name ?? "", amount: income.monthlyEarnings!)
                                 .accessibilityElement()
-                                .accessibilityLabel(income.name)
-                                .accessibilityValue(currencyFormatter.string(from: NSNumber(value: income.monthlyEarnings))!)
+                                .accessibilityLabel(income.name ?? "")
+                                .accessibilityValue(currencyFormatter.string(from: NSNumber(value: income.monthlyEarnings!))!)
                         }
                         HStack {
                             Text("Total (With Non-Liquid)")
@@ -132,6 +131,9 @@ struct IncomeView: View {
     }
     
     func delete(at offsets: IndexSet) {
+        for offset in offsets {
+            modelContext.delete(data.nonAssetIncome[offset])
+        }
         self.data.nonAssetIncome.remove(atOffsets: offsets)
     }
     

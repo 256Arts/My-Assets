@@ -15,6 +15,7 @@ struct NewAssetView: View {
         case direct, calculateWithPastValue
     }
     
+    @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) var dismiss
     
     @EnvironmentObject var data: FinancialData
@@ -33,7 +34,11 @@ struct NewAssetView: View {
     var body: some View {
         Form {
             Section {
-                TextField("Name", text: $asset.name) {
+                TextField("Name", text: Binding(get: {
+                    asset.name ?? ""
+                }, set: { newValue in
+                    asset.name = newValue
+                })) {
                     if asset.name == "The World" {
                         showingJaydenCode = true
                     }
@@ -50,7 +55,11 @@ struct NewAssetView: View {
                         interest = ror
                     }
                 }
-                Toggle("Liquid", isOn: $asset.isLiquid)
+                Toggle("Liquid", isOn: Binding(get: {
+                    asset.isLiquid ?? true
+                }, set: { newValue in
+                    asset.isLiquid = newValue
+                }))
             }
             Section {
                 Picker("Interest Input Mode", selection: $interestInputMode) {
@@ -80,14 +89,18 @@ struct NewAssetView: View {
                             .tag(freq)
                     }
                 }
-                if asset.compoundFrequency.timeInterval != .year {
+                if (asset.compoundFrequency ?? .monthly).timeInterval != .year {
                     Text("Effective Rate: \(percentFormatter.string(from: NSNumber(value: asset.effectiveAnnualInterestFraction))!)")
                 }
             } header: {
                 Text("Interest")
             }
             Section {
-                SymbolPicker(selected: $asset.symbol)
+                SymbolPicker(selected: Binding(get: {
+                    asset.symbol ?? .defaultSymbol
+                }, set: { newValue in
+                    asset.symbol = newValue
+                }))
             }
         }
         .navigationTitle("Add Asset")
@@ -103,6 +116,7 @@ struct NewAssetView: View {
                         let interest = self.interest ?? 0.0
                         self.asset.annualInterestFraction = interest
                         self.asset.currentValue = value
+                        modelContext.insert(asset)
                         self.data.nonStockAssets.append(self.asset)
                         self.data.nonStockAssets.sort(by: { $0 > $1 })
                         self.dismiss()
@@ -118,8 +132,8 @@ struct NewAssetView: View {
             Button("OK", role: .cancel, action: { })
         }
         .onChange(of: asset.symbol) { _, newValue in
-            if asset.name.isEmpty {
-                asset.name = newValue.suggestedTitle
+            if (asset.name ?? "").isEmpty {
+                asset.name = newValue?.suggestedTitle
             }
         }
     }
