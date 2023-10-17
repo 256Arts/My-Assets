@@ -13,8 +13,6 @@ struct OptionalDoubleField: View {
     let label: LocalizedStringKey
     @Binding var value: Double?
     let formatter: NumberFormatter
-    let onEditingChanged: (Bool) -> Void
-    let onCommit: () -> Void
 
     // The text shown by the wrapped TextField. This is also the "source of
     // truth" for the `value`.
@@ -24,71 +22,74 @@ struct OptionalDoubleField: View {
     // This flag ensures we don't try to get a `value` out of `textValue`
     // before the view is fully initialized.
     @State private var hasInitialTextValue = false
+    
+    @FocusState private var isFocused: Bool
 
     init(
         _ label: LocalizedStringKey,
         value: Binding<Double?>,
-        formatter: NumberFormatter,
-        onEditingChanged: @escaping (Bool) -> Void = { _ in },
-        onCommit: @escaping () -> Void = {}
+        formatter: NumberFormatter
     ) {
         self.label = label
         _value = value
         self.formatter = formatter
-        self.onEditingChanged = onEditingChanged
-        self.onCommit = onCommit
     }
 
     var body: some View {
-        TextField(label, text: $textValue, onEditingChanged: { isInFocus in
-            // When the field is in focus we replace the field's contents
-            // with a plain unformatted number. When not in focus, the field
-            // is treated as a label and shows the formatted value.
-            if isInFocus {
-                if formatter.numberStyle == .percent, let value = value {
-                    self.textValue = (value * 100).description
-                } else {
-                    self.textValue = self.value?.description ?? ""
-                }
-            } else {
-                let f = self.formatter
-                var newValue = f.number(from: self.textValue)?.doubleValue
-                if newValue == nil {
-                    newValue = Double(self.textValue)
-                    if let temp = newValue, f.numberStyle == .percent {
-                        newValue = temp / 100
+        LabeledContent(label) {
+            TextField(label, text: $textValue)
+                .onChange(of: isFocused, { _, newValue in
+                    // When the field is in focus we replace the field's contents
+                    // with a plain unformatted number. When not in focus, the field
+                    // is treated as a label and shows the formatted value.
+                    if newValue {
+                        if formatter.numberStyle == .percent, let value = value {
+                            self.textValue = (value * 100).description
+                        } else {
+                            self.textValue = self.value?.description ?? ""
+                        }
+                    } else {
+                        let f = self.formatter
+                        var newValue = f.number(from: self.textValue)?.doubleValue
+                        if newValue == nil {
+                            newValue = Double(self.textValue)
+                            if let temp = newValue, f.numberStyle == .percent {
+                                newValue = temp / 100
+                            }
+                        }
+                        self.textValue = f.string(for: newValue) ?? ""
+                    }
+                })
+                .onChange(of: textValue) {
+                    guard self.hasInitialTextValue else {
+                        // We don't have a usable `textValue` yet -- bail out.
+                        return
+                    }
+                    // This is the only place we update `value`.
+                    let temp = self.formatter.number(from: $0)?.doubleValue
+                    if let temp {
+                        self.value = temp
+                    } else {
+                        if self.formatter.numberStyle == .percent {
+                            self.value = (Double($0) ?? 0) / 100
+                        } else {
+                            self.value = Double($0)
+                        }
                     }
                 }
-                self.textValue = f.string(for: newValue) ?? ""
-            }
-            self.onEditingChanged(isInFocus)
-        }, onCommit: {
-            self.onCommit()
-        })
-            .onChange(of: textValue) {
-                guard self.hasInitialTextValue else {
-                    // We don't have a usable `textValue` yet -- bail out.
-                    return
-                }
-                // This is the only place we update `value`.
-                self.value = self.formatter.number(from: $0)?.doubleValue
-                if self.value == nil {
-                    self.value = Double($0)
-                    if let temp = self.value, self.formatter.numberStyle == .percent {
-                        self.value = temp / 100
+                .onAppear { // Otherwise textfield is empty when view appears
+                    self.hasInitialTextValue = true
+                    // Any `textValue` from this point on is considered valid and
+                    // should be synced with `value`.
+                    if let value = self.value {
+                        // Synchronize `textValue` with `value`; can't be done earlier
+                        self.textValue = self.formatter.string(from: NSDecimalNumber(value: value)) ?? ""
                     }
                 }
-            }
-            .onAppear() { // Otherwise textfield is empty when view appears
-                self.hasInitialTextValue = true
-                // Any `textValue` from this point on is considered valid and
-                // should be synced with `value`.
-                if let value = self.value {
-                    // Synchronize `textValue` with `value`; can't be done earlier
-                    self.textValue = self.formatter.string(from: NSDecimalNumber(value: value)) ?? ""
-                }
-            }
-            .keyboardType(.decimalPad)
+                #if !os(macOS)
+                .keyboardType(.decimalPad)
+                #endif
+        }
     }
 }
 

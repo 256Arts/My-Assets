@@ -7,11 +7,17 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ExpensesView: View {
     
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject var data: FinancialData
+    
+    @Query(filter: #Predicate<Expense> {
+        $0.parent == nil
+    }, sort: [SortDescriptor(\.baseMonthlyCost, order: .reverse)]) var nonDebtExpenses: [Expense]
+    
     @State var showingDetail = false
     
     var spentIncome: Double {
@@ -22,14 +28,11 @@ struct ExpensesView: View {
         NavigationStack {
             List {
                 Section {
-                    ForEach(data.expenses.filter({ $0.fromDebt! })) { expense in
-                        AmountRow(symbol: expense.symbol ?? .defaultSymbol, label: expense.name ?? "", amount: expense.monthlyCost)
-                    }
-                    ForEach(data.nonDebtExpenses) { expense in
+                    ForEach(nonDebtExpenses) { expense in
                         NavigationLink(value: expense) {
                             VStack(spacing: 8) {
                                 AmountRow(symbol: expense.symbol ?? .defaultSymbol, label: expense.name ?? "", amount: expense.monthlyCost)
-                                ForEach(expense.children ?? []) { child in
+                                ForEach(expense.children?.sorted(by: >) ?? []) { child in
                                     AmountRow(symbol: child.symbol ?? .defaultSymbol, label: child.name ?? "", amount: child.monthlyCost)
                                         .foregroundColor(.secondary)
                                         .padding(.leading, 32)
@@ -38,6 +41,9 @@ struct ExpensesView: View {
                         }
                     }
                     .onDelete(perform: delete)
+                    ForEach(data.expenses.filter({ $0.fromDebt! })) { expense in
+                        AmountRow(symbol: expense.symbol ?? .defaultSymbol, label: expense.name ?? "", amount: expense.monthlyCost)
+                    }
                     HStack {
                         Text("Total")
                         Spacer()

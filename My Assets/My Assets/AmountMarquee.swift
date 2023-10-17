@@ -21,6 +21,14 @@ struct AmountMarquee: View {
         (monthlyIncome - monthlyExpenses) * period.months
     }
     
+    var tertiaryLabel: Color {
+        #if canImport(UIKit)
+        Color(uiColor: UIColor.tertiaryLabel)
+        #else
+        Color(nsColor: NSColor.tertiaryLabelColor)
+        #endif
+    }
+    
     var body: some View {
         VStack {
             Text(currencyFormatter.string(from: NSNumber(value: currentValue))!)
@@ -34,7 +42,7 @@ struct AmountMarquee: View {
                         .foregroundColor(0 < combinedNet ? .green : .red)
                     Text("\(period.rawValue) Net")
                         .font(.caption)
-                        .foregroundColor(Color(uiColor: UIColor.tertiaryLabel))
+                        .foregroundColor(tertiaryLabel)
                 }
             } else {
                 HStack {
@@ -45,7 +53,7 @@ struct AmountMarquee: View {
                             .accessibilityLabel("\(period.rawValue) Income")
                         Text("\(period.rawValue) Income")
                             .font(.caption)
-                            .foregroundColor(Color(uiColor: UIColor.tertiaryLabel))
+                            .foregroundColor(tertiaryLabel)
                             .accessibilityHidden(true)
                     }
                     Spacer()
@@ -56,7 +64,7 @@ struct AmountMarquee: View {
                             .accessibilityLabel("\(period.rawValue) Expenses")
                         Text("\(period.rawValue) Expenses")
                             .font(.caption)
-                            .foregroundColor(Color(uiColor: UIColor.tertiaryLabel))
+                            .foregroundColor(tertiaryLabel)
                             .accessibilityHidden(true)
                     }
                 }

@@ -72,7 +72,7 @@ final class InsightsGenerator {
     func netWorthPercentile() -> Double? {
         let userType = UserType(rawValue: UserDefaults.standard.string(forKey: UserDefaults.Key.userType) ?? "") ?? .individual
         let otherHouseholdNetWorth = (userType == .individual ? UserDefaults.standard.double(forKey: UserDefaults.Key.otherHouseholdNetWorth) : 0)
-        let householdNetWorth = data.netWorth(at: .now, passive: false) + otherHouseholdNetWorth
+        let householdNetWorth = data.netWorth(at: .now, type: .working) + otherHouseholdNetWorth
         return netWorthPercentile(householdNetWorth: householdNetWorth, at: .now, locale: .current)
     }
     func netWorthPercentile(householdNetWorth: Double, at date: Date, locale: Locale) -> Double? {
@@ -101,17 +101,14 @@ final class InsightsGenerator {
     var avgAnnualBalanceInterestString: String {
         percentFormatter.string(from: NSNumber(value: avgAnnualBalanceInterest))!
     }
-    var avgAnnualPassiveNetWorthInterestString: String {
-        percentFormatter.string(from: NSNumber(value: data.avgAnnualNetWorthInterest(passive: true)))!
-    }
     var avgAnnualNetWorthInterestString: String {
-        percentFormatter.string(from: NSNumber(value: data.avgAnnualNetWorthInterest(passive: false)))!
+        percentFormatter.string(from: NSNumber(value: data.avgAnnualNetWorthInterest))!
     }
     var balanceIn5YearsString: String {
         currencyFormatter.string(from: NSNumber(value: data.balance(at: .now + 5 * TimeInterval.year)))!
     }
     var netWorthIn5YearsString: String {
-        currencyFormatter.string(from: NSNumber(value: data.netWorth(at: .now + 5 * TimeInterval.year, passive: false)))!
+        currencyFormatter.string(from: NSNumber(value: data.netWorth(at: .now + 5 * TimeInterval.year, type: .working)))!
     }
     var retirementBalanceString: String? {
         guard let retirementBalance = retirementBalance else { return nil }
@@ -126,11 +123,7 @@ final class InsightsGenerator {
     var liveOffTimeString: String {
         guard !liveOffMonths.isInfinite, !liveOffMonths.isNaN else { return "forever" }
         let liveOffTime = DateComponents(day: Int(liveOffMonths * 30))
-        let formatter = DateComponentsFormatter()
-        formatter.unitsStyle = .full
-        formatter.maximumUnitCount = 1
-        formatter.allowedUnits = [.day, .month, .year]
-        return formatter.string(from: liveOffTime) ?? "unknown"
+        return timeRemainingFormatter.string(from: liveOffTime) ?? "unknown"
     }
     var requiredBalanceToLiveOffString: String? {
         guard 0 < avgAnnualBalanceInterest else { return nil }

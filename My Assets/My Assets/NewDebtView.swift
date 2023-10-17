@@ -10,6 +10,8 @@ import SwiftUI
 
 struct NewDebtView: View {
     
+    var parentAsset: Asset?
+    
     @Environment(\.dismiss) var dismiss
     
     @Environment(\.modelContext) private var modelContext
@@ -28,23 +30,12 @@ struct NewDebtView: View {
                 }, set: { newValue in
                     debt.name = newValue
                 }))
+                    #if !os(macOS)
                     .textInputAutocapitalization(.words)
-                OptionalDoubleField("Value ($)", value: $value, formatter: currencyFormatter) { inFocus in
-                    guard let value = value else { return }
-                    if let interest = interest {
-                        debt.annualInterestFraction = interest
-                        debt.currentValue = value
-                    }
-                }
-                OptionalDoubleField("Annual Interest (%)", value: $interest, formatter: percentFormatter, onEditingChanged: { inFocus in
-                    guard let interest = interest, let value = value else { return }
-                    debt.annualInterestFraction = interest
-                    debt.currentValue = value
-                })
-                OptionalDoubleField("Monthly Payment ($)", value: $monthlyPayment, formatter: currencyFormatter) { inFocus in
-                    guard let monthlyPayment = monthlyPayment else { return }
-                    debt.monthlyPayment = monthlyPayment
-                }
+                    #endif
+                OptionalDoubleField("Value ($)", value: $value, formatter: currencyFormatter)
+                OptionalDoubleField("Annual Interest (%)", value: $interest, formatter: percentFormatter)
+                OptionalDoubleField("Monthly Payment ($)", value: $monthlyPayment, formatter: currencyFormatter)
             }
             Section {
                 SymbolPicker(selected: Binding(get: {
@@ -68,13 +59,26 @@ struct NewDebtView: View {
                         self.debt.annualInterestFraction = interest
                         self.debt.currentValue = value
                         modelContext.insert(debt)
-                        self.data.debts.append(self.debt)
-                        self.data.debts.sort(by: { $0 > $1 })
+                        if let parentAsset {
+                            debt.asset = parentAsset
+                        } else {
+                            self.data.debts.append(self.debt)
+                        }
                         self.dismiss()
                     }
                 }
                 .disabled(value == nil)
             }
+        }
+        .onChange(of: value) { _, newValue in
+            guard let newValue else { return }
+            debt.currentValue = newValue
+        }
+        .onChange(of: interest) { _, newValue in
+            debt.annualInterestFraction = newValue
+        }
+        .onChange(of: monthlyPayment) { _, newValue in
+            debt.monthlyPayment = newValue
         }
         .onChange(of: debt.symbol) { _, newValue in
             if (debt.name ?? "").isEmpty {

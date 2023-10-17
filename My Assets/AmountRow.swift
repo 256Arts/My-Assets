@@ -15,6 +15,17 @@ struct AmountRow: View {
     let amount: Double
     
     var body: some View {
+        #if os(watchOS)
+        HStack {
+            SymbolImage(symbol: symbol)
+            VStack(alignment: .leading) {
+                Text(label)
+                    .lineLimit(1)
+                Text(currencyFormatter.string(from: NSNumber(value: amount))!)
+                    .foregroundStyle(.secondary)
+            }
+        }
+        #else
         LabeledContent {
             Text(currencyFormatter.string(from: NSNumber(value: amount))!)
         } label: {
@@ -23,5 +34,6 @@ struct AmountRow: View {
                 Text(label)
             }
         }
+        #endif
     }
 }

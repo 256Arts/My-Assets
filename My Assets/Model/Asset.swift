@@ -47,6 +47,10 @@ class Asset: Comparable {
     var isLiquid: Bool?
     var compoundFrequency: CompoundFrequency?
     var annualInterestFraction: Double?
+    
+    @Relationship(deleteRule: .cascade, inverse: \Debt.asset)
+    var loans: [Debt]?
+    
     var effectiveAnnualInterestFraction: Double {
         guard let annualInterestFraction else { return .nan }
         

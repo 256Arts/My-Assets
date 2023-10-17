@@ -59,34 +59,60 @@ final class FinancialData: ObservableObject {
         expenses.reduce(0, { $0 + $1.monthlyCost })
     }
     
+    var avgAnnualNetWorthInterest: Double {
+        // Calculate weigted average
+        let totalWeight = netWorth(at: .now, type: .natural)
+        guard !totalWeight.isZero else { return 0.0 }
+        
+        var avgInterest = 0.0
+        for asset in assets {
+            avgInterest += asset.effectiveAnnualInterestFraction * asset.currentValue
+        }
+        for debt in debts {
+            avgInterest -= debt.annualInterestFraction ?? 0 * debt.currentValue
+        }
+        return avgInterest / totalWeight
+    }
+    
     func balance(at date: Date) -> Double {
         assets.filter({ $0.isLiquid ?? true }).reduce(0, { $0 + $1.currentValue(at: date) })
     }
     
-    /**
-     passive: Whether the future net worth is only interest on your assets, or assumes you continue earning non-passive income and paying non-debt expenses
-     */
-    func avgAnnualNetWorthInterest(passive: Bool) -> Double {
-        let interest = (netWorth(at: Date(timeIntervalSinceNow: .year), passive: passive) / netWorth(at: .now, passive: passive)) - 1.0
-        return interest.isFinite ? interest : 0
+    enum NetWorthType {
+        case working // Standard net worth
+        case natural // Only assets, debts, and interest on them. (No human interaction. No human work income, or human expenses.)
+        case notWorking // Net worth if you quit your job
     }
 
-    /**
-     passive: Whether the future net worth is only interest on your assets, or assumes you continue earning non-passive income and paying non-debt expenses
-     */
-    func netWorth(at date: Date, passive: Bool) -> Double {
-        if passive || abs(date.timeIntervalSinceNow) < 10 {
-            return assets.reduce(0, { $0 + $1.currentValue(at: date) })  - debts.reduce(0, { $0 + $1.currentValue(at: date) })
+    func netWorth(at date: Date, type: NetWorthType) -> Double {
+        if abs(date.timeIntervalSinceNow) < 10 {
+            return assets.reduce(0, { $0 + $1.currentValue(at: date) }) - debts.reduce(0, { $0 + $1.currentValue(at: date) })
         }
         
         // Calculate all income and expenses within this time, and assume they have the same average interest as the user's current net worth
         // Using formula: Future value of an annuity
-        let pmt = totalIncome - totalExpenses
-        let r = avgAnnualNetWorthInterest(passive: true) / 12
+        let income: Double = {
+            switch type {
+            case .working:
+                totalIncome
+            case .natural, .notWorking:
+                self.income.filter({ $0.isPassive! }).reduce(0, { $0 + $1.monthlyEarnings! })
+            }
+        }()
+        let expenses: Double = {
+            switch type {
+            case .natural:
+                self.expenses.filter({ $0.fromDebt! }).reduce(0, { $0 + $1.monthlyCost })
+            case .working, .notWorking:
+                totalExpenses
+            }
+        }()
+        let pmt = income - expenses
+        let r = avgAnnualNetWorthInterest / 12
         let n = date.timeIntervalSinceNow / TimeInterval.month
         let fv = pmt * (pow(1 + r, n) - 1) / r
         
-        return netWorth(at: .now, passive: true) + fv
+        return netWorth(at: .now, type: type) + fv
     }
     
     init(nonStockAssets: [Asset], stocks: [Stock], debts: [Debt], nonAssetIncome: [Income], nonDebtExpenses: [Expense]) {

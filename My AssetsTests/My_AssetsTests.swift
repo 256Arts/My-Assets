@@ -62,7 +62,7 @@ class My_AssetsTests: XCTestCase {
     }
     
     func testNetWorthPercentile() {
-        let insights = InsightsGenerator(data: FinancialData(fileVersion: 1, nonStockAssets: [], stocks: [], debts: [], nonAssetIncome: [], nonDebtExpenses: []))
+        let insights = InsightsGenerator(data: FinancialData(nonStockAssets: [], stocks: [], debts: [], nonAssetIncome: [], nonDebtExpenses: []))
         let dataYear = Calendar.current.date(from: DateComponents(year: 2020))!
         let usa = Locale(identifier: "en_US")
         

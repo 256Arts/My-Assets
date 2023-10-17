@@ -23,7 +23,7 @@ struct RootTabView: View {
     ]
     
     @AppStorage(UserDefaults.Key.whatsNewVersion) var whatsNewVersion = 0
-    @Query var assets: [Asset]
+    @Query var nonStockAssets: [Asset]
     @Query var debts: [Debt]
     @Query var stocks: [Stock]
     @Query var nonAssetIncome: [Income]
@@ -76,7 +76,7 @@ struct RootTabView: View {
     }
     
     private var financialData: FinancialData {
-        FinancialData(nonStockAssets: assets, stocks: stocks, debts: debts, nonAssetIncome: nonAssetIncome, nonDebtExpenses: nonDebtExpenses)
+        FinancialData(nonStockAssets: nonStockAssets, stocks: stocks, debts: debts, nonAssetIncome: nonAssetIncome, nonDebtExpenses: nonDebtExpenses)
     }
 }
 

@@ -28,7 +28,9 @@ struct NewExpenseView: View {
                 }, set: { newValue in
                     expense.name = newValue
                 }))
-                    .textInputAutocapitalization(.words)
+                #if !os(macOS)
+                .textInputAutocapitalization(.words)
+                #endif
                 OptionalDoubleField("Monthly Cost ($)", value: $cost, formatter: currencyFormatter)
             }
             Section {
@@ -54,10 +56,8 @@ struct NewExpenseView: View {
                         if let parentExpense = self.parentExpense {
                             expense.parent = parentExpense
 //                            parentExpense.children.append(self.expense)
-//                            parentExpense.children.sort(by: { $0 > $1 })
                         } else {
                             self.data.nonDebtExpenses.append(self.expense)
-                            self.data.nonDebtExpenses.sort(by: { $0 > $1 })
                         }
                         self.dismiss()
                     }

@@ -7,19 +7,69 @@
 //
 
 import SwiftUI
+import SwiftData
 import Charts
 
 struct IncomeView: View {
     
-    struct SectorData: Identifiable {
-        let effort: String
-        var id: String { effort }
-        let color: Color
+    struct SectorData: Plottable, Identifiable {
+        
+        enum Effort: Identifiable {
+            case working, passive, passiveNonLiquid
+            
+            var id: Self { self }
+            var title: String {
+                switch self {
+                case .working:
+                    "Working"
+                case .passive:
+                    "Passive"
+                case .passiveNonLiquid:
+                    "Passive (Non-Liquid)"
+                }
+            }
+            var icon: Image {
+                switch self {
+                case .working:
+                    Image(systemName: "building")
+                case .passive:
+                    Image(systemName: "arrow.triangle.2.circlepath")
+                case .passiveNonLiquid:
+                    Image(systemName: "house")
+                }
+            }
+            var color: Color {
+                switch self {
+                case .working:
+                    .gray
+                case .passive:
+                    .green
+                case .passiveNonLiquid:
+                    Color(red: 0, green: 0.5, blue: 0)
+                }
+            }
+        }
+        
+        let effort: Effort
+        var id: Effort { effort }
         let income: Double
+        var primitivePlottable: Double { income }
+        
+        init(effort: Effort, income: Double) {
+            self.effort = effort
+            self.income = income
+        }
+        
+        init?(primitivePlottable: Double) { nil }
     }
     
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject var data: FinancialData
+    
+    @Query(sort: [SortDescriptor(\Income.monthlyEarnings, order: .reverse)]) var nonAssetIncome: [Income]
+    
+    @State var selectedIncome: Double?
+    @State var selectedSector: SectorData?
     @State var showingDetail = false
 
     var workingIncome: Double {
@@ -33,9 +83,9 @@ struct IncomeView: View {
     }
     var pieChartData: [SectorData] {
         [
-            .init(effort: "Working", color: .gray, income: workingIncome),
-            .init(effort: "Passive", color: .green, income: passiveLiquidIncome),
-            .init(effort: "Passive (Non-Liquid)", color: Color(red: 0, green: 0.5, blue: 0), income: passiveNonLiquidIncome)
+            .init(effort: .working, income: workingIncome),
+            .init(effort: .passive, income: passiveLiquidIncome),
+            .init(effort: .passiveNonLiquid, income: passiveNonLiquidIncome)
         ]
     }
     var spentIncome: Double {
@@ -47,17 +97,34 @@ struct IncomeView: View {
             List {
                 Section {
                     Chart(pieChartData) { sector in
-                        SectorMark(angle: .value("Value", sector.income))
-                            .foregroundStyle(by: .value("Effort", sector.effort))
+                        SectorMark(angle: .value("Value", sector.income), innerRadius: .ratio(0.5), angularInset: 1)
+                            .foregroundStyle(by: .value("Effort", sector.effort.title))
+                            .cornerRadius(4)
+                            .annotation(position: .overlay) {
+                                sector.effort.icon
+                                    .symbolVariant(.fill)
+                                    .shadow(radius: 8)
+                                    .opacity(selectedSector == nil || selectedSector?.id == sector.id ? 1.0 : 0.5)
+                            }
+                            .opacity(selectedSector == nil || selectedSector?.id == sector.id ? 1.0 : 0.5)
                     }
                     .chartLegend(position: .trailing)
-                    .chartForegroundStyleScale(range: pieChartData.map({ $0.color }))
-                    .frame(height: 100)
+                    .chartForegroundStyleScale(range: pieChartData.map({ $0.effort.color }))
+                    .chartAngleSelection(value: $selectedIncome)
+                    .frame(height: 110)
+                    .overlay(alignment: .topLeading) {
+                        if selectedSector != nil {
+                            Button("Reset") {
+                                selectedSector = nil
+                            }
+                        }
+                    }
                 }
                 Section {
-                    ForEach($data.nonAssetIncome) { $income in
-                        NavigationLink(destination: IncomeSourceView(income: $income)) {
+                    ForEach(nonAssetIncome) { income in
+                        NavigationLink(value: income) {
                             AmountRow(symbol: income.symbol ?? .defaultSymbol, label: income.name ?? "", amount: income.monthlyEarnings!)
+                                .opacity((selectedSector?.effort ?? .working) == .working ? 1 : 0.5)
                                 .accessibilityElement()
                                 .accessibilityLabel(income.name ?? "")
                                 .accessibilityValue(currencyFormatter.string(from: NSNumber(value: income.monthlyEarnings!))!)
@@ -66,6 +133,7 @@ struct IncomeView: View {
                     .onDelete(perform: delete)
                     ForEach(data.income.filter({ $0.fromAsset! && $0.isLiquid! })) { income in
                         AmountRow(symbol: income.symbol ?? .defaultSymbol, label: income.name ?? "", amount: income.monthlyEarnings!)
+                            .opacity((selectedSector?.effort ?? .passive) == .passive ? 1 : 0.5)
                             .accessibilityElement()
                             .accessibilityLabel(income.name ?? "")
                             .accessibilityValue(currencyFormatter.string(from: NSNumber(value: income.monthlyEarnings!))!)
@@ -84,6 +152,7 @@ struct IncomeView: View {
                     Section {
                         ForEach(data.income.filter({ $0.fromAsset! && !$0.isLiquid! })) { income in
                             AmountRow(symbol: income.symbol ?? .defaultSymbol, label: income.name ?? "", amount: income.monthlyEarnings!)
+                                .opacity((selectedSector?.effort ?? .passiveNonLiquid) == .passiveNonLiquid ? 1 : 0.5)
                                 .accessibilityElement()
                                 .accessibilityLabel(income.name ?? "")
                                 .accessibilityValue(currencyFormatter.string(from: NSNumber(value: income.monthlyEarnings!))!)
@@ -114,13 +183,16 @@ struct IncomeView: View {
             .navigationTitle("Income")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
-                    Button(action: {
+                    Button {
                         self.showingDetail.toggle()
-                    }) {
+                    } label: {
                         Image(systemName: "plus.circle")
                             .symbolVariant(.fill)
                     }
                 }
+            }
+            .navigationDestination(for: Income.self) { income in
+                IncomeSourceView(income: income)
             }
         }
         .sheet(isPresented: self.$showingDetail) {
@@ -128,13 +200,27 @@ struct IncomeView: View {
                 NewIncomeSourceView()
             }
         }
+        .onChange(of: selectedIncome) { (_, newValue: Double?) in
+            if let newValue {
+                selectedSector = findSelectedSector(value: newValue)
+            }
+        }
     }
     
-    func delete(at offsets: IndexSet) {
+    private func delete(at offsets: IndexSet) {
         for offset in offsets {
             modelContext.delete(data.nonAssetIncome[offset])
         }
         self.data.nonAssetIncome.remove(atOffsets: offsets)
+    }
+    
+    private func findSelectedSector(value: Double) -> SectorData? {
+        var totalIncome = 0.0
+     
+        return pieChartData.first { sector in
+            totalIncome += sector.income
+            return value <= totalIncome
+        }
     }
     
 }

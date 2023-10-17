@@ -28,7 +28,9 @@ struct ExpenseView: View {
         Form {
             Section {
                 TextField("Name", text: $nameCopy)
+                    #if !os(macOS)
                     .textInputAutocapitalization(.words)
+                    #endif
                 DoubleField("Monthly Cost ($)", value: Binding(get: {
                     expense.baseMonthlyCost ?? 0
                 }, set: { newValue in
@@ -59,7 +61,9 @@ struct ExpenseView: View {
             }
         }
         .navigationTitle("Expense")
+        #if !os(macOS)
         .navigationBarTitleDisplayMode(.inline)
+        #endif
         .sheet(isPresented: self.$showingSubexpense) {
             NavigationStack {
                 NewExpenseView(parentExpense: expense)
@@ -67,7 +71,6 @@ struct ExpenseView: View {
         }
         .onDisappear {
             expense.name = nameCopy
-            data.nonDebtExpenses.sort(by: >)
         }
     }
     

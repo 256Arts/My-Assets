@@ -20,6 +20,14 @@ struct SymbolPicker: View {
     
     @Binding var selected: Symbol
     
+    var unselectedColor: Color {
+        #if canImport(UIKit)
+        Color(UIColor.tertiarySystemGroupedBackground)
+        #else
+        Color(NSColor.tertiarySystemFill)
+        #endif
+    }
+    
     var body: some View {
         LazyVGrid(columns: [GridItem(.adaptive(minimum: itemSize, maximum: itemSize))]) {
             ForEach(Symbol.allCases) { symbol in
@@ -29,7 +37,7 @@ struct SymbolPicker: View {
                             .fill(symbol.color.gradient)
                     } else {
                         Circle()
-                            .fill(Color(UIColor.tertiarySystemGroupedBackground))
+                            .fill(unselectedColor)
                     }
                     Image(systemName: symbol.rawValue)
                         .foregroundColor(symbol == selected ? Color.white : symbol.color)

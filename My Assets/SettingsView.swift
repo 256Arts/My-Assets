@@ -34,7 +34,7 @@ struct SettingsView: View {
                     }
                 }
                 if userTypeValue == UserType.individual.rawValue {
-                    DoubleField("Other Household Net Worth", value: $otherHouseholdNetWorth, formatter: NumberFormatter())
+                    DoubleField("Partner's Net Worth", value: $otherHouseholdNetWorth, formatter: NumberFormatter())
                 }
             } footer: {
                 Text("Net worth percentiles are based on 2020 data from the USA, adjusted for inflation, and converted to your currency.")
@@ -63,13 +63,18 @@ struct SettingsView: View {
             }
         }
         .navigationTitle("Settings")
+        #if os(macOS)
+        .scenePadding()
+        #else
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 Button("Done") {
                     dismiss()
                 }
             }
+            
         }
+        #endif
         .onChange(of: birthday) { _, newValue in
             UserDefaults.standard.set(newValue.timeIntervalSinceReferenceDate, forKey: UserDefaults.Key.birthday)
         }

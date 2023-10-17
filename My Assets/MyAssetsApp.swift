@@ -23,6 +23,12 @@ struct MyAssetsApp: App {
             RootTabView()
         }
         .modelContainer(for: [Asset.self, Debt.self, Stock.self, Income.self, Expense.self])
+        
+        #if os(macOS)
+        Settings {
+            SettingsView()
+        }
+        #endif
     }
 }
 
@@ -46,5 +52,13 @@ let percentFormatter: NumberFormatter = {
     formatter.numberStyle = .percent
     formatter.minimumFractionDigits = 0
     formatter.maximumFractionDigits = 1
+    return formatter
+}()
+
+let timeRemainingFormatter: DateComponentsFormatter = {
+    let formatter = DateComponentsFormatter()
+    formatter.unitsStyle = .full
+    formatter.maximumUnitCount = 1
+    formatter.allowedUnits = [.day, .month, .year]
     return formatter
 }()

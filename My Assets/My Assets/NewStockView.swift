@@ -21,24 +21,33 @@ struct NewStockView: View {
     var body: some View {
         Form {
             TextField("Symbol", text: $stockSymbol)
+                #if !os(macOS)
                 .autocapitalization(.allCharacters)
+                #endif
                 .disableAutocorrection(true)
             DoubleField("Number Of Shares", value: $stockShares, formatter: NumberFormatter())
         }
             .navigationTitle("Add Stock")
-            .navigationBarItems(leading: Button(action: {
-                self.dismiss()
-            }, label: {
-                Text("Cancel")
-            }), trailing: Button(action: {
-                let stock = Stock(symbol: self.stockSymbol, shares: self.stockShares)
-                stock.fetchPrices()
-                modelContext.insert(stock)
-                self.data.stocks.append(stock)
-                self.dismiss()
-            }, label: {
-                Text("Done")
-            }))
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button(role: .cancel) {
+                        self.dismiss()
+                    } label: {
+                        Text("Cancel")
+                    }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button {
+                        let stock = Stock(symbol: self.stockSymbol, shares: self.stockShares)
+                        stock.fetchPrices()
+                        modelContext.insert(stock)
+                        self.data.stocks.append(stock)
+                        self.dismiss()
+                    } label: {
+                        Text("Done")
+                    }
+                }
+            }
     }
 }
 

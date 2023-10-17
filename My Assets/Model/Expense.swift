@@ -27,7 +27,11 @@ class Expense: Hashable, Comparable {
     }
     var baseMonthlyCost: Double?
     var monthlyCost: Double {
-        (baseMonthlyCost ?? .nan) + (children ?? []).reduce(0, { $0 + $1.baseMonthlyCost! })
+        let children = self.children ?? []
+        let baseMonthlyCost = self.baseMonthlyCost ?? 0.0
+        guard !children.isEmpty else { return baseMonthlyCost }
+        
+        return baseMonthlyCost + children.reduce(0, { $0 + $1.monthlyCost })
     }
     let fromDebt: Bool?
     var parent: Expense?

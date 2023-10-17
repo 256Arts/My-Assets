@@ -10,7 +10,7 @@ import Foundation
 import SwiftData
 
 @Model
-class Debt: Comparable {
+class Debt: Hashable, Comparable {
     
     static func < (lhs: Debt, rhs: Debt) -> Bool {
         lhs.currentValue < rhs.currentValue
@@ -25,6 +25,8 @@ class Debt: Comparable {
     var annualInterestFraction: Double?
     var monthlyPayment: Double?
     
+    var asset: Asset?
+    
     var currentValue: Double {
         get {
             currentValue(at: .now)
@@ -35,12 +37,34 @@ class Debt: Comparable {
         }
     }
     
+    var monthsToPayOff: Double {
+        guard let annualInterestFraction, let monthlyPayment else { return .nan }
+        /* Using formulas:
+         - Compound interest
+         - Future value of a series
+         Note: We get the formula below by solving for t.
+        */
+        let a = 0.0 // Future value
+        let p = currentValue(at: .now) // Principal value
+        let r = annualInterestFraction // Rate
+        let n = 12.0 // Compounds per time unit
+        let m = -monthlyPayment // Monthly payment
+        let t = log((a * r + n * m) / (p * r + n * m)) / (n * log(1 + r / n))
+        
+        return t * 12
+    }
+    var monthsToPayOffString: String? {
+        guard monthsToPayOff.isFinite, !monthsToPayOff.isNaN else { return nil }
+        let time = DateComponents(day: Int(monthsToPayOff * 30))
+        return timeRemainingFormatter.string(from: time)
+    }
+    
     private var prevValue: Double?
     private var prevDate: Date?
     
-    init() {
-        self.name = ""
-        self.symbol = Symbol.defaultSymbol
+    init(name: String? = nil, symbol: Symbol? = nil) {
+        self.name = name ?? ""
+        self.symbol = symbol ?? .defaultSymbol
         self.colorHex = "000000"
         self.annualInterestFraction = 0
         self.monthlyPayment = 0

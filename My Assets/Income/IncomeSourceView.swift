@@ -12,21 +12,23 @@ struct IncomeSourceView: View {
     
     @EnvironmentObject var data: FinancialData
     
-    @Binding var income: Income
+    @Bindable var income: Income
     
     // Bug workaround: Editing name causes view to pop
     @State var nameCopy: String
     
-    init(income: Binding<Income>) {
-        _income = income
-        _nameCopy = State(initialValue: income.wrappedValue.name ?? "")
+    init(income: Income) {
+        self.income = income
+        _nameCopy = State(initialValue: income.name ?? "")
     }
     
     var body: some View {
         Form {
             Section {
                 TextField("Name", text: $nameCopy)
+                    #if !os(macOS)
                     .textInputAutocapitalization(.words)
+                    #endif
                 DoubleField("Monthly Earnings ($)", value: Binding(get: {
                     income.monthlyEarnings ?? 0
                 }, set: { newValue in
@@ -52,16 +54,17 @@ struct IncomeSourceView: View {
             }
         }
         .navigationTitle("Income Source")
+        #if !os(macOS)
         .navigationBarTitleDisplayMode(.inline)
+        #endif
         .onDisappear {
             income.name = nameCopy
-            data.nonAssetIncome.sort(by: >)
         }
     }
 }
 
 struct IncomeSourceView_Previews: PreviewProvider {
     static var previews: some View {
-        IncomeSourceView(income: .constant(Income(name: "", symbol: Symbol.defaultSymbol, isLiquid: true, monthlyEarnings: 100.00, isPassive: true)))
+        IncomeSourceView(income: Income(name: "", symbol: Symbol.defaultSymbol, isLiquid: true, monthlyEarnings: 100.00, isPassive: true))
     }
 }

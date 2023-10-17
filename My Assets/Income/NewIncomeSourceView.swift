@@ -26,7 +26,9 @@ struct NewIncomeSourceView: View {
                 }, set: { newValue in
                     income.name = newValue
                 }))
+                    #if !os(macOS)
                     .textInputAutocapitalization(.words)
+                    #endif
                 OptionalDoubleField("Monthly Earnings ($)", value: $earnings, formatter: currencyFormatter)
                 Toggle("Liquid", isOn: Binding(get: {
                     income.isLiquid ?? true
@@ -60,7 +62,6 @@ struct NewIncomeSourceView: View {
                         self.income.monthlyEarnings = earnings
                         modelContext.insert(income)
                         self.data.nonAssetIncome.append(self.income)
-                        self.data.nonAssetIncome.sort(by: { $0 > $1 })
                         self.dismiss()
                     }
                 }

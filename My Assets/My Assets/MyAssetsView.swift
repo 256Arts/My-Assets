@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import SwiftData
 import Charts
 
 struct MyAssetsView: View {
@@ -17,6 +18,9 @@ struct MyAssetsView: View {
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject var data: FinancialData
     @Environment(\.horizontalSizeClass) private var hSizeClass
+    
+    @Query var unsortedNonStockAssets: [Asset]
+    @Query var unsortedDebts: [Debt]
 
     @State var chartDataSource: FiveYearChart.ChartDataSource = .balance
     @State var showingSettings = false
@@ -28,6 +32,12 @@ struct MyAssetsView: View {
         }
     }
     
+    var nonStockAssets: [Asset] {
+        unsortedNonStockAssets.sorted(by: { $0.currentValue > $1.currentValue })
+    }
+    var debts: [Debt] {
+        unsortedDebts.sorted(by: { $0.currentValue > $1.currentValue })
+    }
     var insights: InsightsGenerator {
         .init(data: data)
     }
@@ -36,7 +46,7 @@ struct MyAssetsView: View {
         NavigationStack {
             List {
                 Section {
-                    TimelineView(.periodic(from: Date(), by: 1.0)) { context in
+                    TimelineView(.periodic(from: Date.now, by: 1.0)) { context in
                         AmountMarquee(period: $period, showAsCombinedValue: $showAsCombinedValue, currentValue: data.balance(at: context.date), monthlyIncome: data.totalLiquidIncome, monthlyExpenses: data.totalExpenses)
                     }
                     .contextMenu {
@@ -49,38 +59,38 @@ struct MyAssetsView: View {
                         Toggle("Show Combined Value", isOn: $showAsCombinedValue)
                     }
                 } header: {
-                    Text("My Balance")
+                    Text("Balance")
                 }
                 Section {
-                    ForEach($data.nonStockAssets) { $asset in
-                        NavigationLink(destination: AssetView(asset: $asset)) {
+                    ForEach(nonStockAssets) { asset in
+                        NavigationLink(value: asset) {
                             AmountRow(symbol: asset.symbol ?? .defaultSymbol, label: asset.name ?? "", amount: asset.currentValue)
                         }
                     }
                     .onDelete(perform: deleteAsset)
-                    Button(action: {
+                    Button {
                         self.showingNewAsset = true
-                    }) {
+                    } label: {
                         Label("New Asset", systemImage: "plus")
                     }
                 } header: {
-                    Text("My Assets")
+                    Text("Assets")
                 }
                 .symbolVariant(.fill)
                 Section {
-                    ForEach($data.debts) { $debt in
-                        NavigationLink(destination: DebtView(debt: $debt)) {
+                    ForEach(debts) { debt in
+                        NavigationLink(value: debt) {
                             AmountRow(symbol: debt.symbol ?? .defaultSymbol, label: debt.name ?? "", amount: debt.currentValue)
                         }
                     }
                     .onDelete(perform: deleteDebt)
-                    Button(action: {
+                    Button {
                         self.showingNewDebt = true
-                    }) {
+                    } label: {
                         Label("New Debt", systemImage: "plus")
                     }
                 } header: {
-                    Text("My Debts")
+                    Text("Debts")
                 }
                 Section {
                     Picker("Chart Data", selection: $chartDataSource) {
@@ -101,8 +111,8 @@ struct MyAssetsView: View {
                     Text("Insights")
                 }
                 Section {
-                    TimelineView(.periodic(from: Date(), by: 1.0)) { context in
-                        AmountMarquee(period: $period, showAsCombinedValue: $showAsCombinedValue, currentValue: data.netWorth(at: context.date, passive: false), monthlyIncome: data.totalIncome, monthlyExpenses: data.totalExpenses)
+                    TimelineView(.periodic(from: Date.now, by: 1.0)) { context in
+                        AmountMarquee(period: $period, showAsCombinedValue: $showAsCombinedValue, currentValue: data.netWorth(at: context.date, type: .working), monthlyIncome: data.totalIncome, monthlyExpenses: data.totalExpenses)
                     }
                     .contextMenu {
                         Picker("Period", selection: $period) {
@@ -131,11 +141,12 @@ struct MyAssetsView: View {
                         }
                     }
                 } header: {
-                    Text("My Net Worth")
+                    Text("Net Worth")
                 }
             }
             .navigationTitle("My Assets")
             .toolbar {
+                #if !os(macOS)
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button {
                         showingSettings = true
@@ -143,16 +154,17 @@ struct MyAssetsView: View {
                         Image(systemName: "gear")
                     }
                 }
+                #endif
                 ToolbarItem(placement: .primaryAction) {
                     Menu {
-                        Button(action: {
+                        Button {
                             self.showingNewAsset = true
-                        }) {
+                        } label: {
                             Label("New Asset", systemImage: "plus.square")
                         }
-                        Button(action: {
+                        Button {
                             self.showingNewDebt = true
-                        }) {
+                        } label: {
                             Label("New Debt", systemImage: "minus.square")
                         }
                     } label: {
@@ -161,6 +173,12 @@ struct MyAssetsView: View {
                     }
                     .menuStyle(.borderlessButton)
                 }
+            }
+            .navigationDestination(for: Asset.self) { asset in
+                AssetView(asset: asset)
+            }
+            .navigationDestination(for: Debt.self) { debt in
+                DebtView(debt: debt)
             }
         }
         .sheet(isPresented: self.$showingSettings) {

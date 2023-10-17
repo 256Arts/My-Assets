@@ -40,16 +40,23 @@ struct FiveYearChart: View {
             case .balance:
                 value = data.balance(at: $0)
             case .netWorth:
-                value = data.netWorth(at: $0, passive: false)
+                value = data.netWorth(at: $0, type: .working)
             }
             return ValueAtDate(value: value, date: $0)
         }
     }
-    var passiveNetWorthChartData: [ValueAtDate] {
+    var passiveAssetsAndDebtsNetWorthChartData: [ValueAtDate] {
         guard chartDataSource == .netWorth else { return [] }
         
         return nowThrough5Years.map {
-            ValueAtDate(value: data.netWorth(at: $0, passive: true), date: $0)
+            ValueAtDate(value: data.netWorth(at: $0, type: .natural), date: $0)
+        }
+    }
+    var notWorkingNetWorthChartData: [ValueAtDate] {
+        guard chartDataSource == .netWorth else { return [] }
+        
+        return nowThrough5Years.map {
+            ValueAtDate(value: data.netWorth(at: $0, type: .notWorking), date: $0)
         }
     }
     var chartInflationData: [ValueAtDate] {
@@ -58,7 +65,7 @@ struct FiveYearChart: View {
         case .balance:
             startingValue = data.balance(at: .now)
         case .netWorth:
-            startingValue = data.netWorth(at: .now, passive: false)
+            startingValue = data.netWorth(at: .now, type: .working)
         }
         let nowThrough5Years = (0...5)
         return nowThrough5Years.map {
@@ -77,12 +84,9 @@ struct FiveYearChart: View {
                 return nil
             }
         case .netWorth:
-            let total = data.avgAnnualNetWorthInterest(passive: false)
-            let passive = data.avgAnnualNetWorthInterest(passive: true)
-            if 0 < total {
-                return Text("YoY: \(percentFormatter.string(from: NSNumber(value: total))!)\n") +
-                    Text("Passive YoY: \(percentFormatter.string(from: NSNumber(value: passive))!)")
-                    .foregroundStyle(.secondary)
+            let fraction = data.avgAnnualNetWorthInterest
+            if 0 < fraction {
+                return Text("YoY: \(percentFormatter.string(from: NSNumber(value: fraction))!)")
             } else {
                 return nil
             }
@@ -94,12 +98,17 @@ struct FiveYearChart: View {
             ForEach(chartData) { datum in
                 LineMark(x: .value("Date", datum.date), y: .value("Value", datum.value), series: .value("Data", chartDataSource.rawValue))
                     .interpolationMethod(.cardinal)
-                    .foregroundStyle(Color.green)
+                    .foregroundStyle(by: .value("Data", chartDataSource.rawValue))
             }
-            ForEach(passiveNetWorthChartData) { datum in
-                LineMark(x: .value("Date", datum.date), y: .value("Value", datum.value), series: .value("Data", "Passive Net Worth"))
+            ForEach(passiveAssetsAndDebtsNetWorthChartData) { datum in
+                LineMark(x: .value("Date", datum.date), y: .value("Value", datum.value), series: .value("Data", "Natural"))
                     .interpolationMethod(.cardinal)
-                    .foregroundStyle(Color.secondary)
+                    .foregroundStyle(by: .value("Data", "Natural"))
+            }
+            ForEach(notWorkingNetWorthChartData) { datum in
+                LineMark(x: .value("Date", datum.date), y: .value("Value", datum.value), series: .value("Data", "Quit Working"))
+                    .interpolationMethod(.cardinal)
+                    .foregroundStyle(by: .value("Data", "Quit Working"))
             }
             ForEach(chartInflationData) { datum in
                 LineMark(x: .value("Date", datum.date), y: .value("Value", datum.value), series: .value("Data", "Inflation"))

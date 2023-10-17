@@ -43,18 +43,10 @@ struct NewAssetView: View {
                         showingJaydenCode = true
                     }
                 }
-                    .textInputAutocapitalization(.words)
-                OptionalDoubleField("Value ($)", value: $value, formatter: currencyFormatter) { inFocus in
-                    guard let value = value else { return }
-                    if let interest = interest {
-                        asset.annualInterestFraction = interest
-                        asset.currentValue = value
-                        value1YearAgo = asset.currentValue(at: Date().addingTimeInterval(-.year))
-                    } else if let cost = value1YearAgo {
-                        let ror = (value - cost) / cost
-                        interest = ror
-                    }
-                }
+                #if !os(macOS)
+                .textInputAutocapitalization(.words)
+                #endif
+                OptionalDoubleField("Value ($)", value: $value, formatter: currencyFormatter)
                 Toggle("Liquid", isOn: Binding(get: {
                     asset.isLiquid ?? true
                 }, set: { newValue in
@@ -70,18 +62,9 @@ struct NewAssetView: View {
                 }
                 .pickerStyle(.segmented)
                 if interestInputMode == .direct {
-                    OptionalDoubleField("Annual Interest (%)", value: $interest, formatter: percentFormatter, onEditingChanged: { inFocus in
-                        guard let interest = interest, let value = value else { return }
-                        asset.annualInterestFraction = interest
-                        asset.currentValue = value
-                        value1YearAgo = asset.currentValue(at: Date().addingTimeInterval(-.year))
-                    })
+                    OptionalDoubleField("Annual Interest (%)", value: $interest, formatter: percentFormatter)
                 } else {
-                    OptionalDoubleField("Value 1 Year Ago ($)", value: $value1YearAgo, formatter: currencyFormatter, onEditingChanged: { inFocus in
-                        guard let cost = value1YearAgo, let value = value else { return }
-                        let ror = (value - cost) / cost
-                        interest = ror
-                    })
+                    OptionalDoubleField("Value 1 Year Ago ($)", value: $value1YearAgo, formatter: currencyFormatter)
                 }
                 Picker("Compound Frequency", selection: $asset.compoundFrequency) {
                     ForEach(Asset.CompoundFrequency.allCases) { freq in
@@ -118,7 +101,6 @@ struct NewAssetView: View {
                         self.asset.currentValue = value
                         modelContext.insert(asset)
                         self.data.nonStockAssets.append(self.asset)
-                        self.data.nonStockAssets.sort(by: { $0 > $1 })
                         self.dismiss()
                     }
                 }
@@ -127,9 +109,33 @@ struct NewAssetView: View {
         }
         .alert("Secret Code: \(jaydenCode)", isPresented: $showingJaydenCode) {
             Button("Copy") {
+                #if canImport(UIKit)
                 UIPasteboard.general.string = jaydenCode
+                #endif
             }
             Button("OK", role: .cancel, action: { })
+        }
+        .onChange(of: value) { _, newValue in
+            guard let value = newValue else { return }
+            if let interest = interest {
+                asset.annualInterestFraction = interest
+                asset.currentValue = value
+                value1YearAgo = asset.currentValue(at: Date().addingTimeInterval(-.year))
+            } else if let cost = value1YearAgo {
+                let ror = (value - cost) / cost
+                interest = ror
+            }
+        }
+        .onChange(of: interest) { _, newValue in
+            guard let interest = newValue, let value = value else { return }
+            asset.annualInterestFraction = interest
+            asset.currentValue = value
+            value1YearAgo = asset.currentValue(at: Date().addingTimeInterval(-.year))
+        }
+        .onChange(of: value1YearAgo) { _, newValue in
+            guard let cost = newValue, let value = value else { return }
+            let ror = (value - cost) / cost
+            interest = ror
         }
         .onChange(of: asset.symbol) { _, newValue in
             if (asset.name ?? "").isEmpty {
