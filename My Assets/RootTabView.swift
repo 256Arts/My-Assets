@@ -2,8 +2,8 @@
 //  ContentView.swift
 //  My Assets
 //
-//  Created by Jayden Irwin on 2020-02-06.
-//  Copyright © 2020 Jayden Irwin. All rights reserved.
+//  Created by 256 Arts Developer on 2020-02-06.
+//  Copyright © 2020 256 Arts Developer. All rights reserved.
 //
 
 import WelcomeKit
@@ -13,7 +13,7 @@ import SwiftUI
 struct RootTabView: View {
     
     enum Tab {
-        case myAssets, income, expenses
+        case summary, assetsAndDebts, income, expenses
     }
     
     let welcomeFeatures = [
@@ -29,16 +29,21 @@ struct RootTabView: View {
     @Query var nonAssetIncome: [Income]
     @Query var nonDebtExpenses: [Expense]
     
-    @State var selectedTab: Tab = .myAssets
+    @State var selectedTab: Tab = .summary
     @State var showingWelcome = false
     
     var body: some View {
         TabView(selection: $selectedTab) {
-            MyAssetsView()
+            SummaryView()
                 .tabItem {
-                    Label("My Assets", systemImage: "banknote")
+                    Label("Summary", systemImage: "chart.line.uptrend.xyaxis")
                 }
-                .tag(Tab.myAssets)
+                .tag(Tab.summary)
+            AssetsAndDebtsView()
+                .tabItem {
+                    Label("Assets/Debts", systemImage: "banknote")
+                }
+                .tag(Tab.assetsAndDebts)
             IncomeView()
                 .tabItem {
                     Label("Income", systemImage: "tray.and.arrow.down")
@@ -52,7 +57,7 @@ struct RootTabView: View {
         }
         .accentColor({
             switch selectedTab {
-            case .myAssets:
+            case .summary, .assetsAndDebts:
                 return nil
             case .income:
                 return .green
@@ -80,8 +85,6 @@ struct RootTabView: View {
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        RootTabView()
-    }
+#Preview {
+    RootTabView()
 }

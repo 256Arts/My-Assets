@@ -2,8 +2,8 @@
 //  AssetsAndDebtsView.swift
 //  My Assets
 //
-//  Created by Jayden Irwin on 2020-02-06.
-//  Copyright © 2020 Jayden Irwin. All rights reserved.
+//  Created by 256 Arts Developer on 2020-02-06.
+//  Copyright © 2020 256 Arts Developer. All rights reserved.
 //
 
 import SwiftUI
@@ -12,9 +12,6 @@ import Charts
 
 struct AssetsAndDebtsView: View {
     
-    @AppStorage(UserDefaults.Key.amountMarqueePeriod) var periodRawValue = "Month"
-    @AppStorage(UserDefaults.Key.amountMarqueeShowAsCombinedValue) var showAsCombinedValue = false
-    
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject var data: FinancialData
     @Environment(\.horizontalSizeClass) private var hSizeClass
@@ -22,15 +19,8 @@ struct AssetsAndDebtsView: View {
     @Query var unsortedNonStockAssets: [Asset]
     @Query var unsortedDebts: [Debt]
 
-    @State var chartDataSource: FiveYearChart.ChartDataSource = .balance
-    @State var showingSettings = false
     @State var showingNewAsset = false
     @State var showingNewDebt = false
-    @State var period = Period(rawValue: UserDefaults.standard.string(forKey: UserDefaults.Key.amountMarqueePeriod) ?? "") ?? .month {
-        didSet {
-            periodRawValue = period.rawValue
-        }
-    }
     
     var nonStockAssets: [Asset] {
         unsortedNonStockAssets.sorted(by: { $0.currentValue > $1.currentValue })
@@ -38,29 +28,10 @@ struct AssetsAndDebtsView: View {
     var debts: [Debt] {
         unsortedDebts.sorted(by: { $0.currentValue > $1.currentValue })
     }
-    var insights: InsightsGenerator {
-        .init(data: data)
-    }
     
     var body: some View {
         NavigationStack {
             List {
-                Section {
-                    TimelineView(.periodic(from: Date.now, by: 1.0)) { context in
-                        AmountMarquee(period: $period, showAsCombinedValue: $showAsCombinedValue, currentValue: data.balance(at: context.date), monthlyIncome: data.totalLiquidIncome, monthlyExpenses: data.totalExpenses)
-                    }
-                    .contextMenu {
-                        Picker("Period", selection: $period) {
-                            ForEach(Period.allCases) {
-                                Text($0.rawValue)
-                                    .tag($0)
-                            }
-                        }
-                        Toggle("Show Combined Value", isOn: $showAsCombinedValue)
-                    }
-                } header: {
-                    Text("Balance")
-                }
                 Section {
                     ForEach(nonStockAssets) { asset in
                         NavigationLink(value: asset) {
@@ -92,69 +63,10 @@ struct AssetsAndDebtsView: View {
                 } header: {
                     Text("Debts")
                 }
-                Section {
-                    Picker("Chart Data", selection: $chartDataSource) {
-                        ForEach(FiveYearChart.ChartDataSource.allCases) {
-                            Text($0.rawValue)
-                                .tag($0)
-                        }
-                    }
-                    .pickerStyle(.segmented)
-                    
-                    FiveYearChart(chartDataSource: $chartDataSource)
-                        .padding(.top, 4)
-                    
-                    ForEach(Array(insights.generate().enumerated()), id: \.0) { (_, string) in
-                        Text(string)
-                    }
-                } header: {
-                    Text("Insights")
-                }
-                Section {
-                    TimelineView(.periodic(from: Date.now, by: 1.0)) { context in
-                        AmountMarquee(period: $period, showAsCombinedValue: $showAsCombinedValue, currentValue: data.netWorth(at: context.date, type: .working), monthlyIncome: data.totalIncome, monthlyExpenses: data.totalExpenses)
-                    }
-                    .contextMenu {
-                        Picker("Period", selection: $period) {
-                            ForEach(Period.allCases) {
-                                Text($0.rawValue)
-                                    .tag($0)
-                            }
-                        }
-                        Toggle("Show as Combined", isOn: $showAsCombinedValue)
-                    }
-                    
-                    if let netWorthPercentile = insights.netWorthPercentile() {
-                        HStack {
-                            Text("Net Worth:")
-                                .bold()
-                                .accessibilityHidden(true)
-                            Spacer()
-                            Gauge(value: netWorthPercentile) {
-                                Text("Net Worth Percentile")
-                            } currentValueLabel: {
-                                Text(insights.netWorthPercentileString ?? "")
-                            }
-                            .gaugeStyle(.accessoryLinear)
-                            .tint(LinearGradient(colors: [.red, .gray, .green], startPoint: .leading, endPoint: .trailing))
-                            .accessibilityHidden(true)
-                        }
-                    }
-                } header: {
-                    Text("Net Worth")
-                }
             }
-            .navigationTitle("My Assets")
+            .headerProminence(.increased)
+            .navigationTitle("Assets & Debts")
             .toolbar {
-                #if !os(macOS)
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
-                        showingSettings = true
-                    } label: {
-                        Image(systemName: "gear")
-                    }
-                }
-                #endif
                 ToolbarItem(placement: .primaryAction) {
                     Menu {
                         Button {
@@ -179,11 +91,6 @@ struct AssetsAndDebtsView: View {
             }
             .navigationDestination(for: Debt.self) { debt in
                 DebtView(debt: debt)
-            }
-        }
-        .sheet(isPresented: self.$showingSettings) {
-            NavigationStack {
-                SettingsView()
             }
         }
         .sheet(isPresented: self.$showingNewAsset) {
@@ -220,8 +127,6 @@ struct AssetsAndDebtsView: View {
     
 }
 
-struct MyAssetsView_Previews: PreviewProvider {
-    static var previews: some View {
-        AssetsAndDebtsView()
-    }
+#Preview {
+    AssetsAndDebtsView()
 }

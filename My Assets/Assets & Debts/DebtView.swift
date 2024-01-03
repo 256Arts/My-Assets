@@ -2,8 +2,8 @@
 //  DebtView.swift
 //  My Assets
 //
-//  Created by Jayden Irwin on 2021-10-27.
-//  Copyright © 2021 Jayden Irwin. All rights reserved.
+//  Created by 256 Arts Developer on 2021-10-27.
+//  Copyright © 2021 256 Arts Developer. All rights reserved.
 //
 
 import SwiftUI
@@ -24,33 +24,17 @@ struct DebtView: View {
     
     var body: some View {
         Form {
-            Section {
-                TextField("Name", text: $nameCopy)
-                    #if !os(macOS)
-                    .textInputAutocapitalization(.words)
-                    #endif
-                DoubleField("Interest", value: Binding(get: {
-                    debt.annualInterestFraction ?? 0
-                }, set: { newValue in
-                    debt.annualInterestFraction = newValue
-                }), formatter: percentFormatter)
-                DoubleField("Amount", value: $debt.currentValue, formatter: currencyFormatter)
-                DoubleField("Monthly Payment", value: Binding(get: {
-                    debt.monthlyPayment ?? 0
-                }, set: { newValue in
-                    debt.monthlyPayment = newValue
-                }), formatter: currencyFormatter)
-                if let monthsToPayOffString = debt.monthsToPayOffString {
-                    Text("\(monthsToPayOffString) remaining")
-                        .foregroundStyle(.secondary)
-                }
-            }
-            Section {
-                SymbolPicker(selected: Binding(get: {
-                    debt.symbol ?? .defaultSymbol
-                }, set: { newValue in
-                    debt.symbol = newValue
-                }))
+            SymbolPickerLink(symbol: $debt.symbol)
+            TextField("Name", text: $nameCopy)
+                #if !os(macOS)
+                .textInputAutocapitalization(.words)
+                #endif
+            OptionalPercentField("Interest", value: $debt.annualInterestFraction)
+            CurrencyField("Amount", value: $debt.currentValue)
+            OptionalCurrencyField("Monthly Payment", value: $debt.monthlyPayment)
+            if let monthsToPayOffString = debt.monthsToPayOffString {
+                Text("\(monthsToPayOffString) remaining")
+                    .foregroundStyle(.secondary)
             }
         }
         .navigationTitle("Debt")
@@ -63,8 +47,6 @@ struct DebtView: View {
     }
 }
 
-struct DebtView_Previews: PreviewProvider {
-    static var previews: some View {
-        DebtView(debt: Debt())
-    }
+#Preview {
+    DebtView(debt: Debt())
 }

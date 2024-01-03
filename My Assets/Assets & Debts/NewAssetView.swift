@@ -2,8 +2,8 @@
 //  NewAssetView.swift
 //  My Assets
 //
-//  Created by Jayden Irwin on 2020-02-06.
-//  Copyright © 2020 Jayden Irwin. All rights reserved.
+//  Created by 256 Arts Developer on 2020-02-06.
+//  Copyright © 2020 256 Arts Developer. All rights reserved.
 //
 
 import SwiftUI
@@ -46,7 +46,7 @@ struct NewAssetView: View {
                 #if !os(macOS)
                 .textInputAutocapitalization(.words)
                 #endif
-                OptionalDoubleField("Value ($)", value: $value, formatter: currencyFormatter)
+                OptionalCurrencyField("Value", value: $value)
                 Toggle("Liquid", isOn: Binding(get: {
                     asset.isLiquid ?? true
                 }, set: { newValue in
@@ -62,14 +62,14 @@ struct NewAssetView: View {
                 }
                 .pickerStyle(.segmented)
                 if interestInputMode == .direct {
-                    OptionalDoubleField("Annual Interest (%)", value: $interest, formatter: percentFormatter)
+                    OptionalPercentField("Annual Interest", value: $interest)
                 } else {
-                    OptionalDoubleField("Value 1 Year Ago ($)", value: $value1YearAgo, formatter: currencyFormatter)
+                    OptionalCurrencyField("Value 1 Year Ago", value: $value1YearAgo)
                 }
                 Picker("Compound Frequency", selection: $asset.compoundFrequency) {
                     ForEach(Asset.CompoundFrequency.allCases) { freq in
                         Text(freq.rawValue.capitalized)
-                            .tag(freq)
+                            .tag(freq as Asset.CompoundFrequency?)
                     }
                 }
                 if (asset.compoundFrequency ?? .monthly).timeInterval != .year {
@@ -86,7 +86,7 @@ struct NewAssetView: View {
                 }))
             }
         }
-        .navigationTitle("Add Asset")
+        .navigationTitle("New Asset")
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
                 Button("Cancel") {
@@ -94,7 +94,7 @@ struct NewAssetView: View {
                 }
             }
             ToolbarItem(placement: .confirmationAction) {
-                Button("Done") {
+                Button("Add") {
                     if let value = self.value {
                         let interest = self.interest ?? 0.0
                         self.asset.annualInterestFraction = interest
@@ -127,13 +127,13 @@ struct NewAssetView: View {
             }
         }
         .onChange(of: interest) { _, newValue in
-            guard let interest = newValue, let value = value else { return }
+            guard interestInputMode == .direct, let interest = newValue, let value = value else { return }
             asset.annualInterestFraction = interest
             asset.currentValue = value
             value1YearAgo = asset.currentValue(at: Date().addingTimeInterval(-.year))
         }
         .onChange(of: value1YearAgo) { _, newValue in
-            guard let cost = newValue, let value = value else { return }
+            guard interestInputMode == .calculateWithPastValue, let cost = newValue, let value = value else { return }
             let ror = (value - cost) / cost
             interest = ror
         }
@@ -145,8 +145,6 @@ struct NewAssetView: View {
     }
 }
 
-struct NewAssetView_Previews: PreviewProvider {
-    static var previews: some View {
-        NewAssetView()
-    }
+#Preview {
+    NewAssetView()
 }

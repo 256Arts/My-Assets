@@ -12,12 +12,30 @@
 		<key>My Assets (watchOS) Watch App.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>1</integer>
+			<integer>0</integer>
 		</dict>
 		<key>My Assets.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>0</integer>
+			<integer>1</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>1B31939D282DDCDF00AA2038</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>1B31BA9723EC823F00B6E63A</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>1BE1623E2A74928B00E4907D</key>
+		<dict>
+			<key>primary</key>
+			<true/>
 		</dict>
 	</dict>
 </dict>

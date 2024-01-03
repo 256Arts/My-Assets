@@ -2,8 +2,8 @@
 //  NewIncomeSourceView.swift
 //  My Assets
 //
-//  Created by Jayden Irwin on 2020-02-07.
-//  Copyright © 2020 Jayden Irwin. All rights reserved.
+//  Created by 256 Arts Developer on 2020-02-07.
+//  Copyright © 2020 256 Arts Developer. All rights reserved.
 //
 
 import SwiftUI
@@ -29,7 +29,7 @@ struct NewIncomeSourceView: View {
                     #if !os(macOS)
                     .textInputAutocapitalization(.words)
                     #endif
-                OptionalDoubleField("Monthly Earnings ($)", value: $earnings, formatter: currencyFormatter)
+                OptionalCurrencyField("Monthly Earnings", value: $earnings)
                 Toggle("Liquid", isOn: Binding(get: {
                     income.isLiquid ?? true
                 }, set: { newValue in
@@ -49,7 +49,7 @@ struct NewIncomeSourceView: View {
                 }))
             }
         }
-        .navigationTitle("Add Income")
+        .navigationTitle("New Income")
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
                 Button("Cancel") {
@@ -57,14 +57,13 @@ struct NewIncomeSourceView: View {
                 }
             }
             ToolbarItem(placement: .confirmationAction) {
-                Button("Done") {
-                    if let earnings = self.earnings {
-                        self.income.monthlyEarnings = earnings
-                        modelContext.insert(income)
-                        self.data.nonAssetIncome.append(self.income)
-                        self.dismiss()
-                    }
+                Button("Add") {
+                    self.income.monthlyEarnings = earnings
+                    modelContext.insert(income)
+                    self.data.nonAssetIncome.append(self.income)
+                    self.dismiss()
                 }
+                .disabled(earnings == nil)
             }
         }
         .navigationTitle(income.name ?? "")
@@ -76,8 +75,6 @@ struct NewIncomeSourceView: View {
     }
 }
 
-struct NewIncomeSourceView_Previews: PreviewProvider {
-    static var previews: some View {
-        NewIncomeSourceView()
-    }
+#Preview {
+    NewIncomeSourceView()
 }

@@ -9,8 +9,16 @@
 import SwiftUI
 
 struct SummaryView: View {
+    
+    @EnvironmentObject var data: FinancialData
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        List {
+            LabeledContent("Balance", value: currencyFormatter.string(from: NSNumber(value: data.balance(at: .now))) ?? "")
+            
+            LabeledContent("Net Worth", value: currencyFormatter.string(from: NSNumber(value: data.netWorth(at: .now, type: .working))) ?? "")
+        }
+        .navigationTitle("Summary")
     }
 }
 

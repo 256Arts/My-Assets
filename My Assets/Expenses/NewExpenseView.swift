@@ -2,8 +2,8 @@
 //  NewExpenseView.swift
 //  My Assets
 //
-//  Created by Jayden Irwin on 2020-02-07.
-//  Copyright © 2020 Jayden Irwin. All rights reserved.
+//  Created by 256 Arts Developer on 2020-02-07.
+//  Copyright © 2020 256 Arts Developer. All rights reserved.
 //
 
 import SwiftUI
@@ -17,7 +17,7 @@ struct NewExpenseView: View {
     
     @EnvironmentObject var data: FinancialData
     
-    @Bindable var expense = Expense(name: "", symbol: Symbol.defaultSymbol, monthlyCost: 0)
+    @Bindable var expense = Expense(name: "", symbol: Symbol.defaultSymbol, category: .discretionary, monthlyCost: 0)
     @State var cost: Double?
     
     var body: some View {
@@ -31,7 +31,13 @@ struct NewExpenseView: View {
                 #if !os(macOS)
                 .textInputAutocapitalization(.words)
                 #endif
-                OptionalDoubleField("Monthly Cost ($)", value: $cost, formatter: currencyFormatter)
+                OptionalCurrencyField("Monthly Cost", value: $cost)
+                Picker("Category", selection: $expense.category) {
+                    ForEach(Expense.Category.allCases) { category in
+                        Text(category.name)
+                            .tag(category as Expense.Category?)
+                    }
+                }
             }
             Section {
                 SymbolPicker(selected: Binding(get: {
@@ -41,7 +47,7 @@ struct NewExpenseView: View {
                 }))
             }
         }
-        .navigationTitle("Add Expense")
+        .navigationTitle("New Expense")
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
                 Button("Cancel") {
@@ -49,19 +55,18 @@ struct NewExpenseView: View {
                 }
             }
             ToolbarItem(placement: .confirmationAction) {
-                Button("Done") {
-                    if let cost = self.cost {
-                        self.expense.baseMonthlyCost = cost
-                        modelContext.insert(expense)
-                        if let parentExpense = self.parentExpense {
-                            expense.parent = parentExpense
+                Button("Add") {
+                    self.expense.baseMonthlyCost = cost
+                    modelContext.insert(expense)
+                    if let parentExpense = self.parentExpense {
+                        expense.parent = parentExpense
 //                            parentExpense.children.append(self.expense)
-                        } else {
-                            self.data.nonDebtExpenses.append(self.expense)
-                        }
-                        self.dismiss()
+                    } else {
+                        self.data.nonDebtExpenses.append(self.expense)
                     }
+                    self.dismiss()
                 }
+                .disabled(cost == nil)
             }
         }
         .onChange(of: expense.symbol) { _, newValue in
@@ -72,8 +77,6 @@ struct NewExpenseView: View {
     }
 }
 
-struct NewExpenseView_Previews: PreviewProvider {
-    static var previews: some View {
-        NewExpenseView(parentExpense: nil)
-    }
+#Preview {
+    NewExpenseView(parentExpense: nil)
 }

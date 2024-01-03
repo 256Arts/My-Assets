@@ -2,8 +2,8 @@
 //  SettingsView.swift
 //  My Assets
 //
-//  Created by Jayden Irwin on 2022-04-09.
-//  Copyright © 2022 Jayden Irwin. All rights reserved.
+//  Created by 256 Arts Developer on 2022-04-09.
+//  Copyright © 2022 256 Arts Developer. All rights reserved.
 //
 
 import SwiftUI
@@ -14,13 +14,6 @@ struct SettingsView: View {
     
     @AppStorage(UserDefaults.Key.userType) var userTypeValue = UserType.individual.rawValue
     @AppStorage(UserDefaults.Key.otherHouseholdNetWorth) var otherHouseholdNetWorth = 0.0
-    #if DEBUG
-    @AppStorage(UserDefaults.Key.showDebugData) var showDebugData = false {
-        didSet {
-            exit(0) // Quit app to reset `CloudController`
-        }
-    }
-    #endif
     
     @State var birthday = Date(timeIntervalSinceReferenceDate: UserDefaults.standard.double(forKey: UserDefaults.Key.birthday))
     
@@ -34,24 +27,14 @@ struct SettingsView: View {
                     }
                 }
                 if userTypeValue == UserType.individual.rawValue {
-                    DoubleField("Partner's Net Worth", value: $otherHouseholdNetWorth, formatter: NumberFormatter())
+                    CurrencyField("Partner's Net Worth", value: $otherHouseholdNetWorth)
                 }
-            } footer: {
-                Text("Net worth percentiles are based on 2020 data from the USA, adjusted for inflation, and converted to your currency.")
-            }
             
-            Section {
                 DatePicker("Birthday", selection: $birthday, in: ...Date.now, displayedComponents: .date)
             }
             
-            #if DEBUG
             Section {
-                Toggle("Debug Data", isOn: $showDebugData)
-            }
-            #endif
-            
-            Section {
-                Link(destination: URL(string: "https://www.jaydenirwin.com/")!) {
+                Link(destination: URL(string: "https://www.256arts.com/")!) {
                     Label("Developer Website", systemImage: "safari")
                 }
                 Link(destination: URL(string: "https://www.256arts.com/joincommunity/")!) {
@@ -81,8 +64,6 @@ struct SettingsView: View {
     }
 }
 
-struct SettingsView_Previews: PreviewProvider {
-    static var previews: some View {
-        SettingsView()
-    }
+#Preview {
+    SettingsView()
 }

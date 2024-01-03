@@ -27,7 +27,7 @@ struct PercentField: View {
     
     var body: some View {
         LabeledContent(label) {
-            TextField(label, value: $updatedValue, format: .currency(code: ""))
+            TextField(label, value: $updatedValue, format: .percent)
                 .focused($isFocused)
                 .multilineTextAlignment(.trailing)
                 .onChange(of: isFocused) { _, newValue in
@@ -43,5 +43,31 @@ struct PercentField: View {
 }
 
 #Preview {
-    DoubleField("Title", value: .constant(0.0))
+    PercentField("Title", value: .constant(0.0))
+}
+
+struct OptionalPercentField: View {
+    
+    let label: LocalizedStringKey
+    @Binding var value: Double?
+
+    init(
+        _ label: LocalizedStringKey,
+        value: Binding<Double?>
+    ) {
+        self.label = label
+        _value = value
+    }
+
+    var body: some View {
+        PercentField(label, value: Binding(get: {
+            value ?? 0
+        }, set: { newValue in
+            value = newValue
+        }))
+    }
+}
+
+#Preview {
+    OptionalPercentField("Title", value: .constant(0.0))
 }

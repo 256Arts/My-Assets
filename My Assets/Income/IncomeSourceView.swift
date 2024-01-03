@@ -2,8 +2,8 @@
 //  IncomeSourceView.swift
 //  My Assets
 //
-//  Created by Jayden Irwin on 2020-02-07.
-//  Copyright © 2020 Jayden Irwin. All rights reserved.
+//  Created by 256 Arts Developer on 2020-02-07.
+//  Copyright © 2020 256 Arts Developer. All rights reserved.
 //
 
 import SwiftUI
@@ -24,34 +24,22 @@ struct IncomeSourceView: View {
     
     var body: some View {
         Form {
-            Section {
-                TextField("Name", text: $nameCopy)
-                    #if !os(macOS)
-                    .textInputAutocapitalization(.words)
-                    #endif
-                DoubleField("Monthly Earnings ($)", value: Binding(get: {
-                    income.monthlyEarnings ?? 0
-                }, set: { newValue in
-                    income.monthlyEarnings = newValue
-                }), formatter: currencyFormatter)
-                Toggle("Liquid", isOn: Binding(get: {
-                    income.isLiquid ?? true
-                }, set: { newValue in
-                    income.isLiquid = newValue
-                }))
-                Toggle("Passive", isOn: Binding(get: {
-                    income.isPassive ?? false
-                }, set: { newValue in
-                    income.isPassive = newValue
-                }))
-            }
-            Section {
-                SymbolPicker(selected: Binding(get: {
-                    income.symbol ?? .defaultSymbol
-                }, set: { newValue in
-                    income.symbol = newValue
-                }))
-            }
+            SymbolPickerLink(symbol: $income.symbol)
+            TextField("Name", text: $nameCopy)
+                #if !os(macOS)
+                .textInputAutocapitalization(.words)
+                #endif
+            OptionalCurrencyField("Monthly Earnings", value: $income.monthlyEarnings)
+            Toggle("Liquid", isOn: Binding(get: {
+                income.isLiquid ?? true
+            }, set: { newValue in
+                income.isLiquid = newValue
+            }))
+            Toggle("Passive", isOn: Binding(get: {
+                income.isPassive ?? false
+            }, set: { newValue in
+                income.isPassive = newValue
+            }))
         }
         .navigationTitle("Income Source")
         #if !os(macOS)
@@ -63,8 +51,6 @@ struct IncomeSourceView: View {
     }
 }
 
-struct IncomeSourceView_Previews: PreviewProvider {
-    static var previews: some View {
-        IncomeSourceView(income: Income(name: "", symbol: Symbol.defaultSymbol, isLiquid: true, monthlyEarnings: 100.00, isPassive: true))
-    }
+#Preview {
+    IncomeSourceView(income: Income(name: "", symbol: Symbol.defaultSymbol, isLiquid: true, monthlyEarnings: 100.00, isPassive: true))
 }

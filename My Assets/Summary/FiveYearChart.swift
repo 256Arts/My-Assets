@@ -2,8 +2,8 @@
 //  FiveYearChart.swift
 //  My Assets
 //
-//  Created by Jayden Irwin on 2023-09-01.
-//  Copyright © 2023 Jayden Irwin. All rights reserved.
+//  Created by 256 Arts Developer on 2023-09-01.
+//  Copyright © 2023 256 Arts Developer. All rights reserved.
 //
 
 import SwiftUI
@@ -26,8 +26,7 @@ struct FiveYearChart: View {
     @EnvironmentObject var data: FinancialData
     
     let nowThrough5Years = (0...5).map { Date.now + TimeInterval($0) * .year }
-    
-    @Binding var chartDataSource: ChartDataSource
+    let chartDataSource: ChartDataSource
     
     var insights: InsightsGenerator {
         .init(data: data)
@@ -128,5 +127,5 @@ struct FiveYearChart: View {
 }
 
 #Preview {
-    FiveYearChart(chartDataSource: .constant(.balance))
+    FiveYearChart(chartDataSource: .balance)
 }

@@ -2,23 +2,48 @@
 //  ExpensesView.swift
 //  My Assets
 //
-//  Created by Jayden Irwin on 2020-02-07.
-//  Copyright © 2020 Jayden Irwin. All rights reserved.
+//  Created by 256 Arts Developer on 2020-02-07.
+//  Copyright © 2020 256 Arts Developer. All rights reserved.
 //
 
 import SwiftUI
 import SwiftData
+import Charts
 
 struct ExpensesView: View {
+    
+    struct SectorData: Plottable, Identifiable {
+        
+        let category: Expense.Category
+        var id: Expense.Category { category }
+        let amount: Double
+        var primitivePlottable: Double { amount }
+        
+        init(category: Expense.Category, amount: Double) {
+            self.category = category
+            self.amount = amount
+        }
+        
+        init?(primitivePlottable: Double) { nil }
+    }
     
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject var data: FinancialData
     
     @Query(filter: #Predicate<Expense> {
         $0.parent == nil
-    }, sort: [SortDescriptor(\.baseMonthlyCost, order: .reverse)]) var nonDebtExpenses: [Expense]
+    }, sort: [SortDescriptor(\.baseMonthlyCost, order: .reverse)]) var nonDebtRootExpenses: [Expense]
+    @Query var nonDebtExpenses: [Expense]
+    @Query var debts: [Debt]
     
     @State var showingDetail = false
+    
+    var pieChartData: [SectorData] {
+        let allExpenses = nonDebtExpenses + debts.map({ Expense(debt: $0) })
+        return Expense.Category.allCases.map { category in
+            SectorData(category: category, amount: allExpenses.filter({ $0.category == category }).reduce(0.0, { $0 + ($1.baseMonthlyCost ?? 0.0) }))
+        }
+    }
     
     var spentIncome: Double {
         data.totalExpenses / data.totalLiquidIncome
@@ -28,7 +53,23 @@ struct ExpensesView: View {
         NavigationStack {
             List {
                 Section {
-                    ForEach(nonDebtExpenses) { expense in
+                    Chart(pieChartData) { sector in
+                        SectorMark(angle: .value("Value", sector.amount), innerRadius: .ratio(0.5), angularInset: 1)
+                            .foregroundStyle(by: .value("Category", sector.category.name))
+                            .cornerRadius(4)
+//                            .annotation(position: .overlay) {
+//                                sector.category.icon
+//                                    .symbolVariant(.fill)
+//                                    .foregroundStyle(Color.white)
+//                                    .shadow(radius: 8)
+//                            }
+                    }
+                    .chartLegend(position: .trailing)
+                    .chartForegroundStyleScale(range: pieChartData.map({ $0.category.color }))
+                    .frame(height: 110)
+                }
+                Section {
+                    ForEach(nonDebtRootExpenses) { expense in
                         NavigationLink(value: expense) {
                             VStack(spacing: 8) {
                                 AmountRow(symbol: expense.symbol ?? .defaultSymbol, label: expense.name ?? "", amount: expense.monthlyCost)
@@ -51,7 +92,7 @@ struct ExpensesView: View {
                     }
                     .font(Font.headline)
                 }
-                if spentIncome.isFinite {
+                if spentIncome.isFinite, 0 < spentIncome {
                     Section {
                         Gauge(value: spentIncome) {
                             Text("Spent Income")
@@ -95,8 +136,6 @@ struct ExpensesView: View {
     
 }
 
-struct ExpensesView_Previews: PreviewProvider {
-    static var previews: some View {
-        ExpensesView()
-    }
+#Preview {
+    ExpensesView()
 }

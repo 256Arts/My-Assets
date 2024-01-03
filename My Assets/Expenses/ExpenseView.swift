@@ -2,8 +2,8 @@
 //  ExpenseView.swift
 //  My Assets
 //
-//  Created by Jayden Irwin on 2020-02-07.
-//  Copyright © 2020 Jayden Irwin. All rights reserved.
+//  Created by 256 Arts Developer on 2020-02-07.
+//  Copyright © 2020 256 Arts Developer. All rights reserved.
 //
 
 import SwiftUI
@@ -27,15 +27,18 @@ struct ExpenseView: View {
     var body: some View {
         Form {
             Section {
+                SymbolPickerLink(symbol: $expense.symbol)
                 TextField("Name", text: $nameCopy)
                     #if !os(macOS)
                     .textInputAutocapitalization(.words)
                     #endif
-                DoubleField("Monthly Cost ($)", value: Binding(get: {
-                    expense.baseMonthlyCost ?? 0
-                }, set: { newValue in
-                    expense.baseMonthlyCost = newValue
-                }), formatter: currencyFormatter)
+                OptionalCurrencyField("Monthly Cost", value: $expense.baseMonthlyCost)
+                Picker("Category", selection: $expense.category) {
+                    ForEach(Expense.Category.allCases) { category in
+                        Text(category.name)
+                            .tag(category as Expense.Category?)
+                    }
+                }
             }
             Section {
                 Button {
@@ -51,13 +54,6 @@ struct ExpenseView: View {
                 .onDelete(perform: delete)
             } header: {
                 Text("Subexpenses")
-            }
-            Section {
-                SymbolPicker(selected: Binding(get: {
-                    expense.symbol ?? .defaultSymbol
-                }, set: { newValue in
-                    expense.symbol = newValue
-                }))
             }
         }
         .navigationTitle("Expense")
@@ -85,8 +81,6 @@ struct ExpenseView: View {
     
 }
 
-struct ExpenseView_Previews: PreviewProvider {
-    static var previews: some View {
-        ExpenseView(expense: Expense(name: "", symbol: Symbol.defaultSymbol, monthlyCost: 9.99))
-    }
+#Preview {
+    ExpenseView(expense: Expense(name: "", symbol: Symbol.defaultSymbol, category: .discretionary, monthlyCost: 9.99))
 }

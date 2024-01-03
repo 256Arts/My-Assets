@@ -2,8 +2,8 @@
 //  Debt.swift
 //  My Assets
 //
-//  Created by Jayden Irwin on 2021-12-29.
-//  Copyright © 2021 Jayden Irwin. All rights reserved.
+//  Created by 256 Arts Developer on 2021-12-29.
+//  Copyright © 2021 256 Arts Developer. All rights reserved.
 //
 
 import Foundation
@@ -39,13 +39,22 @@ class Debt: Hashable, Comparable {
     
     var monthsToPayOff: Double {
         guard let annualInterestFraction, let monthlyPayment else { return .nan }
+        
+        guard !monthlyPayment.isZero else {
+            return .infinity
+        }
+        
+        guard !annualInterestFraction.isZero else {
+            return currentValue / monthlyPayment
+        }
+        
         /* Using formulas:
          - Compound interest
          - Future value of a series
          Note: We get the formula below by solving for t.
         */
         let a = 0.0 // Future value
-        let p = currentValue(at: .now) // Principal value
+        let p = currentValue // Principal value
         let r = annualInterestFraction // Rate
         let n = 12.0 // Compounds per time unit
         let m = -monthlyPayment // Monthly payment
@@ -62,13 +71,13 @@ class Debt: Hashable, Comparable {
     private var prevValue: Double?
     private var prevDate: Date?
     
-    init(name: String? = nil, symbol: Symbol? = nil) {
-        self.name = name ?? ""
-        self.symbol = symbol ?? .defaultSymbol
+    init(name: String = "", symbol: Symbol = .defaultSymbol, value: Double = 0) {
+        self.name = name
+        self.symbol = symbol
         self.colorHex = "000000"
         self.annualInterestFraction = 0
         self.monthlyPayment = 0
-        self.prevValue = 0
+        self.prevValue = value
         self.prevDate = Date()
     }
     
@@ -76,6 +85,11 @@ class Debt: Hashable, Comparable {
         guard let prevDate, let prevValue, let annualInterestFraction, let monthlyPayment else { return .nan }
         
         let monthsSinceDate = date.timeIntervalSince(prevDate) / TimeInterval.month
+        
+        guard !annualInterestFraction.isZero else {
+            return prevValue - (monthsSinceDate * monthlyPayment)
+        }
+        
         let i = annualInterestFraction / 12
         let value = prevValue * pow(1 + i, monthsSinceDate) - (monthlyPayment / i) * (pow(1 + i, monthsSinceDate) - 1)
         return max(0, value)

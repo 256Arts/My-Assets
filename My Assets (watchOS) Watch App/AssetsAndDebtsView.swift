@@ -2,8 +2,8 @@
 //  MyAssetsView.swift
 //  My Assets (watchOS) Watch App
 //
-//  Created by Jayden Irwin on 2023-07-28.
-//  Copyright © 2023 Jayden Irwin. All rights reserved.
+//  Created by 256 Arts Developer on 2023-07-28.
+//  Copyright © 2023 256 Arts Developer. All rights reserved.
 //
 
 import SwiftUI
@@ -32,7 +32,7 @@ struct AssetsAndDebtsView: View {
                 }
                 .onDelete(perform: deleteAsset)
             } header: {
-                Text("My Assets")
+                Text("Assets")
             }
             Section {
                 ForEach(debts) { debt in
@@ -40,10 +40,10 @@ struct AssetsAndDebtsView: View {
                 }
                 .onDelete(perform: deleteDebt)
             } header: {
-                Text("My Debts")
+                Text("Debts")
             }
         }
-        .navigationTitle("My Assets")
+        .navigationTitle("Assets & Debts")
     }
     
     func deleteAsset(at offsets: IndexSet) {

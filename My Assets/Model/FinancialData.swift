@@ -2,8 +2,8 @@
 //  FinancialData.swift
 //  My Assets
 //
-//  Created by Jayden Irwin on 2020-02-06.
-//  Copyright © 2020 Jayden Irwin. All rights reserved.
+//  Created by 256 Arts Developer on 2020-02-06.
+//  Copyright © 2020 256 Arts Developer. All rights reserved.
 //
 
 import SwiftUI
@@ -42,6 +42,9 @@ final class FinancialData: ObservableObject {
     }
     var totalLiquidIncome: Double {
         income.filter({ $0.isLiquid! }).reduce(0, { $0 + $1.monthlyEarnings! })
+    }
+    var totalPassiveIncome: Double {
+        income.filter({ $0.isPassive! }).reduce(0, { $0 + $1.monthlyEarnings! })
     }
     var totalIncome: Double {
         income.reduce(0, { $0 + $1.monthlyEarnings! })
@@ -96,7 +99,7 @@ final class FinancialData: ObservableObject {
             case .working:
                 totalIncome
             case .natural, .notWorking:
-                self.income.filter({ $0.isPassive! }).reduce(0, { $0 + $1.monthlyEarnings! })
+                self.totalPassiveIncome
             }
         }()
         let expenses: Double = {

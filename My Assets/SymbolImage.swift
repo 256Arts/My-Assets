@@ -2,8 +2,8 @@
 //  SymbolImage.swift
 //  My Assets
 //
-//  Created by Jayden Irwin on 2021-11-23.
-//  Copyright © 2021 Jayden Irwin. All rights reserved.
+//  Created by 256 Arts Developer on 2021-11-23.
+//  Copyright © 2021 256 Arts Developer. All rights reserved.
 //
 
 import SwiftUI
@@ -21,8 +21,6 @@ struct SymbolImage: View {
     }
 }
 
-struct SymbolImage_Previews: PreviewProvider {
-    static var previews: some View {
-        SymbolImage(symbol: .defaultSymbol)
-    }
+#Preview {
+    SymbolImage(symbol: .defaultSymbol)
 }

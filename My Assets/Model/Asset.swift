@@ -2,8 +2,8 @@
 //  Models.swift
 //  My Assets
 //
-//  Created by Jayden Irwin on 2020-02-06.
-//  Copyright © 2020 Jayden Irwin. All rights reserved.
+//  Created by 256 Arts Developer on 2020-02-06.
+//  Copyright © 2020 256 Arts Developer. All rights reserved.
 //
 
 import Foundation
@@ -51,6 +51,9 @@ class Asset: Comparable {
     @Relationship(deleteRule: .cascade, inverse: \Debt.asset)
     var loans: [Debt]?
     
+    @Relationship(deleteRule: .cascade, inverse: \UpcomingSpend.asset)
+    var upcomingSpends: [UpcomingSpend]?
+    
     var effectiveAnnualInterestFraction: Double {
         guard let annualInterestFraction else { return .nan }
         
@@ -76,14 +79,14 @@ class Asset: Comparable {
     private var prevValue: Double?
     private var prevDate: Date?
     
-    init() {
-        self.name = ""
-        self.symbol = Symbol.defaultSymbol
+    init(name: String = "", symbol: Symbol = .defaultSymbol, value: Double = 0) {
+        self.name = name
+        self.symbol = symbol
         self.colorHex = "000000"
         self.isLiquid = true
         self.compoundFrequency = Asset.CompoundFrequency.none
         self.annualInterestFraction = 0
-        self.prevValue = 0
+        self.prevValue = value
         self.prevDate = Date()
     }
     

@@ -2,8 +2,8 @@
 //  My_Assets__watchOS_App.swift
 //  My Assets (watchOS) Watch App
 //
-//  Created by Jayden Irwin on 2023-07-28.
-//  Copyright © 2023 Jayden Irwin. All rights reserved.
+//  Created by 256 Arts Developer on 2023-07-28.
+//  Copyright © 2023 256 Arts Developer. All rights reserved.
 //
 
 import SwiftUI
@@ -15,7 +15,10 @@ struct My_Assets__watchOS__Watch_AppApp: App {
         WindowGroup {
             RootTabView()
         }
-        .modelContainer(for: [Asset.self, Debt.self, Stock.self, Income.self, Expense.self])
+        .modelContainer(for: [Asset.self, Debt.self, Stock.self, UpcomingSpend.self, Income.self, Expense.self])
+//        #if DEBUG
+//        .modelContainer(previewContainer)
+//        #endif
     }
 }
 

@@ -2,8 +2,8 @@
 //  NewStockView.swift
 //  My Assets
 //
-//  Created by Jayden Irwin on 2020-02-06.
-//  Copyright © 2020 Jayden Irwin. All rights reserved.
+//  Created by 256 Arts Developer on 2020-02-06.
+//  Copyright © 2020 256 Arts Developer. All rights reserved.
 //
 
 import SwiftUI
@@ -25,9 +25,9 @@ struct NewStockView: View {
                 .autocapitalization(.allCharacters)
                 #endif
                 .disableAutocorrection(true)
-            DoubleField("Number Of Shares", value: $stockShares, formatter: NumberFormatter())
+//            DoubleField("Number Of Shares", value: $stockShares, formatter: NumberFormatter())
         }
-            .navigationTitle("Add Stock")
+            .navigationTitle("New Stock")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(role: .cancel) {
@@ -44,15 +44,13 @@ struct NewStockView: View {
                         self.data.stocks.append(stock)
                         self.dismiss()
                     } label: {
-                        Text("Done")
+                        Text("Add")
                     }
                 }
             }
     }
 }
 
-struct NewStockView_Previews: PreviewProvider {
-    static var previews: some View {
-        NewStockView()
-    }
+#Preview {
+    NewStockView()
 }

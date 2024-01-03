@@ -2,8 +2,8 @@
 //  StockView.swift
 //  My Assets
 //
-//  Created by Jayden Irwin on 2020-09-23.
-//  Copyright © 2020 Jayden Irwin. All rights reserved.
+//  Created by 256 Arts Developer on 2020-09-23.
+//  Copyright © 2020 256 Arts Developer. All rights reserved.
 //
 
 import SwiftUI
@@ -23,8 +23,6 @@ struct StockView: View {
     }
 }
 
-struct StockView_Previews: PreviewProvider {
-    static var previews: some View {
-        StockView(stock: .constant(Stock(symbol: "AAPL", shares: 10)))
-    }
+#Preview {
+    StockView(stock: .constant(Stock(symbol: "AAPL", shares: 10)))
 }

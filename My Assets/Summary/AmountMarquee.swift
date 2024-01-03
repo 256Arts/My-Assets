@@ -2,8 +2,8 @@
 //  AmountMarquee.swift
 //  My Assets
 //
-//  Created by Jayden Irwin on 2022-02-16.
-//  Copyright © 2022 Jayden Irwin. All rights reserved.
+//  Created by 256 Arts Developer on 2022-02-16.
+//  Copyright © 2022 256 Arts Developer. All rights reserved.
 //
 
 import SwiftUI
@@ -75,8 +75,6 @@ struct AmountMarquee: View {
     }
 }
 
-struct AmountMarquee_Previews: PreviewProvider {
-    static var previews: some View {
-        AmountMarquee(period: .constant(.month), showAsCombinedValue: .constant(false), currentValue: 5000, monthlyIncome: 2000, monthlyExpenses: 1000)
-    }
+#Preview {
+    AmountMarquee(period: .constant(.month), showAsCombinedValue: .constant(false), currentValue: 5000, monthlyIncome: 2000, monthlyExpenses: 1000)
 }

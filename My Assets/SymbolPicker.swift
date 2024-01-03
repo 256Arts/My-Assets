@@ -2,8 +2,8 @@
 //  SymbolPicker.swift
 //  My Assets
 //
-//  Created by Jayden Irwin on 2021-10-26.
-//  Copyright © 2021 Jayden Irwin. All rights reserved.
+//  Created by 256 Arts Developer on 2021-10-26.
+//  Copyright © 2021 256 Arts Developer. All rights reserved.
 //
 
 import SwiftUI
@@ -56,8 +56,6 @@ struct SymbolPicker: View {
     }
 }
 
-struct SymbolPicker_Previews: PreviewProvider {
-    static var previews: some View {
-        SymbolPicker(selected: .constant(Symbol.defaultSymbol))
-    }
+#Preview {
+    SymbolPicker(selected: .constant(Symbol.defaultSymbol))
 }

@@ -2,8 +2,8 @@
 //  My_AssetsTests.swift
 //  My AssetsTests
 //
-//  Created by Jayden Irwin on 2022-05-12.
-//  Copyright © 2022 Jayden Irwin. All rights reserved.
+//  Created by 256 Arts Developer on 2022-05-12.
+//  Copyright © 2022 256 Arts Developer. All rights reserved.
 //
 
 import XCTest

@@ -2,8 +2,8 @@
 //  NewDebtView.swift
 //  My Assets
 //
-//  Created by Jayden Irwin on 2021-10-27.
-//  Copyright © 2021 Jayden Irwin. All rights reserved.
+//  Created by 256 Arts Developer on 2021-10-27.
+//  Copyright © 2021 256 Arts Developer. All rights reserved.
 //
 
 import SwiftUI
@@ -33,9 +33,9 @@ struct NewDebtView: View {
                     #if !os(macOS)
                     .textInputAutocapitalization(.words)
                     #endif
-                OptionalDoubleField("Value ($)", value: $value, formatter: currencyFormatter)
-                OptionalDoubleField("Annual Interest (%)", value: $interest, formatter: percentFormatter)
-                OptionalDoubleField("Monthly Payment ($)", value: $monthlyPayment, formatter: currencyFormatter)
+                OptionalCurrencyField("Value", value: $value)
+                OptionalPercentField("Annual Interest", value: $interest)
+                OptionalCurrencyField("Monthly Payment", value: $monthlyPayment)
             }
             Section {
                 SymbolPicker(selected: Binding(get: {
@@ -45,7 +45,7 @@ struct NewDebtView: View {
                 }))
             }
         }
-        .navigationTitle("Add Debt")
+        .navigationTitle("New Debt")
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
                 Button("Cancel") {
@@ -53,7 +53,7 @@ struct NewDebtView: View {
                 }
             }
             ToolbarItem(placement: .confirmationAction) {
-                Button("Done") {
+                Button("Add") {
                     if let value = self.value {
                         let interest = self.interest ?? 0.0
                         self.debt.annualInterestFraction = interest
@@ -88,8 +88,6 @@ struct NewDebtView: View {
     }
 }
 
-struct NewDebtView_Previews: PreviewProvider {
-    static var previews: some View {
-        NewDebtView()
-    }
+#Preview {
+    NewDebtView()
 }

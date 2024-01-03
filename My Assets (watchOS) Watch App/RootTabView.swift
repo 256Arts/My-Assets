@@ -2,8 +2,8 @@
 //  RootTabView.swift
 //  My Assets (watchOS) Watch App
 //
-//  Created by Jayden Irwin on 2023-07-28.
-//  Copyright © 2023 Jayden Irwin. All rights reserved.
+//  Created by 256 Arts Developer on 2023-07-28.
+//  Copyright © 2023 256 Arts Developer. All rights reserved.
 //
 
 import SwiftData
@@ -12,11 +12,13 @@ import SwiftUI
 struct RootTabView: View {
     
     private enum Tab: Identifiable, CaseIterable {
-        case assetsAndDebts, income, expenses
+        case summary, assetsAndDebts, income, expenses
         
         var id: Self { self }
         var title: String {
             switch self {
+            case .summary:
+                "Summary"
             case .assetsAndDebts:
                 "Assets/Debts"
             case .income:
@@ -27,6 +29,8 @@ struct RootTabView: View {
         }
         var iconName: String {
             switch self {
+            case .summary:
+                "chart.line.uptrend.xyaxis"
             case .assetsAndDebts:
                 "banknote"
             case .income:
@@ -37,7 +41,7 @@ struct RootTabView: View {
         }
         var color: Color {
             switch self {
-            case .assetsAndDebts:
+            case .summary, .assetsAndDebts:
                 .blue
             case .income:
                 .green
@@ -65,8 +69,10 @@ struct RootTabView: View {
             .navigationTitle("My Assets")
             .navigationDestination(item: $selectedTab) { tab in
                 switch selectedTab {
+                case .summary:
+                    SummaryView()
                 case .assetsAndDebts:
-                    MyAssetsView()
+                    AssetsAndDebtsView()
                 case .income:
                     IncomeView()
                 case .expenses:

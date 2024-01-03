@@ -2,8 +2,8 @@
 //  MyAssetsApp.swift
 //  My Assets
 //
-//  Created by Jayden Irwin on 2022-03-28.
-//  Copyright © 2022 Jayden Irwin. All rights reserved.
+//  Created by 256 Arts Developer on 2022-03-28.
+//  Copyright © 2022 256 Arts Developer. All rights reserved.
 //
 
 import SwiftUI
@@ -20,9 +20,13 @@ struct MyAssetsApp: App {
     
     var body: some Scene {
         WindowGroup {
+//            DeleterView()
             RootTabView()
         }
-        .modelContainer(for: [Asset.self, Debt.self, Stock.self, Income.self, Expense.self])
+        .modelContainer(for: [Asset.self, Debt.self, Stock.self, UpcomingSpend.self, Income.self, Expense.self])
+//        #if DEBUG
+//        .modelContainer(previewContainer)
+//        #endif
         
         #if os(macOS)
         Settings {
@@ -31,6 +35,26 @@ struct MyAssetsApp: App {
         #endif
     }
 }
+
+#if DEBUG
+struct DeleterView: View {
+    @Environment(\.modelContext) private var modelContext
+    @Query var nonStockAssets: [Asset]
+    @Query var debts: [Debt]
+    @Query var stocks: [Stock]
+    @Query var nonAssetIncome: [Income]
+    @Query var nonDebtExpenses: [Expense]
+    var body: some View {
+        EmptyView()
+            .onAppear {
+                let items: [any PersistentModel] = nonStockAssets + debts + nonAssetIncome + nonDebtExpenses
+                for item in items {
+                    modelContext.delete(item)
+                }
+            }
+    }
+}
+#endif
 
 let currencyFormatter: NumberFormatter = {
     let formatter = NumberFormatter()

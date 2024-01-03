@@ -2,8 +2,8 @@
 //  IncomeView.swift
 //  My Assets
 //
-//  Created by Jayden Irwin on 2020-02-07.
-//  Copyright © 2020 Jayden Irwin. All rights reserved.
+//  Created by 256 Arts Developer on 2020-02-07.
+//  Copyright © 2020 256 Arts Developer. All rights reserved.
 //
 
 import SwiftUI
@@ -100,12 +100,13 @@ struct IncomeView: View {
                         SectorMark(angle: .value("Value", sector.income), innerRadius: .ratio(0.5), angularInset: 1)
                             .foregroundStyle(by: .value("Effort", sector.effort.title))
                             .cornerRadius(4)
-                            .annotation(position: .overlay) {
-                                sector.effort.icon
-                                    .symbolVariant(.fill)
-                                    .shadow(radius: 8)
-                                    .opacity(selectedSector == nil || selectedSector?.id == sector.id ? 1.0 : 0.5)
-                            }
+//                            .annotation(position: .overlay) {
+//                                sector.effort.icon
+//                                    .symbolVariant(.fill)
+//                                    .foregroundStyle(Color.white)
+//                                    .shadow(radius: 8)
+//                                    .opacity(selectedSector == nil || selectedSector?.id == sector.id ? 1.0 : 0.5)
+//                            }
                             .opacity(selectedSector == nil || selectedSector?.id == sector.id ? 1.0 : 0.5)
                     }
                     .chartLegend(position: .trailing)
@@ -148,6 +149,17 @@ struct IncomeView: View {
                         .accessibilityLabel("Total")
                         .accessibilityValue(currencyFormatter.string(from: NSNumber(value: data.totalLiquidIncome))!)
                 }
+                if spentIncome.isFinite, 0 < spentIncome {
+                    Section {
+                        Gauge(value: spentIncome) {
+                            Text("Spent Income")
+                        } currentValueLabel: {
+                            Text("Spent Income: \(percentFormatter.string(from: NSNumber(value: spentIncome))!)")
+                        }
+                        .gaugeStyle(.accessoryLinear)
+                        .tint(LinearGradient(colors: [.green, .gray, .red], startPoint: .leading, endPoint: .trailing))
+                    }
+                }
                 if data.income.contains(where: { $0.fromAsset! && !$0.isLiquid! }) {
                     Section {
                         ForEach(data.income.filter({ $0.fromAsset! && !$0.isLiquid! })) { income in
@@ -166,17 +178,6 @@ struct IncomeView: View {
                         .accessibilityElement()
                         .accessibilityLabel("Total (With Non-Liquid)")
                         .accessibilityValue(currencyFormatter.string(from: NSNumber(value: data.totalIncome))!)
-                    }
-                }
-                if spentIncome.isFinite {
-                    Section {
-                        Gauge(value: spentIncome) {
-                            Text("Spent Income")
-                        } currentValueLabel: {
-                            Text("Spent Income: \(percentFormatter.string(from: NSNumber(value: spentIncome))!)")
-                        }
-                        .gaugeStyle(.accessoryLinear)
-                        .tint(LinearGradient(colors: [.green, .gray, .red], startPoint: .leading, endPoint: .trailing))
                     }
                 }
             }
@@ -225,8 +226,6 @@ struct IncomeView: View {
     
 }
 
-struct IncomeView_Previews: PreviewProvider {
-    static var previews: some View {
-        IncomeView()
-    }
+#Preview {
+    IncomeView()
 }
