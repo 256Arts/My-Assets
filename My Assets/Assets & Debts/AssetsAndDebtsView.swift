@@ -1,5 +1,5 @@
 //
-//  MyAssetsView.swift
+//  AssetsAndDebtsView.swift
 //  My Assets
 //
 //  Created by Jayden Irwin on 2020-02-06.
@@ -10,7 +10,7 @@ import SwiftUI
 import SwiftData
 import Charts
 
-struct MyAssetsView: View {
+struct AssetsAndDebtsView: View {
     
     @AppStorage(UserDefaults.Key.amountMarqueePeriod) var periodRawValue = "Month"
     @AppStorage(UserDefaults.Key.amountMarqueeShowAsCombinedValue) var showAsCombinedValue = false
@@ -222,6 +222,6 @@ struct MyAssetsView: View {
 
 struct MyAssetsView_Previews: PreviewProvider {
     static var previews: some View {
-        MyAssetsView()
+        AssetsAndDebtsView()
     }
 }

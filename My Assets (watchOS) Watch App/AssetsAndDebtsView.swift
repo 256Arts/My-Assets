@@ -9,7 +9,7 @@
 import SwiftUI
 import SwiftData
 
-struct MyAssetsView: View {
+struct AssetsAndDebtsView: View {
     
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject var data: FinancialData
@@ -68,5 +68,5 @@ struct MyAssetsView: View {
 }
 
 #Preview {
-    MyAssetsView()
+    AssetsAndDebtsView()
 }
