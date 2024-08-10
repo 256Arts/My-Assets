@@ -64,9 +64,9 @@ class Expense: Hashable, Comparable {
     
     var name: String?
     var symbol: Symbol?
-    var colorHex: String?
+    var colorName: ColorName?
     var id: String {
-        (name ?? "") + (symbol?.rawValue ?? "") + (colorHex ?? "") + String(baseMonthlyCost ?? 0)
+        (name ?? "") + (symbol?.rawValue ?? "") + (colorName?.rawValue ?? "") + String(baseMonthlyCost ?? 0)
     }
     var category: Category?
     var baseMonthlyCost: Double?
@@ -86,7 +86,7 @@ class Expense: Hashable, Comparable {
     init(name: String, symbol: Symbol, category: Category, monthlyCost: Double) {
         self.name = name
         self.symbol = symbol
-        self.colorHex = "000000"
+        self.colorName = .gray
         self.category = category
         self.baseMonthlyCost = monthlyCost
         self.fromDebt = false
@@ -96,7 +96,7 @@ class Expense: Hashable, Comparable {
     init(debt: Debt) {
         name = debt.name
         symbol = debt.symbol
-        colorHex = debt.colorHex
+        colorName = debt.colorName
         category = .fixed
         baseMonthlyCost = debt.monthlyPayment
         fromDebt = true

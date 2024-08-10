@@ -96,30 +96,46 @@ struct IncomeView: View {
         NavigationStack {
             List {
                 Section {
-                    Chart(pieChartData) { sector in
-                        SectorMark(angle: .value("Value", sector.income), innerRadius: .ratio(0.5), angularInset: 1)
-                            .foregroundStyle(by: .value("Effort", sector.effort.title))
-                            .cornerRadius(4)
-//                            .annotation(position: .overlay) {
-//                                sector.effort.icon
-//                                    .symbolVariant(.fill)
-//                                    .foregroundStyle(Color.white)
-//                                    .shadow(radius: 8)
-//                                    .opacity(selectedSector == nil || selectedSector?.id == sector.id ? 1.0 : 0.5)
-//                            }
-                            .opacity(selectedSector == nil || selectedSector?.id == sector.id ? 1.0 : 0.5)
-                    }
-                    .chartLegend(position: .trailing)
-                    .chartForegroundStyleScale(range: pieChartData.map({ $0.effort.color }))
-                    .chartAngleSelection(value: $selectedIncome)
-                    .frame(height: 110)
-                    .overlay(alignment: .topLeading) {
-                        if selectedSector != nil {
-                            Button("Reset") {
-                                selectedSector = nil
+                    HStack {
+                        Chart(pieChartData) { sector in
+                            SectorMark(angle: .value("Value", sector.income), innerRadius: .ratio(0.5), angularInset: 1)
+                                .foregroundStyle(by: .value("Effort", sector.effort.title))
+                                .cornerRadius(4)
+                            //                            .annotation(position: .overlay) {
+                            //                                sector.effort.icon
+                            //                                    .symbolVariant(.fill)
+                            //                                    .foregroundStyle(Color.white)
+                            //                                    .shadow(radius: 8)
+                            //                                    .opacity(selectedSector == nil || selectedSector?.id == sector.id ? 1.0 : 0.5)
+                            //                            }
+                                .opacity(selectedSector == nil || selectedSector?.id == sector.id ? 1.0 : 0.5)
+                        }
+                        .chartLegend(position: .trailing)
+                        .chartForegroundStyleScale(range: pieChartData.map({ $0.effort.color }))
+                        .chartAngleSelection(value: $selectedIncome)
+                        .frame(height: 110)
+                        .background(Color(UIColor.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 16))
+                        .overlay(alignment: .topLeading) {
+                            if selectedSector != nil {
+                                Button("Reset") {
+                                    selectedSector = nil
+                                }
                             }
                         }
+                        
+                        if spentIncome.isFinite, 0 < spentIncome {
+                            Gauge(value: spentIncome) {
+                                Text("Spent Income")
+                            } currentValueLabel: {
+                                Text("Spent Income: \(percentFormatter.string(from: NSNumber(value: spentIncome))!)")
+                            }
+                            .gaugeStyle(.accessoryLinear)
+                            .tint(LinearGradient(colors: [.green, .gray, .red], startPoint: .leading, endPoint: .trailing))
+                            .frame(idealHeight: .infinity, maxHeight: .infinity)
+                            .background(Color(UIColor.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 16))
+                        }
                     }
+                    .listRowBackground(Color.clear)
                 }
                 Section {
                     ForEach(nonAssetIncome) { income in
@@ -132,6 +148,7 @@ struct IncomeView: View {
                         }
                     }
                     .onDelete(perform: delete)
+                    
                     ForEach(data.income.filter({ $0.fromAsset! && $0.isLiquid! })) { income in
                         AmountRow(symbol: income.symbol ?? .defaultSymbol, label: income.name ?? "", amount: income.monthlyEarnings!)
                             .opacity((selectedSector?.effort ?? .passive) == .passive ? 1 : 0.5)
@@ -139,6 +156,7 @@ struct IncomeView: View {
                             .accessibilityLabel(income.name ?? "")
                             .accessibilityValue(currencyFormatter.string(from: NSNumber(value: income.monthlyEarnings!))!)
                     }
+                    
                     HStack {
                         Text("Total")
                         Spacer()
@@ -149,17 +167,7 @@ struct IncomeView: View {
                         .accessibilityLabel("Total")
                         .accessibilityValue(currencyFormatter.string(from: NSNumber(value: data.totalLiquidIncome))!)
                 }
-                if spentIncome.isFinite, 0 < spentIncome {
-                    Section {
-                        Gauge(value: spentIncome) {
-                            Text("Spent Income")
-                        } currentValueLabel: {
-                            Text("Spent Income: \(percentFormatter.string(from: NSNumber(value: spentIncome))!)")
-                        }
-                        .gaugeStyle(.accessoryLinear)
-                        .tint(LinearGradient(colors: [.green, .gray, .red], startPoint: .leading, endPoint: .trailing))
-                    }
-                }
+                
                 if data.income.contains(where: { $0.fromAsset! && !$0.isLiquid! }) {
                     Section {
                         ForEach(data.income.filter({ $0.fromAsset! && !$0.isLiquid! })) { income in
@@ -169,6 +177,7 @@ struct IncomeView: View {
                                 .accessibilityLabel(income.name ?? "")
                                 .accessibilityValue(currencyFormatter.string(from: NSNumber(value: income.monthlyEarnings!))!)
                         }
+                        
                         HStack {
                             Text("Total (With Non-Liquid)")
                             Spacer()

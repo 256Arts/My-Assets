@@ -14,6 +14,8 @@ struct SettingsView: View {
     
     @AppStorage(UserDefaults.Key.userType) var userTypeValue = UserType.individual.rawValue
     @AppStorage(UserDefaults.Key.otherHouseholdNetWorth) var otherHouseholdNetWorth = 0.0
+    @AppStorage(UserDefaults.Key.summaryScreenShowBalance) var summaryScreenShowBalance = true
+    @AppStorage(UserDefaults.Key.summaryScreenShowNetWorth) var summaryScreenShowNetWorth = true
     
     @State var birthday = Date(timeIntervalSinceReferenceDate: UserDefaults.standard.double(forKey: UserDefaults.Key.birthday))
     
@@ -31,6 +33,11 @@ struct SettingsView: View {
                 }
             
                 DatePicker("Birthday", selection: $birthday, in: ...Date.now, displayedComponents: .date)
+            }
+            
+            Section("Summary Screen") {
+                Toggle("Show Balance", isOn: $summaryScreenShowBalance)
+                Toggle("Show Net Worth", isOn: $summaryScreenShowNetWorth)
             }
             
             Section {

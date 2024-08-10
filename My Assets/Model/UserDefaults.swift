@@ -17,6 +17,8 @@ extension UserDefaults {
         static let birthday = "birthday"
         static let amountMarqueePeriod = "amountMarqueePeriod"
         static let amountMarqueeShowAsCombinedValue = "amountMarqueeShowAsCombinedValue"
+        static let summaryScreenShowBalance = "summaryScreenShowBalance"
+        static let summaryScreenShowNetWorth = "summaryScreenShowNetWorth"
     }
     
     func register() {
@@ -25,7 +27,9 @@ extension UserDefaults {
             Key.userType: UserType.individual.rawValue,
             Key.otherHouseholdNetWorth: 0.0,
             Key.amountMarqueePeriod: Period.month.rawValue,
-            Key.amountMarqueeShowAsCombinedValue: false
+            Key.amountMarqueeShowAsCombinedValue: false,
+            Key.summaryScreenShowBalance: true,
+            Key.summaryScreenShowNetWorth: true
         ])
     }
     

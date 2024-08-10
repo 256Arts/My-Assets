@@ -35,6 +35,7 @@ struct ExpensesView: View {
     }, sort: [SortDescriptor(\.baseMonthlyCost, order: .reverse)]) var nonDebtRootExpenses: [Expense]
     @Query var nonDebtExpenses: [Expense]
     @Query var debts: [Debt]
+    @Query var upcomingSpends: [UpcomingSpend]
     
     @State var showingDetail = false
     
@@ -53,20 +54,35 @@ struct ExpensesView: View {
         NavigationStack {
             List {
                 Section {
-                    Chart(pieChartData) { sector in
-                        SectorMark(angle: .value("Value", sector.amount), innerRadius: .ratio(0.5), angularInset: 1)
-                            .foregroundStyle(by: .value("Category", sector.category.name))
-                            .cornerRadius(4)
-//                            .annotation(position: .overlay) {
-//                                sector.category.icon
-//                                    .symbolVariant(.fill)
-//                                    .foregroundStyle(Color.white)
-//                                    .shadow(radius: 8)
-//                            }
+                    HStack {
+                        Chart(pieChartData) { sector in
+                            SectorMark(angle: .value("Value", sector.amount), innerRadius: .ratio(0.5), angularInset: 1)
+                                .foregroundStyle(by: .value("Category", sector.category.name))
+                                .cornerRadius(4)
+                            //                            .annotation(position: .overlay) {
+                            //                                sector.category.icon
+                            //                                    .symbolVariant(.fill)
+                            //                                    .foregroundStyle(Color.white)
+                            //                                    .shadow(radius: 8)
+                            //                            }
+                        }
+                        .chartLegend(position: .trailing)
+                        .chartForegroundStyleScale(range: pieChartData.map({ $0.category.color }))
+                        .frame(height: 110)
+                        .background(Color(UIColor.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 16))
+                        
+                        if spentIncome.isFinite, 0 < spentIncome {
+                            Gauge(value: spentIncome) {
+                                Text("Spent Income")
+                            } currentValueLabel: {
+                                Text("Spent Income: \(percentFormatter.string(from: NSNumber(value: spentIncome))!)")
+                            }
+                            .gaugeStyle(.accessoryLinear)
+                            .tint(LinearGradient(colors: [.green, .gray, .red], startPoint: .leading, endPoint: .trailing))
+                            .frame(idealHeight: .infinity, maxHeight: .infinity)
+                            .background(Color.primary, in: RoundedRectangle(cornerRadius: 16))
+                        }
                     }
-                    .chartLegend(position: .trailing)
-                    .chartForegroundStyleScale(range: pieChartData.map({ $0.category.color }))
-                    .frame(height: 110)
                 }
                 Section {
                     ForEach(nonDebtRootExpenses) { expense in
@@ -81,10 +97,12 @@ struct ExpensesView: View {
                             }
                         }
                     }
-                    .onDelete(perform: delete)
+                    .onDelete(perform: deleteNonDebtExpense)
+                    
                     ForEach(data.expenses.filter({ $0.fromDebt! })) { expense in
                         AmountRow(symbol: expense.symbol ?? .defaultSymbol, label: expense.name ?? "", amount: expense.monthlyCost)
                     }
+                    
                     HStack {
                         Text("Total")
                         Spacer()
@@ -92,15 +110,17 @@ struct ExpensesView: View {
                     }
                     .font(Font.headline)
                 }
-                if spentIncome.isFinite, 0 < spentIncome {
+
+                if !upcomingSpends.isEmpty {
                     Section {
-                        Gauge(value: spentIncome) {
-                            Text("Spent Income")
-                        } currentValueLabel: {
-                            Text("Spent Income: \(percentFormatter.string(from: NSNumber(value: spentIncome))!)")
+                        ForEach(upcomingSpends) { spend in
+                            NavigationLink(value: spend) {
+                                LabeledContent(spend.name ?? "", value: currencyFormatter.string(from: NSNumber(value: spend.cost ?? 0)) ?? "")
+                            }
                         }
-                        .gaugeStyle(.accessoryLinear)
-                        .tint(LinearGradient(colors: [.green, .gray, .red], startPoint: .leading, endPoint: .trailing))
+                        .onDelete(perform: deleteUpcomingSpend)
+                    } header: {
+                        Text("Upcoming Spends")
                     }
                 }
             }
@@ -119,6 +139,9 @@ struct ExpensesView: View {
             .navigationDestination(for: Expense.self) { expense in
                 ExpenseView(expense: expense)
             }
+            .navigationDestination(for: UpcomingSpend.self) { spend in
+                UpcomingSpendView(spend: spend)
+            }
         }
         .sheet(isPresented: self.$showingDetail) {
             NavigationStack {
@@ -127,10 +150,16 @@ struct ExpensesView: View {
         }
     }
     
-    func delete(at offsets: IndexSet) {
+    private func deleteNonDebtExpense(at offsets: IndexSet) {
         for offset in offsets {
             modelContext.delete(data.nonDebtExpenses[offset])
             data.nonDebtExpenses.remove(at: offset)
+        }
+    }
+    
+    private func deleteUpcomingSpend(at offsets: IndexSet) {
+        for offset in offsets {
+            modelContext.delete(upcomingSpends[offset])
         }
     }
     

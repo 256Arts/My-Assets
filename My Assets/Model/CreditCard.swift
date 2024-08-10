@@ -1,0 +1,58 @@
+//
+//  CreditCard.swift
+//  My Assets
+//
+//  Created by Jayden Irwin on 2024-08-10.
+//  Copyright © 2024 Jayden Irwin. All rights reserved.
+//
+
+import SwiftData
+import SwiftUI
+
+@Model
+class CreditCard {
+    
+    enum RewardType: String, Codable, Identifiable {
+        case cash, giftCard
+        
+        var id: Self { self }
+    }
+    
+    var name: String?
+    var colorName: ColorName?
+    
+    var cardFee: Double?
+    var pointsPerDollar: Double?
+    var pointValue: Double?
+    var rewardType: RewardType?
+    var minimumRedemption: Int?
+    
+    /// How long the gift card is held before it is used. (In months)
+    var timeHoldingGiftCard: Double?
+    var monthlySpend: Double?
+    
+    var monthlyRewardsEarned: Double? {
+        guard let pointsPerDollar, let pointValue, let monthlySpend else { return nil }
+        
+        return (pointsPerDollar * pointValue) * (monthlySpend * 12)
+    }
+    
+    var monthlyRewardsLost: Double? {
+        guard let monthlyRewardsEarned, let pointsPerDollar, let pointValue else { return nil }
+        
+        return monthlyRewardsEarned * (pointsPerDollar * pointValue)
+    }
+    
+    init(name: String = "", colorName: ColorName = .gray, cardFee: Double = 0.00, pointsPerDollar: Double = 1.0, pointValue: Double = 0.01, monthlySpend: Double = 2000.00) {
+        self.name = name
+        self.colorName = colorName
+        self.cardFee = cardFee
+        self.pointsPerDollar = pointsPerDollar
+        self.pointValue = pointValue
+        self.rewardType = .cash
+        self.minimumRedemption = 1
+        self.timeHoldingGiftCard = 2.0
+        self.monthlySpend = monthlySpend
+    }
+    
+}

@@ -61,6 +61,9 @@ final class FinancialData: ObservableObject {
     var totalExpenses: Double {
         expenses.reduce(0, { $0 + $1.monthlyCost })
     }
+    var totalPassiveExpenses: Double {
+        expenses.filter({ $0.fromDebt! }).reduce(0, { $0 + $1.monthlyCost })
+    }
     
     var avgAnnualNetWorthInterest: Double {
         // Calculate weigted average
@@ -99,13 +102,13 @@ final class FinancialData: ObservableObject {
             case .working:
                 totalIncome
             case .natural, .notWorking:
-                self.totalPassiveIncome
+                totalPassiveIncome
             }
         }()
         let expenses: Double = {
             switch type {
             case .natural:
-                self.expenses.filter({ $0.fromDebt! }).reduce(0, { $0 + $1.monthlyCost })
+                totalPassiveExpenses
             case .working, .notWorking:
                 totalExpenses
             }

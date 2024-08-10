@@ -23,18 +23,22 @@ struct NetWorthChartInfoView: View {
                     Text("Income: \(currencyFormatter.string(from: NSNumber(value: data.totalIncome)) ?? "") Expenses: \(currencyFormatter.string(from: NSNumber(value: data.totalExpenses)) ?? "")")
                 }
                 
-                VStack(alignment: .leading) {
-                    Text("Natural")
-                        .font(.headline)
-                    Text("Only assets, debts, and interest on them. (No human interaction. No human work income, or human expenses.)")
-                    Text("Income: \(currencyFormatter.string(from: NSNumber(value: data.totalPassiveIncome)) ?? "") Expenses: \(currencyFormatter.string(from: NSNumber(value: data.expenses.filter({ $0.fromDebt! }).reduce(0, { $0 + $1.monthlyCost }))) ?? "")")
-                }
-                
-                VStack(alignment: .leading) {
-                    Text("Quit Working")
-                        .font(.headline)
-                    Text("Net worth if you quit your job.")
-                    Text("Income: \(currencyFormatter.string(from: NSNumber(value: data.totalPassiveIncome)) ?? "") Expenses: \(currencyFormatter.string(from: NSNumber(value: data.totalExpenses)) ?? "")")
+                if data.totalIncome != data.totalPassiveIncome {
+                    if data.totalExpenses != data.totalPassiveExpenses {
+                        VStack(alignment: .leading) {
+                            Text("Natural")
+                                .font(.headline)
+                            Text("Only assets, debts, and interest on them. (No human interaction. No work income, or living expenses.)")
+                            Text("Income: \(currencyFormatter.string(from: NSNumber(value: data.totalPassiveIncome)) ?? "") Expenses: \(currencyFormatter.string(from: NSNumber(value: data.totalPassiveExpenses)) ?? "")")
+                        }
+                    }
+                    
+                    VStack(alignment: .leading) {
+                        Text("Quit Working")
+                            .font(.headline)
+                        Text("Net worth if you quit your job.")
+                        Text("Income: \(currencyFormatter.string(from: NSNumber(value: data.totalPassiveIncome)) ?? "") Expenses: \(currencyFormatter.string(from: NSNumber(value: data.totalExpenses)) ?? "")")
+                    }
                 }
             }
         }

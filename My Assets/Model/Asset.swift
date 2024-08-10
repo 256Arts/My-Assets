@@ -40,9 +40,9 @@ class Asset: Comparable {
     
     var name: String?
     var symbol: Symbol?
-    var colorHex: String?
+    var colorName: ColorName?
     var id: String {
-        (name ?? "") + (symbol?.rawValue ?? "") + (colorHex ?? "") + (compoundFrequency?.rawValue ?? "")
+        (name ?? "") + (symbol?.rawValue ?? "") + (colorName?.rawValue ?? "") + (compoundFrequency?.rawValue ?? "")
     }
     var isLiquid: Bool?
     var compoundFrequency: CompoundFrequency?
@@ -82,7 +82,7 @@ class Asset: Comparable {
     init(name: String = "", symbol: Symbol = .defaultSymbol, value: Double = 0) {
         self.name = name
         self.symbol = symbol
-        self.colorHex = "000000"
+        self.colorName = .gray
         self.isLiquid = true
         self.compoundFrequency = Asset.CompoundFrequency.none
         self.annualInterestFraction = 0
@@ -93,7 +93,7 @@ class Asset: Comparable {
     init(stock: Stock) {
         name = stock.symbol
         symbol = Symbol.stocks
-        colorHex = "000000"
+        colorName = .gray
         isLiquid = true
         compoundFrequency = Asset.CompoundFrequency.none
         annualInterestFraction = stock.annualInterestFraction ?? 0.0
@@ -102,7 +102,7 @@ class Asset: Comparable {
     }
 
     enum CodingKeys: String, CodingKey {
-        case name, symbol, colorHex, isLiquid, compoundFrequency, annualInterestFraction, prevValue, prevDate
+        case name, symbol, colorName, isLiquid, compoundFrequency, annualInterestFraction, prevValue, prevDate
     }
 
     // For legacy decode
@@ -110,7 +110,7 @@ class Asset: Comparable {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         name = try values.decode(String.self, forKey: .name)
         symbol = try values.decode(Symbol.self, forKey: .symbol)
-        colorHex = try values.decode(String.self, forKey: .colorHex)
+        colorName = try values.decode(ColorName.self, forKey: .colorName)
         isLiquid = (try? values.decode(Bool.self, forKey: .isLiquid)) ?? true
         compoundFrequency = (try? values.decode(CompoundFrequency.self, forKey: .compoundFrequency)) ?? Asset.CompoundFrequency.none
         annualInterestFraction = try values.decode(Double.self, forKey: .annualInterestFraction)

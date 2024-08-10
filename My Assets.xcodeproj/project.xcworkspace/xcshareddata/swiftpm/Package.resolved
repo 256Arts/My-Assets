@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/256Arts/WelcomeKit",
       "state" : {
-        "revision" : "ba92399d329eda1b456821092965f2e342c1fd10",
-        "version" : "1.0.0"
+        "revision" : "f4d577a59ead9db569fd04645e7da91dd90daf93",
+        "version" : "1.1.0"
       }
     }
   ],

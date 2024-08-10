@@ -57,7 +57,7 @@ struct AssetView: View {
                         AmountRow(symbol: loan.symbol ?? .defaultSymbol, label: loan.name ?? "", amount: loan.currentValue)
                     }
                 }
-                .onDelete(perform: delete)
+                .onDelete(perform: deleteLoan)
                 Button {
                     showingLoan = true
                 } label: {
@@ -87,7 +87,7 @@ struct AssetView: View {
                             LabeledContent(spend.name ?? "", value: currencyFormatter.string(from: NSNumber(value: spend.cost ?? 0)) ?? "")
                         }
                     }
-                    .onDelete(perform: delete)
+                    .onDelete(perform: deleteUpcomingSpend)
                     Button {
                         showingSpend = true
                     } label: {
@@ -141,12 +141,21 @@ struct AssetView: View {
         return max(0, min(asset.currentValue / spends.reduce(0, { $0 + ($1.cost ?? 0) }), 1))
     }
     
-    private func delete(at offsets: IndexSet) {
+    private func deleteLoan(at offsets: IndexSet) {
         for offset in offsets {
             if let loans = asset.loans {
                 modelContext.delete(loans[offset])
             }
 //            asset.loans.remove(at: offset)
+        }
+    }
+    
+    private func deleteUpcomingSpend(at offsets: IndexSet) {
+        for offset in offsets {
+            if let spends = asset.upcomingSpends {
+                modelContext.delete(spends[offset])
+            }
+//            asset.upcomingSpends.remove(at: offset)
         }
     }
     

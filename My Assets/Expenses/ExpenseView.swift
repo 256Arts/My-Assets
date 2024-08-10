@@ -19,6 +19,10 @@ struct ExpenseView: View {
     @State var nameCopy: String
     @State var showingSubexpense = false
     
+    var children: [Expense] {
+        expense.children?.sorted() ?? []
+    }
+    
     init(expense: Expense) {
         self.expense = expense
         _nameCopy = State(initialValue: expense.name ?? "")
@@ -46,7 +50,7 @@ struct ExpenseView: View {
                 } label: {
                     Label("Add", systemImage: "plus.circle")
                 }
-                ForEach(expense.children ?? []) { child in
+                ForEach(children) { child in
                     NavigationLink(value: child) {
                         AmountRow(symbol: child.symbol ?? .defaultSymbol, label: child.name ?? "", amount: child.monthlyCost)
                     }

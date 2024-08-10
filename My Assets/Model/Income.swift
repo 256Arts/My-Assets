@@ -17,9 +17,9 @@ class Income: Comparable, Hashable {
     
     var name: String?
     var symbol: Symbol?
-    var colorHex: String?
+    var colorName: ColorName?
     var id: String {
-        (name ?? "") + (symbol?.rawValue ?? "") + (colorHex ?? "") + String(monthlyEarnings ?? 0)
+        (name ?? "") + (symbol?.rawValue ?? "") + (colorName?.rawValue ?? "") + String(monthlyEarnings ?? 0)
     }
     var isLiquid: Bool?
     var monthlyEarnings: Double?
@@ -29,7 +29,7 @@ class Income: Comparable, Hashable {
     init(name: String, symbol: Symbol, isLiquid: Bool, monthlyEarnings: Double, isPassive: Bool) {
         self.name = name
         self.symbol = symbol
-        self.colorHex = "000000"
+        self.colorName = .gray
         self.isLiquid = true
         self.monthlyEarnings = monthlyEarnings
         self.isPassive = isPassive
@@ -39,7 +39,7 @@ class Income: Comparable, Hashable {
     init(asset: Asset) {
         name = asset.name
         symbol = asset.symbol
-        colorHex = asset.colorHex
+        colorName = asset.colorName
         isLiquid = asset.isLiquid
         monthlyEarnings = asset.monthlyEarnings
         isPassive = true

@@ -37,6 +37,16 @@
 		1B3823DF280226510037BAFE /* UserType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3823DE280226510037BAFE /* UserType.swift */; };
 		1B39058F27BCBC5B005599AB /* AmountMarquee.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B39058E27BCBC5B005599AB /* AmountMarquee.swift */; };
 		1B3F748C2722072400E53FF0 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3F748B2722072400E53FF0 /* UserDefaults.swift */; };
+		1B4B4D252C67C4D200FAB76E /* CreditCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B4B4D242C67C4CE00FAB76E /* CreditCard.swift */; };
+		1B4B4D262C67C4D200FAB76E /* CreditCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B4B4D242C67C4CE00FAB76E /* CreditCard.swift */; };
+		1B4B4D272C67C4D200FAB76E /* CreditCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B4B4D242C67C4CE00FAB76E /* CreditCard.swift */; };
+		1B4B4D2D2C67ED8000FAB76E /* ColorName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B4B4D2C2C67ED7D00FAB76E /* ColorName.swift */; };
+		1B4B4D2F2C67ED8000FAB76E /* ColorName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B4B4D2C2C67ED7D00FAB76E /* ColorName.swift */; };
+		1B4B4D312C67EFDE00FAB76E /* ColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B4B4D302C67EFDA00FAB76E /* ColorPicker.swift */; };
+		1B4B4D332C67F14300FAB76E /* ColorPickerLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B4B4D322C67F13E00FAB76E /* ColorPickerLink.swift */; };
+		1B4B4D382C67F40300FAB76E /* CreditCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B4B4D362C67F40300FAB76E /* CreditCardView.swift */; };
+		1B4B4D392C67F40300FAB76E /* CreditCardList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B4B4D352C67F40300FAB76E /* CreditCardList.swift */; };
+		1B4B4D3A2C67F40300FAB76E /* NewCreditCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B4B4D372C67F40300FAB76E /* NewCreditCardView.swift */; };
 		1B520E862A749BD300DBA34A /* AmountRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B520E852A749BD300DBA34A /* AmountRow.swift */; };
 		1B520E882A749BD300DBA34A /* AmountRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B520E852A749BD300DBA34A /* AmountRow.swift */; };
 		1B520E8A2A74A53900DBA34A /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B520E892A74A53900DBA34A /* RootTabView.swift */; };
@@ -146,6 +156,13 @@
 		1B3823DE280226510037BAFE /* UserType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserType.swift; sourceTree = "<group>"; };
 		1B39058E27BCBC5B005599AB /* AmountMarquee.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmountMarquee.swift; sourceTree = "<group>"; };
 		1B3F748B2722072400E53FF0 /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
+		1B4B4D242C67C4CE00FAB76E /* CreditCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditCard.swift; sourceTree = "<group>"; };
+		1B4B4D2C2C67ED7D00FAB76E /* ColorName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorName.swift; sourceTree = "<group>"; };
+		1B4B4D302C67EFDA00FAB76E /* ColorPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPicker.swift; sourceTree = "<group>"; };
+		1B4B4D322C67F13E00FAB76E /* ColorPickerLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerLink.swift; sourceTree = "<group>"; };
+		1B4B4D352C67F40300FAB76E /* CreditCardList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditCardList.swift; sourceTree = "<group>"; };
+		1B4B4D362C67F40300FAB76E /* CreditCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditCardView.swift; sourceTree = "<group>"; };
+		1B4B4D372C67F40300FAB76E /* NewCreditCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCreditCardView.swift; sourceTree = "<group>"; };
 		1B520E852A749BD300DBA34A /* AmountRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AmountRow.swift; sourceTree = "<group>"; };
 		1B520E892A74A53900DBA34A /* RootTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabView.swift; sourceTree = "<group>"; };
 		1B704A422A799599006D701E /* My-Assets--watchOS--Watch-App-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "My-Assets--watchOS--Watch-App-Info.plist"; sourceTree = SOURCE_ROOT; };
@@ -240,12 +257,14 @@
 				1BD76D9E277CC2B200E499A8 /* Debt.swift */,
 				1BB2F26C23EE11AE00A4478C /* Stock.swift */,
 				1BD519CD2B44D72900E47994 /* UpcomingSpend.swift */,
+				1B4B4D242C67C4CE00FAB76E /* CreditCard.swift */,
 				1BB2F26E23EE11C700A4478C /* Income.swift */,
 				1BB2F27023EE11DE00A4478C /* Expense.swift */,
 				1BE6303E23EE3C7700F1EB93 /* TimeInterval.swift */,
 				1BA2CC2F272900C7009F3D40 /* Period.swift */,
 				1B3823DE280226510037BAFE /* UserType.swift */,
 				1BA2CC372729ECE2009F3D40 /* Symbol.swift */,
+				1B4B4D2C2C67ED7D00FAB76E /* ColorName.swift */,
 				1B3F748B2722072400E53FF0 /* UserDefaults.swift */,
 			);
 			path = Model;
@@ -310,18 +329,31 @@
 				1BCAFADA2AFB332A0083D51A /* CurrencyField.swift */,
 				1BA2CC3127290294009F3D40 /* SymbolPicker.swift */,
 				1BEFE9162AE6A9E7006024BE /* SymbolPickerLink.swift */,
+				1B4B4D302C67EFDA00FAB76E /* ColorPicker.swift */,
+				1B4B4D322C67F13E00FAB76E /* ColorPickerLink.swift */,
 				1BA2CC3D274D45A0009F3D40 /* SymbolImage.swift */,
 				1B520E852A749BD300DBA34A /* AmountRow.swift */,
 				1BEFE9132AE69941006024BE /* Summary */,
 				1B085B2123EDC9170008724A /* Assets & Debts */,
 				1B085B2723EDC96F0008724A /* Income */,
 				1B085B2823EDC9750008724A /* Expenses */,
+				1B4B4D342C67F2E100FAB76E /* Credit Cards */,
 				1B085B2223EDC9340008724A /* Model */,
 				1B31BAA123EC824200B6E63A /* Assets.xcassets */,
 				1BCAFAD52AF9E8E80083D51A /* PreviewContainer.swift */,
 				1B31BAA923EC824200B6E63A /* Info.plist */,
 			);
 			path = "My Assets";
+			sourceTree = "<group>";
+		};
+		1B4B4D342C67F2E100FAB76E /* Credit Cards */ = {
+			isa = PBXGroup;
+			children = (
+				1B4B4D352C67F40300FAB76E /* CreditCardList.swift */,
+				1B4B4D362C67F40300FAB76E /* CreditCardView.swift */,
+				1B4B4D372C67F40300FAB76E /* NewCreditCardView.swift */,
+			);
+			path = "Credit Cards";
 			sourceTree = "<group>";
 		};
 		1BB7E5A927F0116700D51084 /* Frameworks */ = {
@@ -437,7 +469,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1500;
-				LastUpgradeCheck = 1510;
+				LastUpgradeCheck = 1600;
 				ORGANIZATIONNAME = "Jayden Irwin";
 				TargetAttributes = {
 					1B31939D282DDCDF00AA2038 = {
@@ -514,6 +546,7 @@
 				1B3193AF282DDF4600AA2038 /* TimeInterval.swift in Sources */,
 				1BD519CF2B44D72900E47994 /* UpcomingSpend.swift in Sources */,
 				1B3193A1282DDCDF00AA2038 /* My_AssetsTests.swift in Sources */,
+				1B4B4D252C67C4D200FAB76E /* CreditCard.swift in Sources */,
 				1B3193B2282DDF5200AA2038 /* Symbol.swift in Sources */,
 				1B3193AD282DDF4200AA2038 /* Income.swift in Sources */,
 				1B3193A9282DDE8100AA2038 /* WorldFinanceStats.swift in Sources */,
@@ -549,12 +582,18 @@
 				1BCAFAD62AF9E8E80083D51A /* PreviewContainer.swift in Sources */,
 				1BA2CC30272900C7009F3D40 /* Period.swift in Sources */,
 				1BC0DC2A251B063F00B51FDD /* StockView.swift in Sources */,
+				1B4B4D272C67C4D200FAB76E /* CreditCard.swift in Sources */,
 				1BD45D3427F25ED8008E07A9 /* MyAssetsApp.swift in Sources */,
 				1BD519CE2B44D72900E47994 /* UpcomingSpend.swift in Sources */,
 				1B085B2423EDC95B0008724A /* IncomeView.swift in Sources */,
 				1B31BAA023EC823F00B6E63A /* RootTabView.swift in Sources */,
 				1BA2CC362729D35F009F3D40 /* DebtView.swift in Sources */,
+				1B4B4D332C67F14300FAB76E /* ColorPickerLink.swift in Sources */,
+				1B4B4D382C67F40300FAB76E /* CreditCardView.swift in Sources */,
+				1B4B4D392C67F40300FAB76E /* CreditCardList.swift in Sources */,
+				1B4B4D3A2C67F40300FAB76E /* NewCreditCardView.swift in Sources */,
 				1B3823D62802120F0037BAFE /* WorldFinanceStats.swift in Sources */,
+				1B4B4D312C67EFDE00FAB76E /* ColorPicker.swift in Sources */,
 				1B3823DC280225B30037BAFE /* SettingsView.swift in Sources */,
 				1BA2CC3E274D45A0009F3D40 /* SymbolImage.swift in Sources */,
 				1B085B2623EDC9660008724A /* ExpensesView.swift in Sources */,
@@ -567,6 +606,7 @@
 				1B25FAB82AED5F6F00C697B2 /* NetWorthChartInfoView.swift in Sources */,
 				1B520E862A749BD300DBA34A /* AmountRow.swift in Sources */,
 				1B31BAB423EC9CAF00B6E63A /* AssetView.swift in Sources */,
+				1B4B4D2F2C67ED8000FAB76E /* ColorName.swift in Sources */,
 				1B3823DF280226510037BAFE /* UserType.swift in Sources */,
 				1BA2CC3227290294009F3D40 /* SymbolPicker.swift in Sources */,
 				1BB2F27123EE11DE00A4478C /* Expense.swift in Sources */,
@@ -580,6 +620,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1BCAFAD72AF9E8E80083D51A /* PreviewContainer.swift in Sources */,
+				1B4B4D2D2C67ED8000FAB76E /* ColorName.swift in Sources */,
 				1B7588402AA3C57F00206201 /* IncomeView.swift in Sources */,
 				1BAB38532A74982900FC9543 /* Expense.swift in Sources */,
 				1BE162532A74955600E4907D /* UserDefaults.swift in Sources */,
@@ -595,6 +636,7 @@
 				1B7588422AA3C58800206201 /* ExpensesView.swift in Sources */,
 				1BAB384E2A7496F600FC9543 /* AssetsAndDebtsView.swift in Sources */,
 				1BE162522A74954F00E4907D /* FinancialData.swift in Sources */,
+				1B4B4D262C67C4D200FAB76E /* CreditCard.swift in Sources */,
 				1BAB38572A74989B00FC9543 /* UserType.swift in Sources */,
 				1BAB38552A74984900FC9543 /* Period.swift in Sources */,
 				1BCAFAD92AFB02DF0083D51A /* SummaryView.swift in Sources */,
@@ -720,6 +762,9 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+				XROS_DEPLOYMENT_TARGET = 1.0;
 			};
 			name = Debug;
 		};
@@ -776,18 +821,20 @@
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = complete;
 				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+				XROS_DEPLOYMENT_TARGET = 1.0;
 			};
 			name = Release;
 		};
 		1B31BAAD23EC824200B6E63A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "My Assets/My Assets.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = VA3SY54YU8;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "My Assets/Info.plist";
@@ -797,25 +844,27 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jaydenirwin.myassets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SDKROOT = xros;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";
 				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,6";
+				TARGETED_DEVICE_FAMILY = "1,2,6,7";
+				XROS_DEPLOYMENT_TARGET = 1.0;
 			};
 			name = Debug;
 		};
 		1B31BAAE23EC824200B6E63A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "My Assets/My Assets.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = VA3SY54YU8;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "My Assets/Info.plist";
@@ -825,14 +874,17 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jaydenirwin.myassets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SDKROOT = xros;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";
 				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,6";
+				TARGETED_DEVICE_FAMILY = "1,2,6,7";
+				XROS_DEPLOYMENT_TARGET = 1.0;
 			};
 			name = Release;
 		};
@@ -845,7 +897,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_ENTITLEMENTS = "My Assets (watchOS) Watch App/My Assets (watchOS) Watch App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_ASSET_PATHS = "\"My Assets (watchOS) Watch App/Preview Content\"";
 				DEVELOPMENT_TEAM = VA3SY54YU8;
 				ENABLE_PREVIEWS = YES;
@@ -859,7 +911,7 @@
 					"@executable_path/Frameworks",
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jaydenirwin.myassets.watchkitapp;
 				PRODUCT_NAME = "My Assets";
 				SDKROOT = watchos;
@@ -881,7 +933,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_ENTITLEMENTS = "My Assets (watchOS) Watch App/My Assets (watchOS) Watch App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_ASSET_PATHS = "\"My Assets (watchOS) Watch App/Preview Content\"";
 				DEVELOPMENT_TEAM = VA3SY54YU8;
 				ENABLE_PREVIEWS = YES;
@@ -895,7 +947,7 @@
 					"@executable_path/Frameworks",
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jaydenirwin.myassets.watchkitapp;
 				PRODUCT_NAME = "My Assets";
 				SDKROOT = watchos;

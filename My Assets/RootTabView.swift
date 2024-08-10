@@ -13,7 +13,7 @@ import SwiftUI
 struct RootTabView: View {
     
     enum Tab {
-        case summary, assetsAndDebts, income, expenses
+        case summary, assetsAndDebts, income, expenses, creditCards
     }
     
     let welcomeFeatures = [
@@ -54,10 +54,15 @@ struct RootTabView: View {
                     Label("Expenses", systemImage: "tray.and.arrow.up")
                 }
                 .tag(Tab.expenses)
+            CreditCardList()
+                .tabItem {
+                    Label("Credit Cards", systemImage: "creditcard")
+                }
+                .tag(Tab.creditCards)
         }
         .accentColor({
             switch selectedTab {
-            case .summary, .assetsAndDebts:
+            case .summary, .assetsAndDebts, .creditCards:
                 return nil
             case .income:
                 return .green

@@ -19,9 +19,9 @@ final class UpcomingSpend: Hashable {
     var asset: Asset?
     
     var monthlyCost: Double? {
-        guard let date, let cost else { return nil }
+        guard let date, let cost, date.timeIntervalSinceNow > 0 else { return nil }
         
-        let monthsToDate = date.timeIntervalSinceNow / TimeInterval.month
+        let monthsToDate = max(1, date.timeIntervalSinceNow / TimeInterval.month)
         return cost / monthsToDate
     }
     

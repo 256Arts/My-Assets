@@ -29,7 +29,8 @@ final class InsightsGenerator {
     }
     var liveOffMonths: Double {
         guard 0 < data.balance(at: .now) else { return 0.0 }
-        let passiveIncome = data.income.filter { $0.isPassive! }
+        // TODO: Include passive income from *liquid* assets
+        let passiveIncome = data.income.filter { $0.isPassive! && !$0.fromAsset! }
         let totalPassiveIncome = passiveIncome.reduce(0.0, { $0 + $1.monthlyEarnings! })
         guard totalPassiveIncome < data.totalExpenses else { return .infinity }
         
@@ -37,7 +38,7 @@ final class InsightsGenerator {
         // Exclude debt interest since it's included in `avgAnnualBalanceInterest`
         let totalStaticExpenses = data.expenses.filter { !$0.fromDebt! }.reduce(0.0, { $0 + $1.monthlyCost })
         // Exclude asset interest since it's included in `avgAnnualBalanceInterest`
-        let totalStaticPassiveIncome = passiveIncome.filter { !$0.fromAsset! }.reduce(0.0, { $0 + $1.monthlyEarnings! })
+        let totalStaticPassiveIncome = passiveIncome.reduce(0.0, { $0 + $1.monthlyEarnings! })
         let staticMonthlyDrain = totalStaticExpenses - totalStaticPassiveIncome
         
         // Dynamic = Different amount every month based on interest percentages
@@ -147,17 +148,35 @@ final class InsightsGenerator {
     
     func generate() -> [AttributedString] {
         var insights: [AttributedString] = []
+        
+        let month = Calendar.current.dateComponents([.month], from: .now).month
+        switch month {
+        case 1:
+            insights.append("Selling assets in January will defer your tax expense.")
+        case 11, 12:
+            insights.append("Waiting until January to sell assets will defer your tax expense.")
+        default:
+            break
+        }
+        
         if !data.expenses.isEmpty {
             if 0 < liveOffMonths {
-                insights.append(try! AttributedString(markdown: "You could live off your \(0 < data.income.filter { $0.isPassive! && !$0.fromAsset! }.count ? "passive income" : "assets") for **\(liveOffTimeString)**."))
+                let earningNetWorthViaAssets = !data.income.filter { $0.isPassive! && $0.fromAsset! }.isEmpty
+                insights.append(try! AttributedString(markdown: "You could live off your \(earningNetWorthViaAssets ? "assets" : "passive income") for **\(liveOffTimeString)**."))
             }
             if liveOffTimeString != "forever", let requiredBalanceToLiveOffString = requiredBalanceToLiveOffString {
                 insights.append(try! AttributedString(markdown: "You need **\(requiredBalanceToLiveOffString)** to live off of your passive income forever."))
             }
         }
+        
         if let retirementBalanceString = retirementBalanceString, let adjustedRetirementBalanceString = adjustedRetirementBalanceString {
             insights.append(try! AttributedString(markdown: "At retirement, your balance could be **\(retirementBalanceString)**. (**\(adjustedRetirementBalanceString)** adjusted for inflation.)"))
         }
+        
+        if !avgAnnualBalanceInterest.isZero, let interestString = percentFormatter.string(from: NSNumber(value: avgAnnualBalanceInterest * (1.5 / 12))) {
+            insights.append(try! AttributedString(markdown: "Defering payment through a credit card can earn you **\(interestString)** in interest"))
+        }
+        
         return insights
     }
     

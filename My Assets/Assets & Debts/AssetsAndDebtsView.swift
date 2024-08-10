@@ -48,6 +48,7 @@ struct AssetsAndDebtsView: View {
                     Text("Assets")
                 }
                 .symbolVariant(.fill)
+                
                 Section {
                     ForEach(debts) { debt in
                         NavigationLink(value: debt) {
@@ -91,6 +92,9 @@ struct AssetsAndDebtsView: View {
             }
             .navigationDestination(for: Debt.self) { debt in
                 DebtView(debt: debt)
+            }
+            .navigationDestination(for: UpcomingSpend.self) { spend in
+                UpcomingSpendView(spend: spend)
             }
         }
         .sheet(isPresented: self.$showingNewAsset) {

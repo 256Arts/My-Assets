@@ -99,15 +99,19 @@ struct FiveYearChart: View {
                     .interpolationMethod(.cardinal)
                     .foregroundStyle(by: .value("Data", chartDataSource.rawValue))
             }
-            ForEach(passiveAssetsAndDebtsNetWorthChartData) { datum in
-                LineMark(x: .value("Date", datum.date), y: .value("Value", datum.value), series: .value("Data", "Natural"))
-                    .interpolationMethod(.cardinal)
-                    .foregroundStyle(by: .value("Data", "Natural"))
-            }
-            ForEach(notWorkingNetWorthChartData) { datum in
-                LineMark(x: .value("Date", datum.date), y: .value("Value", datum.value), series: .value("Data", "Quit Working"))
-                    .interpolationMethod(.cardinal)
-                    .foregroundStyle(by: .value("Data", "Quit Working"))
+            if data.totalIncome != data.totalPassiveIncome {
+                if data.totalExpenses != data.totalPassiveExpenses {
+                    ForEach(passiveAssetsAndDebtsNetWorthChartData) { datum in
+                        LineMark(x: .value("Date", datum.date), y: .value("Value", datum.value), series: .value("Data", "Natural"))
+                            .interpolationMethod(.cardinal)
+                            .foregroundStyle(by: .value("Data", "Natural"))
+                    }
+                }
+                ForEach(notWorkingNetWorthChartData) { datum in
+                    LineMark(x: .value("Date", datum.date), y: .value("Value", datum.value), series: .value("Data", "Quit Working"))
+                        .interpolationMethod(.cardinal)
+                        .foregroundStyle(by: .value("Data", "Quit Working"))
+                }
             }
             ForEach(chartInflationData) { datum in
                 LineMark(x: .value("Date", datum.date), y: .value("Value", datum.value), series: .value("Data", "Inflation"))
