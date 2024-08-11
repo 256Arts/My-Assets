@@ -12,44 +12,8 @@ struct NewCreditCardView: View {
     
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var data: FinancialData
-    
-    var insights: InsightsGenerator {
-        .init(data: data)
-    }
     
     @Bindable var creditCard: CreditCard = CreditCard()
-    
-    private var deferedPaymentInterest: Double? {
-        guard let monthlySpend = creditCard.monthlySpend else { return nil }
-        
-        let avgDeferedPaymentMonths = 1.5
-        return (monthlySpend * (insights.avgAnnualBalanceInterest / 12) * avgDeferedPaymentMonths) * 12
-    }
-    
-    private var interestLost: Double? {
-        guard let monthlyRewardsEarned = creditCard.monthlyRewardsEarned, let minimumRedemption = creditCard.minimumRedemption, let rewardType = creditCard.rewardType, let timeHoldingGiftCard = creditCard.timeHoldingGiftCard else { return nil }
-        
-        let deferedRedemptionLoss: Double = {
-            let redemptionsPerMonth = (monthlyRewardsEarned / 12) / Double(max(1, minimumRedemption))
-            
-            /* Guess: Redemptions will happen half as often as avg calculated.
-             If user can redeem twice in a month, we assume they can always redeem 100% of their rewards. */
-            let fractionOfRewardsRedeemed = min(redemptionsPerMonth / 2, 1)
-            
-            return fractionOfRewardsRedeemed * monthlyRewardsEarned * (insights.avgAnnualBalanceInterest / 12)
-        }()
-        
-        let deferedGiftCardUseLoss = monthlyRewardsEarned * (insights.avgAnnualBalanceInterest / 12) * (rewardType == .giftCard ? timeHoldingGiftCard : 0)
-        
-        return deferedRedemptionLoss + deferedGiftCardUseLoss
-    }
-    
-    private var rewardsRate: Double? {
-        guard let deferedPaymentInterest, let monthlyRewardsEarned = creditCard.monthlyRewardsEarned, let cardFee = creditCard.cardFee, let interestLost, let monthlyRewardsLost = creditCard.monthlyRewardsLost, let monthlySpend = creditCard.monthlySpend else { return nil }
-        
-        return (deferedPaymentInterest + monthlyRewardsEarned - cardFee - interestLost - monthlyRewardsLost) / (monthlySpend * 12)
-    }
     
     var body: some View {
         List {
@@ -60,6 +24,11 @@ struct NewCreditCardView: View {
                     creditCard.name = newValue
                 }))
                 ColorPickerLink(colorName: $creditCard.colorName)
+                TextEditor(text: Binding(get: {
+                    creditCard.notes ?? ""
+                }, set: { newValue in
+                    creditCard.notes = newValue
+                }))
             }
             Section {
                 OptionalCurrencyField("Monthly Spend", value: $creditCard.monthlySpend)
@@ -100,15 +69,6 @@ struct NewCreditCardView: View {
                             #endif
                     }
                 }
-                LabeledContent("Liquid Assets Interest", value: insights.avgAnnualBalanceInterestString)
-            }
-            
-            if let rewardsRate {
-                Section {
-                    LabeledContent("Your Savings Rate", value: percentFormatter.string(from: NSNumber(value: rewardsRate))!)
-                } footer: {
-                    Text("Savings rate includes interest you earn on your liquid assets while your purchase payments are being defered (by 1-2 months) by the credit card.")
-                }
             }
         }
         .toolbar {
@@ -122,7 +82,7 @@ struct NewCreditCardView: View {
                     modelContext.insert(creditCard)
                     self.dismiss()
                 }
-                .disabled(creditCard.name?.isEmpty == false)
+                .disabled(creditCard.name?.isEmpty != false)
             }
         }
         .navigationTitle("New Credit Card")

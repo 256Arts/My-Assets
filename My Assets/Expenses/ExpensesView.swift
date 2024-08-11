@@ -68,21 +68,32 @@ struct ExpensesView: View {
                         }
                         .chartLegend(position: .trailing)
                         .chartForegroundStyleScale(range: pieChartData.map({ $0.category.color }))
-                        .frame(height: 110)
-                        .background(Color(UIColor.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 16))
+                        .padding(6)
+                        .frame(idealHeight: .infinity, maxHeight: .infinity)
+                        .background(Color(UIColor.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 12))
                         
                         if spentIncome.isFinite, 0 < spentIncome {
-                            Gauge(value: spentIncome) {
+                            VStack(spacing: 0) {
+                                Gauge(value: spentIncome) {
+                                    EmptyView()
+                                } currentValueLabel: {
+                                    Text(shortPercentFormatter.string(from: NSNumber(value: spentIncome))!)
+                                }
+                                .gaugeStyle(.accessoryCircular)
+                                .tint(LinearGradient(colors: [.green, .gray, .red], startPoint: .leading, endPoint: .trailing))
+                                
                                 Text("Spent Income")
-                            } currentValueLabel: {
-                                Text("Spent Income: \(percentFormatter.string(from: NSNumber(value: spentIncome))!)")
+                                    .multilineTextAlignment(.center)
+                                    .font(.caption)
                             }
-                            .gaugeStyle(.accessoryLinear)
-                            .tint(LinearGradient(colors: [.green, .gray, .red], startPoint: .leading, endPoint: .trailing))
+                            .padding(6)
                             .frame(idealHeight: .infinity, maxHeight: .infinity)
-                            .background(Color.primary, in: RoundedRectangle(cornerRadius: 16))
+                            .background(Color(UIColor.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 12))
                         }
                     }
+                    .frame(height: 120)
+                    .listRowBackground(Color.clear)
+                    .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                 }
                 Section {
                     ForEach(nonDebtRootExpenses) { expense in

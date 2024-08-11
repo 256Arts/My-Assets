@@ -24,10 +24,10 @@ struct MyAssetsApp: App {
             RootTabView()
         }
         .defaultSize(width: 500, height: 800)
-//        .modelContainer(for: [Asset.self, Debt.self, Stock.self, UpcomingSpend.self, Income.self, Expense.self, CreditCard.self])
-        #if DEBUG
-        .modelContainer(previewContainer)
-        #endif
+        .modelContainer(for: [Asset.self, Debt.self, Stock.self, UpcomingSpend.self, Income.self, Expense.self, CreditCard.self])
+//        #if DEBUG
+//        .modelContainer(previewContainer)
+//        #endif
         
         #if os(macOS)
         Settings {
@@ -94,6 +94,14 @@ let percentFormatter: NumberFormatter = {
     formatter.numberStyle = .percent
     formatter.minimumFractionDigits = 0
     formatter.maximumFractionDigits = 1
+    return formatter
+}()
+
+let shortPercentFormatter: NumberFormatter = {
+    let formatter = NumberFormatter()
+    formatter.numberStyle = .percent
+    formatter.minimumFractionDigits = 0
+    formatter.maximumFractionDigits = 0
     return formatter
 }()
 

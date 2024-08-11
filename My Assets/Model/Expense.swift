@@ -13,7 +13,7 @@ import SwiftData
 class Expense: Hashable, Comparable {
     
     enum Category: String, CaseIterable, Identifiable, Codable {
-        case fixed, variable, intermittent, discretionary
+        case fixed, variable, intermittent, discretionary, savings
         
         var id: Self { self }
         var name: String {
@@ -26,6 +26,8 @@ class Expense: Hashable, Comparable {
                 "Intermittent"
             case .discretionary:
                 "Discretionary"
+            case .savings:
+                "Savings"
             }
         }
         var icon: Image {
@@ -38,6 +40,8 @@ class Expense: Hashable, Comparable {
                 Image(systemName: "wrench.and.screwdriver")
             case .discretionary:
                 Image(systemName: "bag")
+            case .savings:
+                Image(systemName: "building.columns")
             }
         }
         var color: Color {
@@ -45,11 +49,13 @@ class Expense: Hashable, Comparable {
             case .fixed:
                 .gray
             case .variable:
-                .green
+                .yellow
             case .intermittent:
                 .orange
             case .discretionary:
-                .blue
+                .purple
+            case .savings:
+                .green
             }
         }
     }
@@ -93,14 +99,33 @@ class Expense: Hashable, Comparable {
         self.children = []
     }
     
-    init(debt: Debt) {
+    init(debt: Debt, extraPaymentOnly: Bool = false) {
         name = debt.name
         symbol = debt.symbol
         colorName = debt.colorName
+        fromDebt = true
+        
         category = .fixed
         baseMonthlyCost = debt.monthlyPayment
-        fromDebt = true
         children = []
+        
+        /*
+        if extraPaymentOnly {
+            category = .savings
+            baseMonthlyCost = (debt.monthlyPayment ?? 0) - (debt.minimumMonthlyPayment ?? 0)
+            children = []
+        } else {
+            category = .fixed
+            baseMonthlyCost = debt.minimumMonthlyPayment
+            if debt.monthlyPayment == debt.minimumMonthlyPayment {
+                children = []
+            } else {
+                children = [
+                    Expense(debt: debt, extraPaymentOnly: true)
+                ]
+            }
+        }
+         */
     }
     
     func hash(into hasher: inout Hasher) {

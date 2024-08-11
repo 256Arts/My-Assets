@@ -18,7 +18,10 @@ extension UserDefaults {
         static let amountMarqueePeriod = "amountMarqueePeriod"
         static let amountMarqueeShowAsCombinedValue = "amountMarqueeShowAsCombinedValue"
         static let summaryScreenShowBalance = "summaryScreenShowBalance"
+        static let summaryScreenBalanceShowChart = "summaryScreenBalanceShowChart"
         static let summaryScreenShowNetWorth = "summaryScreenShowNetWorth"
+        static let summaryScreenNetWorthShowChart = "summaryScreenNetWorthShowChart"
+        static let summaryScreenNetWorthShowPercentile = "summaryScreenNetWorthShowPercentile"
     }
     
     func register() {
@@ -29,7 +32,10 @@ extension UserDefaults {
             Key.amountMarqueePeriod: Period.month.rawValue,
             Key.amountMarqueeShowAsCombinedValue: false,
             Key.summaryScreenShowBalance: true,
-            Key.summaryScreenShowNetWorth: true
+            Key.summaryScreenBalanceShowChart: true,
+            Key.summaryScreenShowNetWorth: true,
+            Key.summaryScreenNetWorthShowChart: true,
+            Key.summaryScreenNetWorthShowPercentile: false
         ])
     }
     

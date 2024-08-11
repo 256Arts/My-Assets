@@ -12,18 +12,25 @@ import Charts
 
 struct SummaryView: View {
     
+    enum Subpage: Identifiable {
+        case balance, netWorth
+        
+        var id: Self { self }
+    }
+    
     @AppStorage(UserDefaults.Key.amountMarqueePeriod) var periodRawValue = "Month"
     @AppStorage(UserDefaults.Key.amountMarqueeShowAsCombinedValue) var showAsCombinedValue = false
     @AppStorage(UserDefaults.Key.summaryScreenShowBalance) var summaryScreenShowBalance = true
+    @AppStorage(UserDefaults.Key.summaryScreenBalanceShowChart) var summaryScreenBalanceShowChart = true
     @AppStorage(UserDefaults.Key.summaryScreenShowNetWorth) var summaryScreenShowNetWorth = true
+    @AppStorage(UserDefaults.Key.summaryScreenNetWorthShowChart) var summaryScreenNetWorthShowChart = true
+    @AppStorage(UserDefaults.Key.summaryScreenNetWorthShowPercentile) var summaryScreenNetWorthShowPercentile = true
     
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject var data: FinancialData
     @Environment(\.horizontalSizeClass) private var hSizeClass
 
     @State var showingSettings = false
-    @State var showingNetWorthChartInfo = false
-    @State var showingNetWorthPercentileInfo = false
     @State var period = Period(rawValue: UserDefaults.standard.string(forKey: UserDefaults.Key.amountMarqueePeriod) ?? "") ?? .month {
         didSet {
             periodRawValue = period.rawValue
@@ -39,21 +46,25 @@ struct SummaryView: View {
             List {
                 if summaryScreenShowBalance {
                     Section {
-                        VStack(spacing: 22) {
-                            TimelineView(.periodic(from: Date.now, by: 1.0)) { context in
-                                AmountMarquee(period: $period, showAsCombinedValue: $showAsCombinedValue, currentValue: data.balance(at: context.date), monthlyIncome: data.totalLiquidIncome, monthlyExpenses: data.totalExpenses)
-                            }
-                            .contextMenu {
-                                Picker("Period", selection: $period) {
-                                    ForEach(Period.allCases) {
-                                        Text($0.rawValue)
-                                            .tag($0)
-                                    }
+                        NavigationLink(value: Subpage.balance) {
+                            VStack(spacing: 22) {
+                                TimelineView(.periodic(from: Date.now, by: 1.0)) { context in
+                                    AmountMarquee(period: $period, showAsCombinedValue: $showAsCombinedValue, currentValue: data.balance(at: context.date), monthlyIncome: data.totalLiquidIncome, monthlyExpenses: data.totalExpenses)
                                 }
-                                Toggle("Show Combined Value", isOn: $showAsCombinedValue)
+                                .contextMenu {
+                                    Picker("Period", selection: $period) {
+                                        ForEach(Period.allCases) {
+                                            Text($0.rawValue)
+                                                .tag($0)
+                                        }
+                                    }
+                                    Toggle("Show Combined Value", isOn: $showAsCombinedValue)
+                                }
+                                
+                                if summaryScreenBalanceShowChart {
+                                    FiveYearChart(chartDataSource: .balance)
+                                }
                             }
-                            
-                            FiveYearChart(chartDataSource: .balance)
                         }
                     } header: {
                         Text("Balance")
@@ -62,32 +73,26 @@ struct SummaryView: View {
                 
                 if summaryScreenShowNetWorth {
                     Section {
-                        VStack(spacing: 22) {
-                            TimelineView(.periodic(from: Date.now, by: 1.0)) { context in
-                                AmountMarquee(period: $period, showAsCombinedValue: $showAsCombinedValue, currentValue: data.netWorth(at: context.date, type: .working), monthlyIncome: data.totalIncome, monthlyExpenses: data.totalExpenses)
-                            }
-                            .contextMenu {
-                                Picker("Period", selection: $period) {
-                                    ForEach(Period.allCases) {
-                                        Text($0.rawValue)
-                                            .tag($0)
-                                    }
+                        NavigationLink(value: Subpage.netWorth) {
+                            VStack(spacing: 22) {
+                                TimelineView(.periodic(from: Date.now, by: 1.0)) { context in
+                                    AmountMarquee(period: $period, showAsCombinedValue: $showAsCombinedValue, currentValue: data.netWorth(at: context.date, type: .working), monthlyIncome: data.totalIncome, monthlyExpenses: data.totalExpenses)
                                 }
-                                Toggle("Show as Combined", isOn: $showAsCombinedValue)
-                            }
-                            
-                            FiveYearChart(chartDataSource: .netWorth)
-                                .overlay(alignment: .bottomTrailing) {
-                                    Button {
-                                        showingNetWorthChartInfo = true
-                                    } label: {
-                                        Image(systemName: "info.circle")
+                                .contextMenu {
+                                    Picker("Period", selection: $period) {
+                                        ForEach(Period.allCases) {
+                                            Text($0.rawValue)
+                                                .tag($0)
+                                        }
                                     }
-                                    .buttonStyle(.borderless)
+                                    Toggle("Show as Combined", isOn: $showAsCombinedValue)
                                 }
-                            
-                            if let netWorthPercentile = insights.netWorthPercentile() {
-                                HStack {
+                                
+                                if summaryScreenNetWorthShowChart {
+                                    FiveYearChart(chartDataSource: .netWorth)
+                                }
+                                
+                                if summaryScreenNetWorthShowPercentile, let netWorthPercentile = insights.netWorthPercentile() {
                                     Gauge(value: netWorthPercentile) {
                                         Text("Net Worth Percentile")
                                     } currentValueLabel: {
@@ -96,13 +101,7 @@ struct SummaryView: View {
                                     .gaugeStyle(.accessoryLinear)
                                     .tint(LinearGradient(colors: [.red, .gray, .green], startPoint: .leading, endPoint: .trailing))
                                     .accessibilityHidden(true)
-                                    
-                                    Button {
-                                        showingNetWorthPercentileInfo = true
-                                    } label: {
-                                        Image(systemName: "info.circle")
-                                    }
-                                    .buttonStyle(.borderless)
+                                    .padding(.vertical, 4)
                                 }
                             }
                         }
@@ -132,20 +131,18 @@ struct SummaryView: View {
                 }
                 #endif
             }
+            .navigationDestination(for: Subpage.self) { subpage in
+                switch subpage {
+                case .balance:
+                    BalanceView()
+                case .netWorth:
+                    NetWorthView()
+                }
+            }
         }
-        .alert("Net Worth Percentile", isPresented: $showingNetWorthPercentileInfo, actions: {
-            Button("OK") { }
-        }, message: {
-            Text("Net worth percentiles are based on 2023 data from the USA, adjusted for inflation, and converted to your currency.")
-        })
         .sheet(isPresented: $showingSettings) {
             NavigationStack {
                 SettingsView()
-            }
-        }
-        .sheet(isPresented: $showingNetWorthChartInfo) {
-            NavigationStack {
-                NetWorthChartInfoView()
             }
         }
     }

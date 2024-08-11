@@ -31,6 +31,7 @@ struct DebtView: View {
                 #endif
             OptionalPercentField("Interest", value: $debt.annualInterestFraction)
             CurrencyField("Amount", value: $debt.currentValue)
+            OptionalCurrencyField("Minimum Monthly Payment", value: $debt.minimumMonthlyPayment)
             OptionalCurrencyField("Monthly Payment", value: $debt.monthlyPayment)
             if let monthsToPayOffString = debt.monthsToPayOffString {
                 Text("\(monthsToPayOffString) remaining")

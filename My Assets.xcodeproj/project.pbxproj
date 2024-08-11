@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		1B085B2423EDC95B0008724A /* IncomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B085B2323EDC95B0008724A /* IncomeView.swift */; };
 		1B085B2623EDC9660008724A /* ExpensesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B085B2523EDC9660008724A /* ExpensesView.swift */; };
-		1B25FAB82AED5F6F00C697B2 /* NetWorthChartInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B25FAB72AED5F6F00C697B2 /* NetWorthChartInfoView.swift */; };
+		1B25FAB82AED5F6F00C697B2 /* NetWorthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B25FAB72AED5F6F00C697B2 /* NetWorthView.swift */; };
 		1B3193A1282DDCDF00AA2038 /* My_AssetsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3193A0282DDCDF00AA2038 /* My_AssetsTests.swift */; };
 		1B3193A7282DDE7900AA2038 /* FinancialData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B31BAB123EC874D00B6E63A /* FinancialData.swift */; };
 		1B3193A8282DDE7C00AA2038 /* InsightsGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3823D82802187D0037BAFE /* InsightsGenerator.swift */; };
@@ -47,6 +47,7 @@
 		1B4B4D382C67F40300FAB76E /* CreditCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B4B4D362C67F40300FAB76E /* CreditCardView.swift */; };
 		1B4B4D392C67F40300FAB76E /* CreditCardList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B4B4D352C67F40300FAB76E /* CreditCardList.swift */; };
 		1B4B4D3A2C67F40300FAB76E /* NewCreditCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B4B4D372C67F40300FAB76E /* NewCreditCardView.swift */; };
+		1B4B4D3C2C69204500FAB76E /* BalanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B4B4D3B2C69204200FAB76E /* BalanceView.swift */; };
 		1B520E862A749BD300DBA34A /* AmountRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B520E852A749BD300DBA34A /* AmountRow.swift */; };
 		1B520E882A749BD300DBA34A /* AmountRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B520E852A749BD300DBA34A /* AmountRow.swift */; };
 		1B520E8A2A74A53900DBA34A /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B520E892A74A53900DBA34A /* RootTabView.swift */; };
@@ -137,7 +138,7 @@
 /* Begin PBXFileReference section */
 		1B085B2323EDC95B0008724A /* IncomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomeView.swift; sourceTree = "<group>"; };
 		1B085B2523EDC9660008724A /* ExpensesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpensesView.swift; sourceTree = "<group>"; };
-		1B25FAB72AED5F6F00C697B2 /* NetWorthChartInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetWorthChartInfoView.swift; sourceTree = "<group>"; };
+		1B25FAB72AED5F6F00C697B2 /* NetWorthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetWorthView.swift; sourceTree = "<group>"; };
 		1B31939E282DDCDF00AA2038 /* My AssetsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "My AssetsTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B3193A0282DDCDF00AA2038 /* My_AssetsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = My_AssetsTests.swift; sourceTree = "<group>"; };
 		1B31BA9823EC823F00B6E63A /* My Assets.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "My Assets.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -163,6 +164,7 @@
 		1B4B4D352C67F40300FAB76E /* CreditCardList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditCardList.swift; sourceTree = "<group>"; };
 		1B4B4D362C67F40300FAB76E /* CreditCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditCardView.swift; sourceTree = "<group>"; };
 		1B4B4D372C67F40300FAB76E /* NewCreditCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCreditCardView.swift; sourceTree = "<group>"; };
+		1B4B4D3B2C69204200FAB76E /* BalanceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceView.swift; sourceTree = "<group>"; };
 		1B520E852A749BD300DBA34A /* AmountRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AmountRow.swift; sourceTree = "<group>"; };
 		1B520E892A74A53900DBA34A /* RootTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabView.swift; sourceTree = "<group>"; };
 		1B704A422A799599006D701E /* My-Assets--watchOS--Watch-App-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "My-Assets--watchOS--Watch-App-Info.plist"; sourceTree = SOURCE_ROOT; };
@@ -394,7 +396,8 @@
 				1BEFE9142AE69999006024BE /* SummaryView.swift */,
 				1B39058E27BCBC5B005599AB /* AmountMarquee.swift */,
 				1B75883D2AA2C94500206201 /* FiveYearChart.swift */,
-				1B25FAB72AED5F6F00C697B2 /* NetWorthChartInfoView.swift */,
+				1B4B4D3B2C69204200FAB76E /* BalanceView.swift */,
+				1B25FAB72AED5F6F00C697B2 /* NetWorthView.swift */,
 				1B3823DB280225B30037BAFE /* SettingsView.swift */,
 			);
 			path = Summary;
@@ -586,6 +589,7 @@
 				1BD45D3427F25ED8008E07A9 /* MyAssetsApp.swift in Sources */,
 				1BD519CE2B44D72900E47994 /* UpcomingSpend.swift in Sources */,
 				1B085B2423EDC95B0008724A /* IncomeView.swift in Sources */,
+				1B4B4D3C2C69204500FAB76E /* BalanceView.swift in Sources */,
 				1B31BAA023EC823F00B6E63A /* RootTabView.swift in Sources */,
 				1BA2CC362729D35F009F3D40 /* DebtView.swift in Sources */,
 				1B4B4D332C67F14300FAB76E /* ColorPickerLink.swift in Sources */,
@@ -603,7 +607,7 @@
 				1B31BAB823ECEE2100B6E63A /* NewStockView.swift in Sources */,
 				1BC52ECA23EDEA0500B5B818 /* NewExpenseView.swift in Sources */,
 				1BC52EC823EDE9F800B5B818 /* NewIncomeSourceView.swift in Sources */,
-				1B25FAB82AED5F6F00C697B2 /* NetWorthChartInfoView.swift in Sources */,
+				1B25FAB82AED5F6F00C697B2 /* NetWorthView.swift in Sources */,
 				1B520E862A749BD300DBA34A /* AmountRow.swift in Sources */,
 				1B31BAB423EC9CAF00B6E63A /* AssetView.swift in Sources */,
 				1B4B4D2F2C67ED8000FAB76E /* ColorName.swift in Sources */,

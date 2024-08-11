@@ -23,6 +23,7 @@ class Debt: Hashable, Comparable {
         (name ?? "") + (symbol?.rawValue ?? "") + (colorName?.rawValue ?? "") + String(annualInterestFraction ?? 0)
     }
     var annualInterestFraction: Double?
+    var minimumMonthlyPayment: Double?
     var monthlyPayment: Double?
     
     var asset: Asset?

@@ -12,10 +12,15 @@ import SwiftUI
 struct CreditCardList: View {
     
     @Environment(\.modelContext) private var modelContext
+    @EnvironmentObject var data: FinancialData
     
     @Query var creditCards: [CreditCard]
     
     @State private var showingDetail: Bool = false
+    
+    var insights: InsightsGenerator {
+        .init(data: data)
+    }
     
     var body: some View {
         NavigationStack {
@@ -23,7 +28,21 @@ struct CreditCardList: View {
                 ForEach(creditCards) { creditCard in
                     NavigationLink(value: creditCard) {
                         Label {
-                            Text(creditCard.name ?? "")
+                            VStack(alignment: .leading) {
+                                HStack {
+                                    Text(creditCard.name ?? "")
+                                    Spacer()
+                                    if let rewardsRate = creditCard.rewardsRate(avgAnnualBalanceInterest: insights.avgAnnualBalanceInterest) {
+                                        Text(percentFormatter.string(from: NSNumber(value: rewardsRate))!)
+                                    }
+                                }
+                                
+                                if let notes = creditCard.notes {
+                                    Text(notes)
+                                        .font(.footnote)
+                                        .foregroundStyle(.secondary)
+                                }
+                            }
                         } icon: {
                             Image(systemName: "creditcard")
                                 .symbolVariant(.fill)

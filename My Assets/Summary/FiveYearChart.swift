@@ -108,9 +108,9 @@ struct FiveYearChart: View {
                     }
                 }
                 ForEach(notWorkingNetWorthChartData) { datum in
-                    LineMark(x: .value("Date", datum.date), y: .value("Value", datum.value), series: .value("Data", "Quit Working"))
+                    LineMark(x: .value("Date", datum.date), y: .value("Value", datum.value), series: .value("Data", "Unemployed"))
                         .interpolationMethod(.cardinal)
-                        .foregroundStyle(by: .value("Data", "Quit Working"))
+                        .foregroundStyle(by: .value("Data", "Unemployed"))
                 }
             }
             ForEach(chartInflationData) { datum in
