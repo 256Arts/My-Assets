@@ -24,10 +24,11 @@ struct MyAssetsApp: App {
             RootTabView()
         }
         .defaultSize(width: 500, height: 800)
+        #if targetEnvironment(simulator)
+        .modelContainer(previewContainer)
+        #else
         .modelContainer(for: [Asset.self, Debt.self, Stock.self, UpcomingSpend.self, Income.self, Expense.self, CreditCard.self])
-//        #if DEBUG
-//        .modelContainer(previewContainer)
-//        #endif
+        #endif
         
         #if os(macOS)
         Settings {

@@ -68,7 +68,7 @@ struct FiveYearChart: View {
         }
         let nowThrough5Years = (0...5)
         return nowThrough5Years.map {
-            let value = startingValue * pow(1 + WorldFinanceStats.shared.averageAnnualUSInflation, Double($0))
+            let value = startingValue * pow(1 + WorldFinanceStats.averageAnnualUSInflation, Double($0))
             let date = Date.now + TimeInterval($0) * .year
             return ValueAtDate(value: value, date: date)
         }

@@ -10,7 +10,7 @@ import SwiftData
 import SwiftUI
 
 @Model
-class CreditCard {
+final class CreditCard {
     
     enum RewardType: String, Codable, Identifiable {
         case cash, giftCard

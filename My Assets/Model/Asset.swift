@@ -10,7 +10,7 @@ import Foundation
 import SwiftData
 
 @Model
-class Asset: Comparable {
+final class Asset: Comparable {
     
     enum CompoundFrequency: String, CaseIterable, Identifiable, Codable {
         case yearly
@@ -97,7 +97,7 @@ class Asset: Comparable {
         isLiquid = true
         compoundFrequency = Asset.CompoundFrequency.none
         annualInterestFraction = stock.annualInterestFraction ?? 0.0
-        prevValue = stock.price ?? 0.00 * Double(stock.numberOfShares ?? 1)
+        prevValue = stock.price ?? 0.00 * Double(stock.quantity ?? 1)
         prevDate = Date()
     }
 

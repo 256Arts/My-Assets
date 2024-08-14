@@ -10,7 +10,7 @@ import SwiftUI
 import SwiftData
 
 @Model
-class Expense: Hashable, Comparable {
+final class Expense: Hashable, Comparable {
     
     enum Category: String, CaseIterable, Identifiable, Codable {
         case fixed, variable, intermittent, discretionary, savings
@@ -53,7 +53,7 @@ class Expense: Hashable, Comparable {
             case .intermittent:
                 .orange
             case .discretionary:
-                .purple
+                .red
             case .savings:
                 .green
             }

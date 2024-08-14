@@ -77,12 +77,12 @@ final class InsightsGenerator {
         return netWorthPercentile(householdNetWorth: householdNetWorth, at: .now, locale: .current)
     }
     func netWorthPercentile(householdNetWorth: Double, at date: Date, locale: Locale) -> Double? {
-        guard let conversionRate = WorldFinanceStats.shared.conversionRates[locale.currency?.identifier ?? ""] else { return nil }
+        guard let conversionRate = WorldFinanceStats.conversionRates[locale.currency?.identifier ?? ""] else { return nil }
         
         let myNetWorth = householdNetWorth * conversionRate
         var myBracket = WorldFinanceStats.Bracket(percentile: 0.0, money: myNetWorth)
         
-        for bracket in WorldFinanceStats.shared.usHouseholdNetWorthPercentiles(at: date) {
+        for bracket in WorldFinanceStats.usHouseholdNetWorthPercentiles(at: date) {
             if myNetWorth < bracket.money {
                 let fractionToBracket = (myNetWorth - myBracket.money) / (bracket.money - myBracket.money)
                 let percentile = myBracket.percentile + (fractionToBracket * (bracket.percentile - myBracket.percentile))
@@ -119,7 +119,7 @@ final class InsightsGenerator {
     var adjustedRetirementBalanceString: String? {
         guard let retirementBalance = retirementBalance, let retirementDate = retirementDate else { return nil }
 
-        return currencyFormatter.string(from: NSNumber(value: WorldFinanceStats.shared.adjustForInflation(value: retirementBalance, in: retirementDate)))!
+        return currencyFormatter.string(from: NSNumber(value: WorldFinanceStats.adjustForInflation(value: retirementBalance, in: retirementDate)))!
     }
     var liveOffTimeString: String {
         guard !liveOffMonths.isInfinite, !liveOffMonths.isNaN else { return "forever" }

@@ -14,7 +14,12 @@ struct StockView: View {
     
     var body: some View {
         Form {
-            TextField("Number Of Shares", value: $stock.numberOfShares, formatter: NumberFormatter())
+//            OptionalTextField("Symbol", text: $stock.symbol)
+//                #if !os(macOS)
+//                .autocapitalization(.allCharacters)
+//                #endif
+//                .disableAutocorrection(true)
+            TextField("Quantity", value: $stock.quantity, formatter: NumberFormatter())
         }
         .navigationTitle("Stock")
         #if !os(macOS)
@@ -24,5 +29,5 @@ struct StockView: View {
 }
 
 #Preview {
-    StockView(stock: .constant(Stock(symbol: "AAPL", shares: 10)))
+    StockView(stock: .constant(Stock(symbol: "AAPL", quantity: 10)))
 }

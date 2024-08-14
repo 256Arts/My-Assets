@@ -8,23 +8,21 @@
 
 import Foundation
 
-final class WorldFinanceStats {
+enum WorldFinanceStats {
     
     struct Bracket: Equatable {
         let percentile: Double
         let money: Double
     }
     
-    static let shared = WorldFinanceStats()
+    static let averageAnnualUSInflation = 0.03
     
-    let averageAnnualUSInflation = 0.03
-    
-    let conversionRates = [
+    static let conversionRates = [
         "USD": 1.0,
         "CAD": 0.79
     ]
     
-    func usHouseholdNetWorthPercentiles(at date: Date) -> [Bracket] {
+    static func usHouseholdNetWorthPercentiles(at date: Date) -> [Bracket] {
         let percentiles2020: [Bracket] = [
             Bracket(percentile: 0.01, money: -76_000),
             Bracket(percentile: 0.10, money: 400),
@@ -45,7 +43,7 @@ final class WorldFinanceStats {
         }
     }
     
-    func adjustForInflation(value: Double, in futureDate: Date) -> Double {
+    static func adjustForInflation(value: Double, in futureDate: Date) -> Double {
         let yearsToDate = futureDate.timeIntervalSinceNow / .year
         return value * pow(1 - averageAnnualUSInflation, yearsToDate)
     }

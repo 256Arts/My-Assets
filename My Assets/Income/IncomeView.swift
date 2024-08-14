@@ -143,7 +143,7 @@ struct IncomeView: View {
                             .background(Color(UIColor.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 12))
                         }
                     }
-                    .frame(height: 120)
+                    .frame(height: 130)
                     .listRowBackground(Color.clear)
                     .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                 }

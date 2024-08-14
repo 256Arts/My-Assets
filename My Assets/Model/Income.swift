@@ -9,7 +9,7 @@
 import SwiftData
 
 @Model
-class Income: Comparable, Hashable {
+final class Income: Comparable, Hashable {
     
     static func < (lhs: Income, rhs: Income) -> Bool {
         lhs.monthlyEarnings ?? 0 < rhs.monthlyEarnings ?? 0

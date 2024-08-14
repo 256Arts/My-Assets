@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		1B085B2423EDC95B0008724A /* IncomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B085B2323EDC95B0008724A /* IncomeView.swift */; };
 		1B085B2623EDC9660008724A /* ExpensesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B085B2523EDC9660008724A /* ExpensesView.swift */; };
+		1B159D7D2C6D3C69005CD5D6 /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B159D7C2C6D3C66005CD5D6 /* Secrets.swift */; };
+		1B159D7F2C6D4419005CD5D6 /* AlphaVantage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B159D7E2C6D440E005CD5D6 /* AlphaVantage.swift */; };
+		1B159D802C6D4419005CD5D6 /* AlphaVantage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B159D7E2C6D440E005CD5D6 /* AlphaVantage.swift */; };
+		1B159D812C6D4419005CD5D6 /* AlphaVantage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B159D7E2C6D440E005CD5D6 /* AlphaVantage.swift */; };
 		1B25FAB82AED5F6F00C697B2 /* NetWorthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B25FAB72AED5F6F00C697B2 /* NetWorthView.swift */; };
 		1B3193A1282DDCDF00AA2038 /* My_AssetsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3193A0282DDCDF00AA2038 /* My_AssetsTests.swift */; };
 		1B3193A7282DDE7900AA2038 /* FinancialData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B31BAB123EC874D00B6E63A /* FinancialData.swift */; };
@@ -138,6 +142,8 @@
 /* Begin PBXFileReference section */
 		1B085B2323EDC95B0008724A /* IncomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomeView.swift; sourceTree = "<group>"; };
 		1B085B2523EDC9660008724A /* ExpensesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpensesView.swift; sourceTree = "<group>"; };
+		1B159D7C2C6D3C66005CD5D6 /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
+		1B159D7E2C6D440E005CD5D6 /* AlphaVantage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlphaVantage.swift; sourceTree = "<group>"; };
 		1B25FAB72AED5F6F00C697B2 /* NetWorthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetWorthView.swift; sourceTree = "<group>"; };
 		1B31939E282DDCDF00AA2038 /* My AssetsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "My AssetsTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B3193A0282DDCDF00AA2038 /* My_AssetsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = My_AssetsTests.swift; sourceTree = "<group>"; };
@@ -255,6 +261,7 @@
 				1B31BAB123EC874D00B6E63A /* FinancialData.swift */,
 				1B3823D52802120F0037BAFE /* WorldFinanceStats.swift */,
 				1B3823D82802187D0037BAFE /* InsightsGenerator.swift */,
+				1B159D7E2C6D440E005CD5D6 /* AlphaVantage.swift */,
 				1B31BABB23ED17C400B6E63A /* Asset.swift */,
 				1BD76D9E277CC2B200E499A8 /* Debt.swift */,
 				1BB2F26C23EE11AE00A4478C /* Stock.swift */,
@@ -343,6 +350,7 @@
 				1B085B2223EDC9340008724A /* Model */,
 				1B31BAA123EC824200B6E63A /* Assets.xcassets */,
 				1BCAFAD52AF9E8E80083D51A /* PreviewContainer.swift */,
+				1B159D7C2C6D3C66005CD5D6 /* Secrets.swift */,
 				1B31BAA923EC824200B6E63A /* Info.plist */,
 			);
 			path = "My Assets";
@@ -552,6 +560,7 @@
 				1B4B4D252C67C4D200FAB76E /* CreditCard.swift in Sources */,
 				1B3193B2282DDF5200AA2038 /* Symbol.swift in Sources */,
 				1B3193AD282DDF4200AA2038 /* Income.swift in Sources */,
+				1B159D812C6D4419005CD5D6 /* AlphaVantage.swift in Sources */,
 				1B3193A9282DDE8100AA2038 /* WorldFinanceStats.swift in Sources */,
 				1B3193AC282DDF3F00AA2038 /* Stock.swift in Sources */,
 				1B3193AA282DDF3A00AA2038 /* Asset.swift in Sources */,
@@ -574,6 +583,7 @@
 				1B31BAB023EC85C300B6E63A /* AssetsAndDebtsView.swift in Sources */,
 				1BC0DC2E251B0B5900B51FDD /* PercentField.swift in Sources */,
 				1BD519D62B44DB8800E47994 /* NewUpcomingSpendView.swift in Sources */,
+				1B159D802C6D4419005CD5D6 /* AlphaVantage.swift in Sources */,
 				1B3F748C2722072400E53FF0 /* UserDefaults.swift in Sources */,
 				1BCAFADB2AFB332A0083D51A /* CurrencyField.swift in Sources */,
 				1BB2F26F23EE11C700A4478C /* Income.swift in Sources */,
@@ -602,6 +612,7 @@
 				1BA2CC3E274D45A0009F3D40 /* SymbolImage.swift in Sources */,
 				1B085B2623EDC9660008724A /* ExpensesView.swift in Sources */,
 				1B39058F27BCBC5B005599AB /* AmountMarquee.swift in Sources */,
+				1B159D7D2C6D3C69005CD5D6 /* Secrets.swift in Sources */,
 				1B31BAB623ECB96700B6E63A /* NewAssetView.swift in Sources */,
 				1BEFE9152AE69999006024BE /* SummaryView.swift in Sources */,
 				1B31BAB823ECEE2100B6E63A /* NewStockView.swift in Sources */,
@@ -624,6 +635,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1BCAFAD72AF9E8E80083D51A /* PreviewContainer.swift in Sources */,
+				1B159D7F2C6D4419005CD5D6 /* AlphaVantage.swift in Sources */,
 				1B4B4D2D2C67ED8000FAB76E /* ColorName.swift in Sources */,
 				1B7588402AA3C57F00206201 /* IncomeView.swift in Sources */,
 				1BAB38532A74982900FC9543 /* Expense.swift in Sources */,

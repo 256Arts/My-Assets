@@ -9,6 +9,7 @@
 #if DEBUG
 import SwiftData
 
+@MainActor
 let previewAssets = [
     Asset(name: "House", symbol: .house, value: 500_000),
     Asset(name: "Bank Account", symbol: .bank, value: 10_000),
@@ -16,15 +17,18 @@ let previewAssets = [
     Asset(name: "Car", symbol: .car, value: 30_000),
     Asset(name: "Bitcoin Wallet", symbol: .bitcoin, value: 50_000)
 ]
+@MainActor
 let previewDebts = [
     Debt(name: "Mortgage", symbol: .house, value: 150_000),
     Debt(name: "Car Loan", symbol: .car, value: 15_000)
 ]
+@MainActor
 let previewIncome = [
     Income(name: "Work", symbol: .building, isLiquid: true, monthlyEarnings: 10_000, isPassive: false),
     Income(name: "App Sales", symbol: .app, isLiquid: true, monthlyEarnings: 1_000, isPassive: true),
     Income(name: "Etsy Store", symbol: .shippingbox, isLiquid: true, monthlyEarnings: 200, isPassive: false)
 ]
+@MainActor
 let previewExpenses = [
     Expense(name: "Electricity", symbol: .bolt, category: .variable, monthlyCost: 150),
     Expense(name: "Water", symbol: .drop, category: .variable, monthlyCost: 100),
@@ -39,6 +43,7 @@ let previewExpenses = [
     Expense(name: "Home Insurance", symbol: .house, category: .fixed, monthlyCost: 100),
     Expense(name: "Train Pass", symbol: .tram, category: .intermittent, monthlyCost: 30)
 ]
+@MainActor
 let previewCreditCards = [
     CreditCard(name: "VISA", colorName: .gray, cardFee: 50, pointsPerDollar: 2, pointValue: 0.01, monthlySpend: 1000),
     CreditCard(name: "Mastercard", colorName: .red, cardFee: 0, pointsPerDollar: 3, pointValue: 0.01, monthlySpend: 1000),

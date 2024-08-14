@@ -10,7 +10,7 @@ import Foundation
 import SwiftData
 
 @Model
-class Debt: Hashable, Comparable {
+final class Debt: Hashable, Comparable {
     
     static func < (lhs: Debt, rhs: Debt) -> Bool {
         lhs.currentValue < rhs.currentValue

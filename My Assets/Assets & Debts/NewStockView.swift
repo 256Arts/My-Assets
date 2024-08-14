@@ -16,7 +16,7 @@ struct NewStockView: View {
     @EnvironmentObject var data: FinancialData
     
     @State var stockSymbol = ""
-    @State var stockShares = 0.0
+    @State var quantity = 0.0
     
     var body: some View {
         Form {
@@ -25,7 +25,7 @@ struct NewStockView: View {
                 .autocapitalization(.allCharacters)
                 #endif
                 .disableAutocorrection(true)
-//            DoubleField("Number Of Shares", value: $stockShares, formatter: NumberFormatter())
+            TextField("Quantity", value: $quantity, formatter: NumberFormatter())
         }
             .navigationTitle("New Stock")
             .toolbar {
@@ -38,10 +38,12 @@ struct NewStockView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button {
-                        let stock = Stock(symbol: self.stockSymbol, shares: self.stockShares)
-                        stock.fetchPrices()
-                        modelContext.insert(stock)
-                        self.data.stocks.append(stock)
+                        Task {
+                            let stock = Stock(symbol: self.stockSymbol, quantity: self.quantity)
+                            try? await stock.fetchPrices()
+                            modelContext.insert(stock)
+                            self.data.stocks.append(stock)
+                        }
                         self.dismiss()
                     } label: {
                         Text("Add")
