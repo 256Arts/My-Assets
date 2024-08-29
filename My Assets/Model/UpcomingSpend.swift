@@ -9,12 +9,24 @@
 import Foundation
 import SwiftData
 
+protocol Schedulable {
+    var name: String? { get }
+    var transactionAmount: Double? { get }
+    var nextTransactionDate: Date? { get }
+}
+
 @Model
-final class UpcomingSpend: Hashable {
+final class UpcomingSpend: Schedulable, Hashable {
     
     var name: String?
     var cost: Double?
     var date: Date?
+    var transactionAmount: Double? {
+        guard let cost else { return nil }
+        
+        return -cost
+    }
+    var nextTransactionDate: Date? { date }
     
     var asset: Asset?
     

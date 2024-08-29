@@ -45,7 +45,7 @@ struct SummaryView: View {
         NavigationStack {
             List {
                 if summaryScreenShowBalance {
-                    Section {
+                    Section("Balance") {
                         NavigationLink(value: Subpage.balance) {
                             VStack(spacing: 22) {
                                 TimelineView(.periodic(from: Date.now, by: 1.0)) { context in
@@ -66,13 +66,11 @@ struct SummaryView: View {
                                 }
                             }
                         }
-                    } header: {
-                        Text("Balance")
                     }
                 }
                 
                 if summaryScreenShowNetWorth {
-                    Section {
+                    Section("Net Worth") {
                         NavigationLink(value: Subpage.netWorth) {
                             VStack(spacing: 22) {
                                 TimelineView(.periodic(from: Date.now, by: 1.0)) { context in
@@ -105,17 +103,17 @@ struct SummaryView: View {
                                 }
                             }
                         }
-                    } header: {
-                        Text("Net Worth")
                     }
                 }
                 
-                Section {
+                Section("Insights") {
                     ForEach(Array(insights.generate().enumerated()), id: \.0) { (_, string) in
                         Text(string)
                     }
-                } header: {
-                    Text("Insights")
+                }
+                
+                Section("Cash Flows") {
+                    CashFlowsView()
                 }
             }
             .headerProminence(.increased)

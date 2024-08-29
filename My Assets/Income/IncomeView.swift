@@ -159,7 +159,7 @@ struct IncomeView: View {
                     }
                     .onDelete(perform: delete)
                     
-                    ForEach(data.income.filter({ $0.fromAsset! && $0.isLiquid! })) { income in
+                    ForEach(data.income.filter({ $0.fromAsset && $0.isLiquid! })) { income in
                         AmountRow(symbol: income.symbol ?? .defaultSymbol, label: income.name ?? "", amount: income.monthlyEarnings!)
                             .opacity((selectedSector?.effort ?? .passive) == .passive ? 1 : 0.5)
                             .accessibilityElement()
@@ -178,9 +178,9 @@ struct IncomeView: View {
                         .accessibilityValue(currencyFormatter.string(from: NSNumber(value: data.totalLiquidIncome))!)
                 }
                 
-                if data.income.contains(where: { $0.fromAsset! && !$0.isLiquid! }) {
+                if data.income.contains(where: { $0.fromAsset && !$0.isLiquid! }) {
                     Section {
-                        ForEach(data.income.filter({ $0.fromAsset! && !$0.isLiquid! })) { income in
+                        ForEach(data.income.filter({ $0.fromAsset && !$0.isLiquid! })) { income in
                             AmountRow(symbol: income.symbol ?? .defaultSymbol, label: income.name ?? "", amount: income.monthlyEarnings!)
                                 .opacity((selectedSector?.effort ?? .passiveNonLiquid) == .passiveNonLiquid ? 1 : 0.5)
                                 .accessibilityElement()

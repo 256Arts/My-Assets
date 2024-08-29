@@ -24,18 +24,36 @@ struct DebtView: View {
     
     var body: some View {
         Form {
-            SymbolPickerLink(symbol: $debt.symbol)
-            TextField("Name", text: $nameCopy)
-                #if !os(macOS)
-                .textInputAutocapitalization(.words)
-                #endif
-            OptionalPercentField("Interest", value: $debt.annualInterestFraction)
-            CurrencyField("Amount", value: $debt.currentValue)
-            OptionalCurrencyField("Minimum Monthly Payment", value: $debt.minimumMonthlyPayment)
-            OptionalCurrencyField("Monthly Payment", value: $debt.monthlyPayment)
-            if let monthsToPayOffString = debt.monthsToPayOffString {
-                Text("\(monthsToPayOffString) remaining")
-                    .foregroundStyle(.secondary)
+            Section {
+                SymbolPickerLink(symbol: $debt.symbol)
+                TextField("Name", text: $nameCopy)
+                    #if !os(macOS)
+                    .textInputAutocapitalization(.words)
+                    #endif
+                OptionalPercentField("Interest", value: $debt.annualInterestFraction)
+                CurrencyField("Amount", value: $debt.currentValue)
+            }
+            Section {
+                OptionalCurrencyField("Monthly Payment", value: $debt.monthlyPayment)
+                Picker("Transaction Frequency", selection: $debt.transactionFrequency) {
+                    Text("-")
+                        .tag(nil as TransactionFrequency?)
+                    ForEach(TransactionFrequency.allCases) { freq in
+                        Text(freq.rawValue.capitalized)
+                            .tag(freq as TransactionFrequency?)
+                    }
+                }
+                if debt.transactionFrequency != nil {
+                    DatePicker("Starting Date", selection: Binding(get: {
+                        debt.transactionDateStart ?? .now
+                    }, set: { newValue in
+                        debt.transactionDateStart = newValue
+                    }), displayedComponents: .date)
+                }
+                if let monthsToPayOffString = debt.monthsToPayOffString {
+                    Text("\(monthsToPayOffString) remaining")
+                        .foregroundStyle(.secondary)
+                }
             }
         }
         .navigationTitle("Debt")

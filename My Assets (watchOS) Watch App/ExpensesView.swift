@@ -19,7 +19,7 @@ struct ExpensesView: View {
     
     var body: some View {
         List {
-            ForEach(data.expenses.filter({ $0.fromDebt! })) { expense in
+            ForEach(data.expenses.filter({ $0.fromDebt })) { expense in
                 AmountRow(symbol: expense.symbol ?? .defaultSymbol, label: expense.name!, amount: expense.monthlyCost)
             }
             ForEach(nonDebtExpenses) { expense in

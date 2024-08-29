@@ -110,7 +110,7 @@ struct ExpensesView: View {
                     }
                     .onDelete(perform: deleteNonDebtExpense)
                     
-                    ForEach(data.expenses.filter({ $0.fromDebt! })) { expense in
+                    ForEach(data.expenses.filter({ $0.fromDebt })) { expense in
                         AmountRow(symbol: expense.symbol ?? .defaultSymbol, label: expense.name ?? "", amount: expense.monthlyCost)
                     }
                     

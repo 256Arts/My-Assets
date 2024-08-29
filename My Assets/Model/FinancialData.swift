@@ -62,7 +62,7 @@ final class FinancialData: ObservableObject {
         expenses.reduce(0, { $0 + $1.monthlyCost })
     }
     var totalPassiveExpenses: Double {
-        expenses.filter({ $0.fromDebt! }).reduce(0, { $0 + $1.monthlyCost })
+        expenses.filter({ $0.fromDebt }).reduce(0, { $0 + $1.monthlyCost })
     }
     
     var avgAnnualNetWorthInterest: Double {

@@ -40,6 +40,21 @@ struct IncomeSourceView: View {
             }, set: { newValue in
                 income.isPassive = newValue
             }))
+            Picker("Transaction Frequency", selection: $income.transactionFrequency) {
+                Text("-")
+                    .tag(nil as TransactionFrequency?)
+                ForEach(TransactionFrequency.allCases) { freq in
+                    Text(freq.rawValue.capitalized)
+                        .tag(freq as TransactionFrequency?)
+                }
+            }
+            if income.transactionFrequency != nil {
+                DatePicker("Starting Date", selection: Binding(get: {
+                    income.transactionDateStart ?? .now
+                }, set: { newValue in
+                    income.transactionDateStart = newValue
+                }), displayedComponents: .date)
+            }
         }
         .navigationTitle("Income Source")
         #if !os(macOS)

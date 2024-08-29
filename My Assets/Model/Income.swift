@@ -6,10 +6,11 @@
 //  Copyright © 2020 256 Arts Developer. All rights reserved.
 //
 
+import Foundation
 import SwiftData
 
 @Model
-final class Income: Comparable, Hashable {
+final class Income: Schedulable, Comparable, Hashable {
     
     static func < (lhs: Income, rhs: Income) -> Bool {
         lhs.monthlyEarnings ?? 0 < rhs.monthlyEarnings ?? 0
@@ -24,7 +25,27 @@ final class Income: Comparable, Hashable {
     var isLiquid: Bool?
     var monthlyEarnings: Double?
     var isPassive: Bool?
-    let fromAsset: Bool?
+    var transactionDateStart: Date?
+    var transactionFrequency: TransactionFrequency?
+    
+    @Transient
+    var fromAsset: Bool = false
+    
+    var transactionAmount: Double? {
+        guard let monthlyEarnings, let transactionFrequency else { return nil }
+        
+        return monthlyEarnings / transactionFrequency.timesPerMonth
+    }
+    var nextTransactionDate: Date? {
+        guard let transactionFrequency, let transactionDateStart else { return nil }
+        
+        let calendar = Calendar.autoupdatingCurrent
+        var nextDate = transactionDateStart
+        while nextDate.timeIntervalSince(calendar.startOfDay(for: .now)) < 0 {
+            nextDate = calendar.date(byAdding: transactionFrequency.calendarValues.0, value: transactionFrequency.calendarValues.1, to: nextDate)!
+        }
+        return nextDate
+    }
     
     init(name: String, symbol: Symbol, isLiquid: Bool, monthlyEarnings: Double, isPassive: Bool) {
         self.name = name

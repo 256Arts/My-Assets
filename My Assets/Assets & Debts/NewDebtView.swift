@@ -36,7 +36,6 @@ struct NewDebtView: View {
                     #endif
                 OptionalCurrencyField("Value", value: $value)
                 OptionalPercentField("Annual Interest", value: $interest)
-                OptionalCurrencyField("Minimum Monthly Payment", value: $minimumMonthlyPayment)
                 OptionalCurrencyField("Monthly Payment", value: $monthlyPayment)
             }
             Section {
@@ -78,12 +77,6 @@ struct NewDebtView: View {
         }
         .onChange(of: interest) { _, newValue in
             debt.annualInterestFraction = newValue
-        }
-        .onChange(of: minimumMonthlyPayment) { _, newValue in
-            debt.minimumMonthlyPayment = newValue
-            if monthlyPayment?.isZero ?? true {
-                monthlyPayment = newValue
-            }
         }
         .onChange(of: monthlyPayment) { _, newValue in
             debt.monthlyPayment = newValue

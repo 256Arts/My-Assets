@@ -51,36 +51,8 @@ struct AssetView: View {
                 }
             }
             
-            Section {
-                ForEach(asset.loans ?? []) { loan in
-                    NavigationLink(value: loan) {
-                        AmountRow(symbol: loan.symbol ?? .defaultSymbol, label: loan.name ?? "", amount: loan.currentValue)
-                    }
-                }
-                .onDelete(perform: deleteLoan)
-                Button {
-                    showingLoan = true
-                } label: {
-                    Label("Add", systemImage: "plus.circle")
-                }
-                if let loans = asset.loans, let loansPaidFraction {
-                    VStack {
-                        ProgressView(value: loansPaidFraction)
-                            .progressViewStyle(.linear)
-                            .accessibilityHidden(true)
-                        HStack {
-                            Text("\(percentFormatter.string(from: NSNumber(value: loansPaidFraction)) ?? "") paid")
-                            Spacer()
-                            Text("\(loans.max(by: { $0.monthsToPayOff < $1.monthsToPayOff })?.monthsToPayOffString ?? "") left")
-                        }
-                    }
-                    .padding(.vertical)
-                }
-            } header: {
-                Text("Loans")
-            }
-            
-            if asset.isLiquid == true {
+            switch asset.isLiquid {
+            case true:
                 Section {
                     ForEach(asset.upcomingSpends ?? []) { spend in
                         NavigationLink(value: spend) {
@@ -108,6 +80,37 @@ struct AssetView: View {
                 } header: {
                     Text("Upcoming Spends")
                 }
+            case false:
+                Section {
+                    ForEach(asset.loans ?? []) { loan in
+                        NavigationLink(value: loan) {
+                            AmountRow(symbol: loan.symbol ?? .defaultSymbol, label: loan.name ?? "", amount: loan.currentValue)
+                        }
+                    }
+                    .onDelete(perform: deleteLoan)
+                    Button {
+                        showingLoan = true
+                    } label: {
+                        Label("Add", systemImage: "plus.circle")
+                    }
+                    if let loans = asset.loans, let loansPaidFraction {
+                        VStack {
+                            ProgressView(value: loansPaidFraction)
+                                .progressViewStyle(.linear)
+                                .accessibilityHidden(true)
+                            HStack {
+                                Text("\(percentFormatter.string(from: NSNumber(value: loansPaidFraction)) ?? "") paid")
+                                Spacer()
+                                Text("\(loans.max(by: { $0.monthsToPayOff < $1.monthsToPayOff })?.monthsToPayOffString ?? "") left")
+                            }
+                        }
+                        .padding(.vertical)
+                    }
+                } header: {
+                    Text("Loans")
+                }
+            default:
+                EmptyView()
             }
         }
         .navigationTitle("Asset")

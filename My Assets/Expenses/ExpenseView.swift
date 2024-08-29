@@ -43,6 +43,21 @@ struct ExpenseView: View {
                             .tag(category as Expense.Category?)
                     }
                 }
+                Picker("Transaction Frequency", selection: $expense.transactionFrequency) {
+                    Text("-")
+                        .tag(nil as TransactionFrequency?)
+                    ForEach(TransactionFrequency.allCases) { freq in
+                        Text(freq.rawValue.capitalized)
+                            .tag(freq as TransactionFrequency?)
+                    }
+                }
+                if expense.transactionFrequency != nil {
+                    DatePicker("Starting Date", selection: Binding(get: {
+                        expense.transactionDateStart ?? .now
+                    }, set: { newValue in
+                        expense.transactionDateStart = newValue
+                    }), displayedComponents: .date)
+                }
             }
             Section {
                 Button {

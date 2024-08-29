@@ -10,7 +10,7 @@ import SwiftUI
 import SwiftData
 
 @Model
-final class Expense: Hashable, Comparable {
+final class Expense: Schedulable, Hashable, Comparable {
     
     enum Category: String, CaseIterable, Identifiable, Codable {
         case fixed, variable, intermittent, discretionary, savings
@@ -83,8 +83,29 @@ final class Expense: Hashable, Comparable {
         
         return baseMonthlyCost + children.reduce(0, { $0 + $1.monthlyCost })
     }
-    let fromDebt: Bool?
+    var transactionDateStart: Date?
+    var transactionFrequency: TransactionFrequency?
+    
+    @Transient
+    var fromDebt: Bool = false
+    
     var parent: Expense?
+    
+    var transactionAmount: Double? {
+        guard let transactionFrequency else { return nil }
+        
+        return -monthlyCost / transactionFrequency.timesPerMonth
+    }
+    var nextTransactionDate: Date? {
+        guard let transactionFrequency, let transactionDateStart else { return nil }
+        
+        let calendar = Calendar.autoupdatingCurrent
+        var nextDate = transactionDateStart
+        while nextDate.timeIntervalSince(calendar.startOfDay(for: .now)) < 0 {
+            nextDate = calendar.date(byAdding: transactionFrequency.calendarValues.0, value: transactionFrequency.calendarValues.1, to: nextDate)!
+        }
+        return nextDate
+    }
     
     @Relationship(deleteRule: .cascade, inverse: \Expense.parent)
     var children: [Expense]?
@@ -103,6 +124,8 @@ final class Expense: Hashable, Comparable {
         name = debt.name
         symbol = debt.symbol
         colorName = debt.colorName
+        transactionDateStart = debt.transactionDateStart
+        transactionFrequency = debt.transactionFrequency
         fromDebt = true
         
         category = .fixed

@@ -13,6 +13,7 @@
 		1B159D7F2C6D4419005CD5D6 /* AlphaVantage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B159D7E2C6D440E005CD5D6 /* AlphaVantage.swift */; };
 		1B159D802C6D4419005CD5D6 /* AlphaVantage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B159D7E2C6D440E005CD5D6 /* AlphaVantage.swift */; };
 		1B159D812C6D4419005CD5D6 /* AlphaVantage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B159D7E2C6D440E005CD5D6 /* AlphaVantage.swift */; };
+		1B159D822C6D5471005CD5D6 /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B159D7C2C6D3C66005CD5D6 /* Secrets.swift */; };
 		1B25FAB82AED5F6F00C697B2 /* NetWorthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B25FAB72AED5F6F00C697B2 /* NetWorthView.swift */; };
 		1B3193A1282DDCDF00AA2038 /* My_AssetsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3193A0282DDCDF00AA2038 /* My_AssetsTests.swift */; };
 		1B3193A7282DDE7900AA2038 /* FinancialData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B31BAB123EC874D00B6E63A /* FinancialData.swift */; };
@@ -65,6 +66,10 @@
 		1BA2CC362729D35F009F3D40 /* DebtView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA2CC352729D35F009F3D40 /* DebtView.swift */; };
 		1BA2CC382729ECE2009F3D40 /* Symbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA2CC372729ECE2009F3D40 /* Symbol.swift */; };
 		1BA2CC3E274D45A0009F3D40 /* SymbolImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA2CC3D274D45A0009F3D40 /* SymbolImage.swift */; };
+		1BAA98122C7D3E47005F4D66 /* CashFlowsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BAA98112C7D3E3F005F4D66 /* CashFlowsView.swift */; };
+		1BAA98142C7D4048005F4D66 /* TransactionFrequency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BAA98132C7D4040005F4D66 /* TransactionFrequency.swift */; };
+		1BAA98152C7D4048005F4D66 /* TransactionFrequency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BAA98132C7D4040005F4D66 /* TransactionFrequency.swift */; };
+		1BAA98162C7D4048005F4D66 /* TransactionFrequency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BAA98132C7D4040005F4D66 /* TransactionFrequency.swift */; };
 		1BAB384E2A7496F600FC9543 /* AssetsAndDebtsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BAB384D2A7496F600FC9543 /* AssetsAndDebtsView.swift */; };
 		1BAB384F2A74981F00FC9543 /* Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B31BABB23ED17C400B6E63A /* Asset.swift */; };
 		1BAB38502A74982200FC9543 /* Debt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD76D9E277CC2B200E499A8 /* Debt.swift */; };
@@ -183,6 +188,8 @@
 		1BA2CC352729D35F009F3D40 /* DebtView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebtView.swift; sourceTree = "<group>"; };
 		1BA2CC372729ECE2009F3D40 /* Symbol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Symbol.swift; sourceTree = "<group>"; };
 		1BA2CC3D274D45A0009F3D40 /* SymbolImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbolImage.swift; sourceTree = "<group>"; };
+		1BAA98112C7D3E3F005F4D66 /* CashFlowsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CashFlowsView.swift; sourceTree = "<group>"; };
+		1BAA98132C7D4040005F4D66 /* TransactionFrequency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionFrequency.swift; sourceTree = "<group>"; };
 		1BAB384D2A7496F600FC9543 /* AssetsAndDebtsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetsAndDebtsView.swift; sourceTree = "<group>"; };
 		1BAB38582A749A1600FC9543 /* My Assets (watchOS) Watch App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "My Assets (watchOS) Watch App.entitlements"; sourceTree = "<group>"; };
 		1BB2F26C23EE11AE00A4478C /* Stock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stock.swift; sourceTree = "<group>"; };
@@ -270,6 +277,7 @@
 				1BB2F26E23EE11C700A4478C /* Income.swift */,
 				1BB2F27023EE11DE00A4478C /* Expense.swift */,
 				1BE6303E23EE3C7700F1EB93 /* TimeInterval.swift */,
+				1BAA98132C7D4040005F4D66 /* TransactionFrequency.swift */,
 				1BA2CC2F272900C7009F3D40 /* Period.swift */,
 				1B3823DE280226510037BAFE /* UserType.swift */,
 				1BA2CC372729ECE2009F3D40 /* Symbol.swift */,
@@ -406,6 +414,7 @@
 				1B75883D2AA2C94500206201 /* FiveYearChart.swift */,
 				1B4B4D3B2C69204200FAB76E /* BalanceView.swift */,
 				1B25FAB72AED5F6F00C697B2 /* NetWorthView.swift */,
+				1BAA98112C7D3E3F005F4D66 /* CashFlowsView.swift */,
 				1B3823DB280225B30037BAFE /* SettingsView.swift */,
 			);
 			path = Summary;
@@ -563,6 +572,7 @@
 				1B159D812C6D4419005CD5D6 /* AlphaVantage.swift in Sources */,
 				1B3193A9282DDE8100AA2038 /* WorldFinanceStats.swift in Sources */,
 				1B3193AC282DDF3F00AA2038 /* Stock.swift in Sources */,
+				1BAA98162C7D4048005F4D66 /* TransactionFrequency.swift in Sources */,
 				1B3193AA282DDF3A00AA2038 /* Asset.swift in Sources */,
 				1B3193AE282DDF4400AA2038 /* Expense.swift in Sources */,
 				1B3193A7282DDE7900AA2038 /* FinancialData.swift in Sources */,
@@ -601,6 +611,7 @@
 				1B085B2423EDC95B0008724A /* IncomeView.swift in Sources */,
 				1B4B4D3C2C69204500FAB76E /* BalanceView.swift in Sources */,
 				1B31BAA023EC823F00B6E63A /* RootTabView.swift in Sources */,
+				1BAA98122C7D3E47005F4D66 /* CashFlowsView.swift in Sources */,
 				1BA2CC362729D35F009F3D40 /* DebtView.swift in Sources */,
 				1B4B4D332C67F14300FAB76E /* ColorPickerLink.swift in Sources */,
 				1B4B4D382C67F40300FAB76E /* CreditCardView.swift in Sources */,
@@ -613,6 +624,7 @@
 				1B085B2623EDC9660008724A /* ExpensesView.swift in Sources */,
 				1B39058F27BCBC5B005599AB /* AmountMarquee.swift in Sources */,
 				1B159D7D2C6D3C69005CD5D6 /* Secrets.swift in Sources */,
+				1BAA98152C7D4048005F4D66 /* TransactionFrequency.swift in Sources */,
 				1B31BAB623ECB96700B6E63A /* NewAssetView.swift in Sources */,
 				1BEFE9152AE69999006024BE /* SummaryView.swift in Sources */,
 				1B31BAB823ECEE2100B6E63A /* NewStockView.swift in Sources */,
@@ -639,6 +651,7 @@
 				1B4B4D2D2C67ED8000FAB76E /* ColorName.swift in Sources */,
 				1B7588402AA3C57F00206201 /* IncomeView.swift in Sources */,
 				1BAB38532A74982900FC9543 /* Expense.swift in Sources */,
+				1BAA98142C7D4048005F4D66 /* TransactionFrequency.swift in Sources */,
 				1BE162532A74955600E4907D /* UserDefaults.swift in Sources */,
 				1BD519D02B44D72900E47994 /* UpcomingSpend.swift in Sources */,
 				1BAB384F2A74981F00FC9543 /* Asset.swift in Sources */,
@@ -650,6 +663,7 @@
 				1BAB38502A74982200FC9543 /* Debt.swift in Sources */,
 				1BAB38562A74985800FC9543 /* TimeInterval.swift in Sources */,
 				1B7588422AA3C58800206201 /* ExpensesView.swift in Sources */,
+				1B159D822C6D5471005CD5D6 /* Secrets.swift in Sources */,
 				1BAB384E2A7496F600FC9543 /* AssetsAndDebtsView.swift in Sources */,
 				1BE162522A74954F00E4907D /* FinancialData.swift in Sources */,
 				1B4B4D262C67C4D200FAB76E /* CreditCard.swift in Sources */,

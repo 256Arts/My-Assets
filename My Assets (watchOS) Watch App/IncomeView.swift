@@ -20,7 +20,7 @@ struct IncomeView: View {
             ForEach(incomes) { income in
                 AmountRow(symbol: income.symbol ?? .defaultSymbol, label: income.name!, amount: income.monthlyEarnings ?? 0)
             }
-            ForEach(data.income.filter({ $0.fromAsset! && $0.isLiquid! })) { income in
+            ForEach(data.income.filter({ $0.fromAsset && $0.isLiquid! })) { income in
                 AmountRow(symbol: income.symbol ?? .defaultSymbol, label: income.name!, amount: income.monthlyEarnings ?? 0)
             }
             HStack {

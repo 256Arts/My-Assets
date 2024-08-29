@@ -12,10 +12,8 @@ struct ColorPicker: View {
     
     #if targetEnvironment(macCatalyst)
     let itemSize: CGFloat = 32
-    let symbolFontSize: CGFloat = 13
     #else
     let itemSize: CGFloat = 42
-    let symbolFontSize: CGFloat = 17
     #endif
     
     @Binding var selected: ColorName
@@ -40,7 +38,6 @@ struct ColorPicker: View {
         }
         .symbolVariant(.fill)
         .imageScale(.large)
-        .font(.system(size: symbolFontSize, weight: .medium))
         .padding(.horizontal, -4)
         .padding(.vertical, 12)
     }
