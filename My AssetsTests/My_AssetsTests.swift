@@ -58,7 +58,7 @@ func testWorldStats() {
 
 @Test
 func testNetWorthPercentile() {
-    let insights = InsightsGenerator(data: FinancialData(nonStockAssets: [], stocks: [], debts: [], nonAssetIncome: [], nonDebtExpenses: []))
+    let insights = InsightsGenerator(data: FinancialData(nonStockAssets: [], stocks: [], debts: [], nonAssetIncome: [], expenses: []))
     let dataYear = Calendar.current.date(from: DateComponents(year: 2020))!
     let usa = Locale(identifier: "en_US")
     

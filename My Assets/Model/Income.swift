@@ -19,18 +19,22 @@ final class Income: Schedulable, Comparable, Hashable {
     var name: String?
     var symbol: Symbol?
     var colorName: ColorName?
-    var id: String {
-        (name ?? "") + (symbol?.rawValue ?? "") + (colorName?.rawValue ?? "") + String(monthlyEarnings ?? 0)
-    }
     var isLiquid: Bool?
     var monthlyEarnings: Double?
     var isPassive: Bool?
     var transactionDateStart: Date?
     var transactionFrequency: TransactionFrequency?
     
+    // MARK: Relationships
+    
     @Transient
     var fromAsset: Bool = false
     
+    // MARK: Computed Properties
+    
+    var id: String {
+        (name ?? "") + (symbol?.rawValue ?? "") + (colorName?.rawValue ?? "") + String(monthlyEarnings ?? 0)
+    }
     var transactionAmount: Double? {
         guard let monthlyEarnings, let transactionFrequency else { return nil }
         
@@ -46,6 +50,8 @@ final class Income: Schedulable, Comparable, Hashable {
         }
         return nextDate
     }
+    
+    // MARK: Init
     
     init(name: String, symbol: Symbol, isLiquid: Bool, monthlyEarnings: Double, isPassive: Bool) {
         self.name = name

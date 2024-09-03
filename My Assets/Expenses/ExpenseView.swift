@@ -32,11 +32,14 @@ struct ExpenseView: View {
         Form {
             Section {
                 SymbolPickerLink(symbol: $expense.symbol)
+                    .disabled(expense.fromDebt != nil)
                 TextField("Name", text: $nameCopy)
                     #if !os(macOS)
                     .textInputAutocapitalization(.words)
                     #endif
+                    .disabled(expense.fromDebt != nil)
                 OptionalCurrencyField("Monthly Cost", value: $expense.baseMonthlyCost)
+                    .disabled(expense.fromDebt != nil)
                 Picker("Category", selection: $expense.category) {
                     ForEach(Expense.Category.allCases) { category in
                         Text(category.name)
@@ -60,17 +63,24 @@ struct ExpenseView: View {
                 }
             }
             Section {
-                Button {
-                    showingSubexpense = true
-                } label: {
-                    Label("Add", systemImage: "plus.circle")
-                }
-                ForEach(children) { child in
-                    NavigationLink(value: child) {
-                        AmountRow(symbol: child.symbol ?? .defaultSymbol, label: child.name ?? "", amount: child.monthlyCost)
+                if expense.fromDebt == nil {
+                    Button {
+                        showingSubexpense = true
+                    } label: {
+                        Label("Add", systemImage: "plus.circle")
+                    }
+                    
+                    ForEach(children) { child in
+                        NavigationLink(value: child) {
+                            AmountRow(symbol: child.symbol ?? .defaultSymbol, label: child.name ?? "", amount: child.monthlyCost())
+                        }
+                    }
+                    .onDelete(perform: delete)
+                } else {
+                    ForEach(children) { child in
+                        AmountRow(symbol: child.symbol ?? .defaultSymbol, label: child.name ?? "", amount: child.monthlyCost())
                     }
                 }
-                .onDelete(perform: delete)
             } header: {
                 Text("Subexpenses")
             }

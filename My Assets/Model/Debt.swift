@@ -12,6 +12,10 @@ import SwiftData
 @Model
 final class Debt: Hashable, Comparable {
     
+    enum DebtError: Error {
+        case missingName
+    }
+    
     static func < (lhs: Debt, rhs: Debt) -> Bool {
         lhs.currentValue < rhs.currentValue
     }
@@ -19,17 +23,21 @@ final class Debt: Hashable, Comparable {
     var name: String?
     var symbol: Symbol?
     var colorName: ColorName?
+    var annualInterestFraction: Double?
+    var monthlyPayment: Double?
+    private var prevValue: Double?
+    private var prevDate: Date?
+    
+    // MARK: Relationships
+    
+    var asset: Asset?
+    var expense: Expense?
+    
+    // MARK: Computed Properties
+    
     var id: String {
         (name ?? "") + (symbol?.rawValue ?? "") + (colorName?.rawValue ?? "") + String(annualInterestFraction ?? 0)
     }
-    var annualInterestFraction: Double?
-    var monthlyPayment: Double?
-    
-    var transactionDateStart: Date?
-    var transactionFrequency: TransactionFrequency?
-    
-    var asset: Asset?
-    
     var currentValue: Double {
         get {
             currentValue(at: .now)
@@ -39,7 +47,11 @@ final class Debt: Hashable, Comparable {
             prevDate = Date()
         }
     }
-    
+    var monthlyInterest: Double {
+        guard let annualInterestFraction else { return .nan }
+        
+        return currentValue * annualInterestFraction / 12.0
+    }
     var monthsToPayOff: Double {
         guard let annualInterestFraction, let monthlyPayment else { return .nan }
         
@@ -71,8 +83,7 @@ final class Debt: Hashable, Comparable {
         return timeRemainingFormatter.string(from: time)
     }
     
-    private var prevValue: Double?
-    private var prevDate: Date?
+    // MARK: Init
     
     init(name: String = "", symbol: Symbol = .defaultSymbol, value: Double = 0) {
         self.name = name
@@ -96,6 +107,21 @@ final class Debt: Hashable, Comparable {
         let i = annualInterestFraction / 12
         let value = prevValue * pow(1 + i, monthsSinceDate) - (monthlyPayment / i) * (pow(1 + i, monthsSinceDate) - 1)
         return max(0, value)
+    }
+    
+    func generateExpense(transactionFrequency: TransactionFrequency? = nil, transactionDateStart: Date? = nil) throws {
+        guard let name else { throw DebtError.missingName }
+        
+        let expense = Expense(name: name, symbol: symbol ?? .defaultSymbol, category: .variable, monthlyCost: 0)
+        expense.colorName = colorName
+        expense.transactionDateStart = transactionDateStart
+        expense.transactionFrequency = transactionFrequency
+        expense.fromDebt = self
+        
+        let interestExpense = Expense(name: "Interest", symbol: symbol ?? .defaultSymbol, category: .fixed, monthlyCost: monthlyInterest)
+        let principalExpense = Expense(name: "Principal", symbol: symbol ?? .defaultSymbol, category: .savings, monthlyCost: (monthlyPayment ?? monthlyInterest) - monthlyInterest)
+        
+        expense.children = [ interestExpense, principalExpense ]
     }
     
 }

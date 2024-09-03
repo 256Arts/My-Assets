@@ -35,24 +35,23 @@ struct DebtView: View {
             }
             Section {
                 OptionalCurrencyField("Monthly Payment", value: $debt.monthlyPayment)
-                Picker("Transaction Frequency", selection: $debt.transactionFrequency) {
-                    Text("-")
-                        .tag(nil as TransactionFrequency?)
-                    ForEach(TransactionFrequency.allCases) { freq in
-                        Text(freq.rawValue.capitalized)
-                            .tag(freq as TransactionFrequency?)
-                    }
-                }
-                if debt.transactionFrequency != nil {
-                    DatePicker("Starting Date", selection: Binding(get: {
-                        debt.transactionDateStart ?? .now
-                    }, set: { newValue in
-                        debt.transactionDateStart = newValue
-                    }), displayedComponents: .date)
-                }
+            } footer: {
                 if let monthsToPayOffString = debt.monthsToPayOffString {
                     Text("\(monthsToPayOffString) remaining")
                         .foregroundStyle(.secondary)
+                }
+            }
+            if debt.expense == nil {
+                Section {
+                    VStack(alignment: .leading) {
+                        HStack {
+                            Image(systemName: "exclamationmark.triangle")
+                            Text("There is no associated expense for this debt.")
+                        }
+                        Button("Fix") {
+                            try? debt.generateExpense()
+                        }
+                    }
                 }
             }
         }
@@ -62,6 +61,9 @@ struct DebtView: View {
         #endif
         .onDisappear {
             debt.name = nameCopy
+            debt.expense?.symbol = debt.symbol
+            debt.expense?.children?.first(where: { $0.name == "Interest" })?.baseMonthlyCost = debt.monthlyInterest
+            debt.expense?.children?.first(where: { $0.name == "Principal" })?.baseMonthlyCost = (debt.monthlyPayment ?? debt.monthlyInterest) - debt.monthlyInterest
         }
     }
 }

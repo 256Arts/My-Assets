@@ -21,7 +21,6 @@ final class CreditCard {
     var name: String?
     var colorName: ColorName?
     var notes: String?
-    
     var cardFee: Double?
     var pointsPerDollar: Double?
     var pointValue: Double?
@@ -32,17 +31,20 @@ final class CreditCard {
     var timeHoldingGiftCard: Double?
     var monthlySpend: Double?
     
+    // MARK: Computed Properties
+    
     var monthlyRewardsEarned: Double? {
         guard let pointsPerDollar, let pointValue, let monthlySpend else { return nil }
         
         return (pointsPerDollar * pointValue) * (monthlySpend * 12)
     }
-    
     var monthlyRewardsLost: Double? {
         guard let monthlyRewardsEarned, let pointsPerDollar, let pointValue else { return nil }
         
         return monthlyRewardsEarned * (pointsPerDollar * pointValue)
     }
+    
+    // MARK: Init
     
     init(name: String = "", colorName: ColorName = .gray, cardFee: Double = 0.00, pointsPerDollar: Double = 1.0, pointValue: Double = 0.01, monthlySpend: Double = 2000.00) {
         self.name = name

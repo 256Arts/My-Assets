@@ -51,7 +51,7 @@ struct CashFlowsView: View {
                 Spacer()
                 
                 VStack(alignment: .trailing) {
-                    Text(currencyFormatter.string(from: NSNumber(value: trans.transactionAmount)) ?? "")
+                    Text(currencyDeltaFormatter.string(from: NSNumber(value: trans.transactionAmount)) ?? "")
                         .foregroundStyle(trans.transactionAmount < 0 ? Color.red : Color.green)
                     Text(trans.name)
                         .font(.caption)

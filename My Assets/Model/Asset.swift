@@ -41,12 +41,13 @@ final class Asset: Comparable {
     var name: String?
     var symbol: Symbol?
     var colorName: ColorName?
-    var id: String {
-        (name ?? "") + (symbol?.rawValue ?? "") + (colorName?.rawValue ?? "") + (compoundFrequency?.rawValue ?? "")
-    }
     var isLiquid: Bool?
     var compoundFrequency: CompoundFrequency?
     var annualInterestFraction: Double?
+    private var prevValue: Double?
+    private var prevDate: Date?
+    
+    // MARK: Relationships
     
     @Relationship(deleteRule: .cascade, inverse: \Debt.asset)
     var loans: [Debt]?
@@ -54,6 +55,11 @@ final class Asset: Comparable {
     @Relationship(deleteRule: .cascade, inverse: \UpcomingSpend.asset)
     var upcomingSpends: [UpcomingSpend]?
     
+    // MARK: Computed Properties
+    
+    var id: String {
+        (name ?? "") + (symbol?.rawValue ?? "") + (colorName?.rawValue ?? "") + (compoundFrequency?.rawValue ?? "")
+    }
     var effectiveAnnualInterestFraction: Double {
         guard let annualInterestFraction else { return .nan }
         
@@ -76,16 +82,15 @@ final class Asset: Comparable {
         (currentValue * pow(1 + effectiveAnnualInterestFraction/12, 1)) - currentValue
     }
     
-    private var prevValue: Double?
-    private var prevDate: Date?
+    // MARK: Init
     
-    init(name: String = "", symbol: Symbol = .defaultSymbol, value: Double = 0) {
+    init(name: String = "", symbol: Symbol = .defaultSymbol, value: Double = 0, annualInterestFraction: Double = 0) {
         self.name = name
         self.symbol = symbol
         self.colorName = .gray
         self.isLiquid = true
         self.compoundFrequency = Asset.CompoundFrequency.none
-        self.annualInterestFraction = 0
+        self.annualInterestFraction = annualInterestFraction
         self.prevValue = value
         self.prevDate = Date()
     }

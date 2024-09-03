@@ -15,15 +15,15 @@ struct ExpensesView: View {
     
     @Query(filter: #Predicate<Expense> {
         $0.parent == nil
-    }, sort: [SortDescriptor(\.baseMonthlyCost, order: .reverse)]) var nonDebtExpenses: [Expense]
+    }, sort: [SortDescriptor(\.baseMonthlyCost, order: .reverse)]) var expenses: [Expense]
     
     var body: some View {
         List {
-            ForEach(data.expenses.filter({ $0.fromDebt })) { expense in
-                AmountRow(symbol: expense.symbol ?? .defaultSymbol, label: expense.name!, amount: expense.monthlyCost)
+            ForEach(expenses.filter({ $0.fromDebt != nil })) { expense in
+                AmountRow(symbol: expense.symbol ?? .defaultSymbol, label: expense.name!, amount: expense.monthlyCost())
             }
-            ForEach(nonDebtExpenses) { expense in
-                AmountRow(symbol: expense.symbol ?? .defaultSymbol, label: expense.name!, amount: expense.monthlyCost)
+            ForEach(expenses.filter({ $0.fromDebt == nil })) { expense in
+                AmountRow(symbol: expense.symbol ?? .defaultSymbol, label: expense.name!, amount: expense.monthlyCost())
             }
             HStack {
                 Text("Total")

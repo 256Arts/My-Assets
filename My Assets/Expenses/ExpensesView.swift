@@ -32,17 +32,17 @@ struct ExpensesView: View {
     
     @Query(filter: #Predicate<Expense> {
         $0.parent == nil
-    }, sort: [SortDescriptor(\.baseMonthlyCost, order: .reverse)]) var nonDebtRootExpenses: [Expense]
-    @Query var nonDebtExpenses: [Expense]
+    }, sort: [SortDescriptor(\.baseMonthlyCost, order: .reverse)]) var rootExpenses: [Expense]
+    @Query var expenses: [Expense]
     @Query var debts: [Debt]
     @Query var upcomingSpends: [UpcomingSpend]
     
     @State var showingDetail = false
+    @State var showingDeleteError = false
     
     var pieChartData: [SectorData] {
-        let allExpenses = nonDebtExpenses + debts.map({ Expense(debt: $0) })
-        return Expense.Category.allCases.map { category in
-            SectorData(category: category, amount: allExpenses.filter({ $0.category == category }).reduce(0.0, { $0 + ($1.baseMonthlyCost ?? 0.0) }))
+        Expense.Category.allCases.map { category in
+            SectorData(category: category, amount: expenses.filter({ $0.category == category }).reduce(0.0, { $0 + ($1.baseMonthlyCost ?? 0.0) }))
         }
     }
     
@@ -96,23 +96,19 @@ struct ExpensesView: View {
                     .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                 }
                 Section {
-                    ForEach(nonDebtRootExpenses) { expense in
+                    ForEach(rootExpenses) { expense in
                         NavigationLink(value: expense) {
                             VStack(spacing: 8) {
-                                AmountRow(symbol: expense.symbol ?? .defaultSymbol, label: expense.name ?? "", amount: expense.monthlyCost)
+                                AmountRow(symbol: expense.symbol ?? .defaultSymbol, label: expense.name ?? "", amount: expense.monthlyCost())
                                 ForEach(expense.children?.sorted(by: >) ?? []) { child in
-                                    AmountRow(symbol: child.symbol ?? .defaultSymbol, label: child.name ?? "", amount: child.monthlyCost)
+                                    AmountRow(symbol: child.symbol ?? .defaultSymbol, label: child.name ?? "", amount: child.monthlyCost())
                                         .foregroundColor(.secondary)
                                         .padding(.leading, 32)
                                 }
                             }
                         }
                     }
-                    .onDelete(perform: deleteNonDebtExpense)
-                    
-                    ForEach(data.expenses.filter({ $0.fromDebt })) { expense in
-                        AmountRow(symbol: expense.symbol ?? .defaultSymbol, label: expense.name ?? "", amount: expense.monthlyCost)
-                    }
+                    .onDelete(perform: deleteExpense)
                     
                     HStack {
                         Text("Total")
@@ -154,6 +150,11 @@ struct ExpensesView: View {
                 UpcomingSpendView(spend: spend)
             }
         }
+        .alert("Unable to Delete", isPresented: $showingDeleteError, actions: {
+            Button("OK") { }
+        }, message: {
+            Text("This expense is associated with a debt. Deleting the debt will also delete this expense.")
+        })
         .sheet(isPresented: self.$showingDetail) {
             NavigationStack {
                 NewExpenseView(parentExpense: nil)
@@ -161,10 +162,16 @@ struct ExpensesView: View {
         }
     }
     
-    private func deleteNonDebtExpense(at offsets: IndexSet) {
+    private func deleteExpense(at offsets: IndexSet) {
         for offset in offsets {
-            modelContext.delete(data.nonDebtExpenses[offset])
-            data.nonDebtExpenses.remove(at: offset)
+            let expense = rootExpenses[offset]
+            guard expense.fromDebt == nil else {
+                showingDeleteError = true
+                return
+            }
+            
+            modelContext.delete(expense)
+//            data.nonDebtExpenses.remove(at: offset)
         }
     }
     

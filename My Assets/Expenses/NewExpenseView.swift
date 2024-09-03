@@ -62,7 +62,7 @@ struct NewExpenseView: View {
                         expense.parent = parentExpense
 //                            parentExpense.children.append(self.expense)
                     } else {
-                        self.data.nonDebtExpenses.append(self.expense)
+                        self.data.expenses.append(self.expense)
                     }
                     self.dismiss()
                 }

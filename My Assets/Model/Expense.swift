@@ -60,41 +60,33 @@ final class Expense: Schedulable, Hashable, Comparable {
         }
     }
     
-    static func == (lhs: Expense, rhs: Expense) -> Bool {
-        lhs.id == rhs.id
-    }
-    
-    static func < (lhs: Expense, rhs: Expense) -> Bool {
-        lhs.monthlyCost < rhs.monthlyCost
-    }
-    
     var name: String?
     var symbol: Symbol?
     var colorName: ColorName?
-    var id: String {
-        (name ?? "") + (symbol?.rawValue ?? "") + (colorName?.rawValue ?? "") + String(baseMonthlyCost ?? 0)
-    }
     var category: Category?
     var baseMonthlyCost: Double?
-    var monthlyCost: Double {
-        let children = self.children ?? []
-        let baseMonthlyCost = self.baseMonthlyCost ?? 0.0
-        guard !children.isEmpty else { return baseMonthlyCost }
-        
-        return baseMonthlyCost + children.reduce(0, { $0 + $1.monthlyCost })
-    }
     var transactionDateStart: Date?
     var transactionFrequency: TransactionFrequency?
     
-    @Transient
-    var fromDebt: Bool = false
+    // MARK: Relationships
+    
+    @Relationship(deleteRule: .cascade, inverse: \Debt.expense)
+    var fromDebt: Debt?
     
     var parent: Expense?
     
+    @Relationship(deleteRule: .cascade, inverse: \Expense.parent)
+    var children: [Expense]?
+    
+    // MARK: Computed Properties
+    
+    var id: String {
+        (name ?? "") + (symbol?.rawValue ?? "") + (colorName?.rawValue ?? "") + String(baseMonthlyCost ?? 0)
+    }
     var transactionAmount: Double? {
         guard let transactionFrequency else { return nil }
         
-        return -monthlyCost / transactionFrequency.timesPerMonth
+        return -monthlyCost() / transactionFrequency.timesPerMonth
     }
     var nextTransactionDate: Date? {
         guard let transactionFrequency, let transactionDateStart else { return nil }
@@ -107,52 +99,33 @@ final class Expense: Schedulable, Hashable, Comparable {
         return nextDate
     }
     
-    @Relationship(deleteRule: .cascade, inverse: \Expense.parent)
-    var children: [Expense]?
+    // MARK: Init
     
-    init(name: String, symbol: Symbol, category: Category, monthlyCost: Double) {
+    init(name: String, symbol: Symbol, category: Category, monthlyCost: Double, children: [Expense] = []) {
         self.name = name
         self.symbol = symbol
         self.colorName = .gray
         self.category = category
         self.baseMonthlyCost = monthlyCost
-        self.fromDebt = false
-        self.children = []
+        self.children = children
     }
     
-    init(debt: Debt, extraPaymentOnly: Bool = false) {
-        name = debt.name
-        symbol = debt.symbol
-        colorName = debt.colorName
-        transactionDateStart = debt.transactionDateStart
-        transactionFrequency = debt.transactionFrequency
-        fromDebt = true
+    func monthlyCost(excludingSavings: Bool = false) -> Double {
+        let baseMonthlyCost = (excludingSavings && category == .savings) ? 0.0 : baseMonthlyCost ?? 0.0
         
-        category = .fixed
-        baseMonthlyCost = debt.monthlyPayment
-        children = []
-        
-        /*
-        if extraPaymentOnly {
-            category = .savings
-            baseMonthlyCost = (debt.monthlyPayment ?? 0) - (debt.minimumMonthlyPayment ?? 0)
-            children = []
-        } else {
-            category = .fixed
-            baseMonthlyCost = debt.minimumMonthlyPayment
-            if debt.monthlyPayment == debt.minimumMonthlyPayment {
-                children = []
-            } else {
-                children = [
-                    Expense(debt: debt, extraPaymentOnly: true)
-                ]
-            }
-        }
-         */
+        return baseMonthlyCost + (children ?? []).reduce(0, { $0 + $1.monthlyCost(excludingSavings: excludingSavings) })
     }
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
+    }
+    
+    static func == (lhs: Expense, rhs: Expense) -> Bool {
+        lhs.id == rhs.id
+    }
+    
+    static func < (lhs: Expense, rhs: Expense) -> Bool {
+        lhs.monthlyCost() < rhs.monthlyCost()
     }
     
 }

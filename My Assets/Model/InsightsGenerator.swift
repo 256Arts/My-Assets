@@ -36,7 +36,7 @@ final class InsightsGenerator {
         
         // Static = Same amount every month
         // Exclude debt interest since it's included in `avgAnnualBalanceInterest`
-        let totalStaticExpenses = data.expenses.filter { !$0.fromDebt }.reduce(0.0, { $0 + $1.monthlyCost })
+        let totalStaticExpenses = data.expenses.filter { $0.fromDebt == nil }.reduce(0.0, { $0 + $1.monthlyCost(excludingSavings: true) })
         // Exclude asset interest since it's included in `avgAnnualBalanceInterest`
         let totalStaticPassiveIncome = passiveIncome.reduce(0.0, { $0 + $1.monthlyEarnings! })
         let staticMonthlyDrain = totalStaticExpenses - totalStaticPassiveIncome
@@ -129,7 +129,7 @@ final class InsightsGenerator {
     var requiredBalanceToLiveOffString: String? {
         guard 0 < avgAnnualBalanceInterest else { return nil }
         
-        let totalStaticExpenses = data.expenses.filter { !$0.fromDebt }.reduce(0.0, { $0 + $1.monthlyCost })
+        let totalStaticExpenses = data.expenses.filter { $0.fromDebt == nil }.reduce(0.0, { $0 + $1.monthlyCost(excludingSavings: true) })
         let totalStaticPassiveIncome = data.income.filter { $0.isPassive! && !$0.fromAsset }.reduce(0.0, { $0 + $1.monthlyEarnings! })
         let staticMonthlyDrain = totalStaticExpenses - totalStaticPassiveIncome
         

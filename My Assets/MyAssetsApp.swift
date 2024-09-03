@@ -20,7 +20,6 @@ struct MyAssetsApp: App {
     
     var body: some Scene {
         WindowGroup {
-//            DeleterView()
             RootTabView()
         }
         .defaultSize(width: 500, height: 800)
@@ -39,13 +38,22 @@ struct MyAssetsApp: App {
 }
 
 #if DEBUG
+struct BackupRestorerView: View {
+    @Environment(\.modelContext) private var modelContext
+    var body: some View {
+        Text("Restoring backup...")
+            .onAppear {
+                restoreBackup(context: modelContext)
+            }
+    }
+}
 struct DeleterView: View {
     @Environment(\.modelContext) private var modelContext
     @Query var nonStockAssets: [Asset]
     @Query var debts: [Debt]
     @Query var stocks: [Stock]
     @Query var nonAssetIncome: [Income]
-    @Query var nonDebtExpenses: [Expense]
+    @Query var expenses: [Expense]
     var body: some View {
         Text("Deleting preview data...")
             .onAppear {
@@ -65,8 +73,8 @@ struct DeleterView: View {
                         modelContext.delete(item)
                     }
                 }
-                for item in nonDebtExpenses {
-                    if previewExpenses.contains(where: { $0.name == item.name && $0.monthlyCost == item.monthlyCost }) {
+                for item in expenses {
+                    if previewExpenses.contains(where: { $0.name == item.name && $0.monthlyCost() == item.monthlyCost() }) {
                         modelContext.delete(item)
                     }
                 }

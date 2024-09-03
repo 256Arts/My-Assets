@@ -12,31 +12,15 @@ final class FinancialData: ObservableObject {
     
     static let newestFileVersion = 1
     
-    @Published var nonStockAssets: [Asset] {
-       didSet {
-           save()
-       }
-    }
-    @Published var stocks: [Stock] {
-       didSet {
-           save()
-       }
-    }
+    @Published var nonStockAssets: [Asset]
+    @Published var stocks: [Stock]
     var assets: [Asset] {
         (nonStockAssets + stocks.map({ Asset(stock: $0) })).sorted(by: >)
     }
     
-    @Published var debts: [Debt] {
-        didSet {
-            save()
-        }
-    }
+    @Published var debts: [Debt]
     
-    @Published var nonAssetIncome: [Income] {
-       didSet {
-           save()
-       }
-    }
+    @Published var nonAssetIncome: [Income]
     var income: [Income] {
         (nonAssetIncome + assets.map({ Income(asset: $0) })).filter({ $0.monthlyEarnings != 0 }).sorted(by: >)
     }
@@ -50,19 +34,12 @@ final class FinancialData: ObservableObject {
         income.reduce(0, { $0 + $1.monthlyEarnings! })
     }
     
-    @Published var nonDebtExpenses: [Expense] {
-        didSet {
-            save()
-        }
-    }
-    var expenses: [Expense] {
-        (nonDebtExpenses + debts.map({ Expense(debt: $0) })).filter({ $0.monthlyCost != 0 }).sorted(by: >)
-    }
+    @Published var expenses: [Expense]
     var totalExpenses: Double {
-        expenses.reduce(0, { $0 + $1.monthlyCost })
+        expenses.reduce(0, { $0 + $1.monthlyCost(excludingSavings: true) })
     }
     var totalPassiveExpenses: Double {
-        expenses.filter({ $0.fromDebt }).reduce(0, { $0 + $1.monthlyCost })
+        expenses.filter({ $0.fromDebt != nil }).reduce(0, { $0 + $1.monthlyCost(excludingSavings: true) })
     }
     
     var avgAnnualNetWorthInterest: Double {
@@ -121,16 +98,12 @@ final class FinancialData: ObservableObject {
         return netWorth(at: .now, type: type) + fv
     }
     
-    init(nonStockAssets: [Asset], stocks: [Stock], debts: [Debt], nonAssetIncome: [Income], nonDebtExpenses: [Expense]) {
+    init(nonStockAssets: [Asset], stocks: [Stock], debts: [Debt], nonAssetIncome: [Income], expenses: [Expense]) {
         self.nonStockAssets = nonStockAssets
         self.stocks = stocks
         self.debts = debts
         self.nonAssetIncome = nonAssetIncome
-        self.nonDebtExpenses = nonDebtExpenses.filter { $0.parent == nil }
-    }
-    
-    func save() {
-        // Removed with SwiftData
+        self.expenses = expenses.filter { $0.parent == nil }
     }
     
 }

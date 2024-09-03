@@ -22,6 +22,8 @@ struct NewDebtView: View {
     @State var value: Double?
     @State var minimumMonthlyPayment: Double?
     @State var monthlyPayment: Double?
+    @State var transactionFrequency: TransactionFrequency?
+    @State var transactionDateStart: Date?
     
     var body: some View {
         Form {
@@ -31,12 +33,29 @@ struct NewDebtView: View {
                 }, set: { newValue in
                     debt.name = newValue
                 }))
-                    #if !os(macOS)
-                    .textInputAutocapitalization(.words)
-                    #endif
+                #if !os(macOS)
+                .textInputAutocapitalization(.words)
+                #endif
                 OptionalCurrencyField("Value", value: $value)
                 OptionalPercentField("Annual Interest", value: $interest)
+            }
+            Section {
                 OptionalCurrencyField("Monthly Payment", value: $monthlyPayment)
+                Picker("Transaction Frequency", selection: $transactionFrequency) {
+                    Text("-")
+                        .tag(nil as TransactionFrequency?)
+                    ForEach(TransactionFrequency.allCases) { freq in
+                        Text(freq.rawValue.capitalized)
+                            .tag(freq as TransactionFrequency?)
+                    }
+                }
+                if transactionFrequency != nil {
+                    DatePicker("Starting Date", selection: Binding(get: {
+                        transactionDateStart ?? .now
+                    }, set: { newValue in
+                        transactionDateStart = newValue
+                    }), displayedComponents: .date)
+                }
             }
             Section {
                 SymbolPicker(selected: Binding(get: {
@@ -55,18 +74,7 @@ struct NewDebtView: View {
             }
             ToolbarItem(placement: .confirmationAction) {
                 Button("Add") {
-                    if let value = self.value {
-                        let interest = self.interest ?? 0.0
-                        self.debt.annualInterestFraction = interest
-                        self.debt.currentValue = value
-                        modelContext.insert(debt)
-                        if let parentAsset {
-                            debt.asset = parentAsset
-                        } else {
-                            self.data.debts.append(self.debt)
-                        }
-                        self.dismiss()
-                    }
+                    try? addDebtAndDismiss()
                 }
                 .disabled(value == nil)
             }
@@ -86,6 +94,26 @@ struct NewDebtView: View {
                 debt.name = newValue?.suggestedTitle
             }
         }
+    }
+    
+    private func addDebtAndDismiss() throws {
+        guard let value else { return }
+        
+        let interest = self.interest ?? 0.0
+        self.debt.annualInterestFraction = interest
+        self.debt.currentValue = value
+        
+        try? self.debt.generateExpense(transactionFrequency: transactionFrequency, transactionDateStart: transactionDateStart)
+        
+        modelContext.insert(debt)
+        if let parentAsset {
+            debt.asset = parentAsset
+        } else {
+            self.data.debts.append(self.debt)
+//            self.data.expenses.append(expense)
+        }
+        
+        dismiss()
     }
 }
 

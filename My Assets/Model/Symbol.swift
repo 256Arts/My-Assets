@@ -17,7 +17,7 @@ enum Symbol: String, CaseIterable, Identifiable, Codable {
     case stocks = "chart.line.uptrend.xyaxis" // Future: Hide this option when adding native stocks support in app
     
     // Living
-    case house, building, car, fuelpump, bus, tram, airplane, sailboat
+    case house, building, storefront, car, fuelpump, bus, tram, airplane, sailboat
     case bed = "bed.double"
     
     // Household
@@ -26,6 +26,8 @@ enum Symbol: String, CaseIterable, Identifiable, Codable {
     case basket
     
     // Other
+    case skateboard, skis, snowboard, surfboard
+    case gymbag = "gym.bag"
     case wineglass
     case pills
     case stethoscope
@@ -33,7 +35,7 @@ enum Symbol: String, CaseIterable, Identifiable, Codable {
     case doc = "doc.text"
     case ticket
     case takeoutbag = "takeoutbag.and.cup.and.straw"
-    case tshirt, shippingbox, iphone
+    case tshirt, shoe, shippingbox, iphone, macbook
     
     // Digital
     case icloud
@@ -54,206 +56,238 @@ enum Symbol: String, CaseIterable, Identifiable, Codable {
     var suggestedTitle: String {
         switch self {
         case .banknote:
-            return "Cash"
+            "Cash"
         case .bitcoin:
-            return "Bitcoin"
+            "Bitcoin"
         case .creditcard:
-            return "Credit Card"
+            "Credit Card"
         case .bag:
-            return "Shopping"
+            "Shopping"
         case .gift:
-            return "Gifts"
+            "Gifts"
         case .bank:
-            return "Bank Account"
+            "Bank Account"
         case .stocks:
-            return "Stocks"
+            "Stocks"
         case .house:
-            return "House"
+            "House"
         case .building:
-            return "Work"
+            "Work"
+        case .storefront:
+            "Shopping"
         case .car:
-            return "Car Insurance"
+            "Car Insurance"
         case .fuelpump:
-            return "Fuel"
+            "Fuel"
         case .bus:
-            return "Bus Pass"
+            "Bus Pass"
         case .tram:
-            return "Train Pass"
+            "Train Pass"
         case .airplane:
-            return "Travel"
+            "Travel"
         case .sailboat:
-            return "Boat"
+            "Boat"
         case .bed:
-            return "Hotels"
+            "Hotels"
         case .wifi:
-            return "Internet"
+            "Internet"
         case .flame:
-            return "Heating"
+            "Heating"
         case .snowflake:
-            return "Air Conditioning"
+            "Air Conditioning"
         case .drop:
-            return "Water"
+            "Water"
         case .bolt:
-            return "Electricity"
+            "Electricity"
         case .hammer:
-            return "Renovations"
+            "Renovations"
         case .wrench:
-            return "Repairs"
+            "Repairs"
         case .lightbulb:
-            return "Utilities"
+            "Utilities"
         case .chair:
-            return "Furnature"
+            "Furnature"
         case .basket:
-            return "Basket"
+            "Basket"
+        case .skateboard:
+            "Skateboard"
+        case .skis:
+            "Ski"
+        case .snowboard:
+            "Snowboard"
+        case .surfboard:
+            "Surfboard"
+        case .gymbag:
+            "Gym"
         case .wineglass:
-            return "Alcohol"
+            "Alcohol"
         case .stethoscope:
-            return "Doctor"
+            "Doctor"
         case .pills:
-            return "Medicine"
+            "Medicine"
         case .pawprint:
-            return "Pet Supplies"
+            "Pet Supplies"
         case .teddybear:
-            return "Children"
+            "Children"
         case .leaf:
-            return "Garden"
+            "Garden"
         case .graduationcap:
-            return "School"
+            "School"
         case .doc:
-            return "Taxes"
+            "Taxes"
         case .ticket:
-            return "Entertainment"
+            "Entertainment"
         case .takeoutbag:
-            return "Take Out"
+            "Take Out"
         case .tshirt:
-            return "Clothing"
+            "Clothing"
+        case .shoe:
+            "Shoes"
         case .shippingbox:
-            return "Online Shopping"
+            "Online Shopping"
         case .iphone:
-            return "Phone"
+            "Phone"
+        case .macbook:
+            "Computer"
         case .icloud:
-            return "Cloud Storage"
+            "Cloud Storage"
         case .music:
-            return "Music"
+            "Music"
         case .tv:
-            return "TV"
+            "TV"
         case .gamecontroller:
-            return "Games"
+            "Games"
         case .newspaper:
-            return "News"
+            "News"
         case .figure:
-            return "Personal"
+            "Personal"
         case .figurerun:
-            return "Fitness"
+            "Fitness"
         case .family:
-            return "Family"
+            "Family"
         case .app:
-            return "App Subscriptions"
+            "App Subscriptions"
         case .star:
-            return ""
+            ""
         }
     }
     
     var color: Color {
         switch self {
         case .banknote:
-            return .green
+            .green
         case .bitcoin:
-            return .orange
+            .orange
         case .creditcard:
-            return .mint
+            .mint
         case .bag:
-            return .mint
+            .mint
         case .gift:
-            return .red
+            .red
         case .bank:
-            return .green
+            .green
         case .stocks:
-            return .blue
+            .blue
         case .house:
-            return .brown
+            .brown
         case .building:
-            return .cyan
+            .cyan
+        case .storefront:
+            .red
         case .car:
-            return .blue
+            .blue
         case .fuelpump:
-            return .blue
+            .blue
         case .bus:
-            return .blue
+            .blue
         case .tram:
-            return .blue
+            .blue
         case .airplane:
-            return .blue
+            .blue
         case .sailboat:
-            return .blue
+            .blue
         case .bed:
-            return .brown
+            .brown
         case .wifi:
-            return .blue
+            .blue
         case .flame:
-            return .orange
+            .orange
         case .snowflake:
-            return .cyan
+            .cyan
         case .drop:
-            return .blue
+            .blue
         case .bolt:
-            return .yellow
+            .yellow
         case .hammer:
-            return .orange
+            .orange
         case .wrench:
-            return .gray
+            .gray
         case .lightbulb:
-            return .yellow
+            .yellow
         case .chair:
-            return .brown
+            .brown
         case .basket:
-            return .yellow
+            .yellow
+        case .skateboard:
+            .mint
+        case .skis:
+            .blue
+        case .snowboard:
+            .blue
+        case .surfboard:
+            .blue
+        case .gymbag:
+            .mint
         case .wineglass:
-            return .purple
+            .purple
         case .stethoscope:
-            return .pink
+            .pink
         case .pills:
-            return .pink
+            .pink
         case .pawprint:
-            return .brown
+            .brown
         case .teddybear:
-            return .brown
+            .brown
         case .leaf:
-            return .green
+            .green
         case .graduationcap:
-            return .indigo
+            .indigo
         case .doc:
-            return .gray
+            .gray
         case .ticket:
-            return .purple
+            .purple
         case .takeoutbag:
-            return .orange
+            .orange
         case .tshirt:
-            return .purple
+            .purple
+        case .shoe:
+            .purple
         case .shippingbox:
-            return .brown
+            .brown
         case .iphone:
-            return .blue
+            .blue
+        case .macbook:
+            .blue
         case .icloud:
-            return .cyan
+            .cyan
         case .music:
-            return .pink
+            .pink
         case .tv:
-            return .indigo
+            .indigo
         case .gamecontroller:
-            return .red
+            .red
         case .newspaper:
-            return .pink
+            .pink
         case .figure:
-            return .blue
+            .blue
         case .figurerun:
-            return .green
+            .green
         case .family:
-            return .blue
+            .blue
         case .app:
-            return .blue
+            .blue
         case .star:
-            return .gray
+            .gray
         }
     }
 }
