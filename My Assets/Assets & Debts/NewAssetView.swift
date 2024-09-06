@@ -95,14 +95,16 @@ struct NewAssetView: View {
             }
             ToolbarItem(placement: .confirmationAction) {
                 Button("Add") {
-                    if let value = self.value {
-                        let interest = self.interest ?? 0.0
-                        self.asset.annualInterestFraction = interest
-                        self.asset.currentValue = value
-                        modelContext.insert(asset)
-                        self.data.nonStockAssets.append(self.asset)
-                        self.dismiss()
-                    }
+                    guard let value else { return }
+                    
+                    let interest = self.interest ?? 0.0
+                    self.asset.annualInterestFraction = interest
+                    self.asset.currentValue = value
+                    try? self.asset.generateIncome()
+                    
+                    modelContext.insert(asset)
+                    self.data.nonStockAssets.append(self.asset)
+                    self.dismiss()
                 }
                 .disabled(value == nil)
             }

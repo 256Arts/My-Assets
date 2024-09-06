@@ -25,6 +25,8 @@ struct SummaryView: View {
     @AppStorage(UserDefaults.Key.summaryScreenShowNetWorth) var summaryScreenShowNetWorth = true
     @AppStorage(UserDefaults.Key.summaryScreenNetWorthShowChart) var summaryScreenNetWorthShowChart = true
     @AppStorage(UserDefaults.Key.summaryScreenNetWorthShowPercentile) var summaryScreenNetWorthShowPercentile = true
+    @AppStorage(UserDefaults.Key.summaryScreenShowCashFlows) var summaryScreenShowCashFlows = true
+    @AppStorage(UserDefaults.Key.summaryScreenShowInsights) var summaryScreenShowInsights = true
     
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject var data: FinancialData
@@ -106,14 +108,18 @@ struct SummaryView: View {
                     }
                 }
                 
-                Section("Insights") {
-                    ForEach(Array(insights.generate().enumerated()), id: \.0) { (_, string) in
-                        Text(string)
+                if summaryScreenShowCashFlows {
+                    Section("Cash Flows") {
+                        CashFlowsView()
                     }
                 }
                 
-                Section("Cash Flows") {
-                    CashFlowsView()
+                if summaryScreenShowInsights {
+                    Section("Insights") {
+                        ForEach(Array(insights.generate().enumerated()), id: \.0) { (_, string) in
+                            Text(string)
+                        }
+                    }
                 }
             }
             .headerProminence(.increased)

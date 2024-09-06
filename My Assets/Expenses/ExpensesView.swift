@@ -171,7 +171,7 @@ struct ExpensesView: View {
             }
             
             modelContext.delete(expense)
-//            data.nonDebtExpenses.remove(at: offset)
+            data.expenses = expenses
         }
     }
     

@@ -2,8 +2,8 @@
 //  ColorPicker.swift
 //  My Assets
 //
-//  Created by Jayden Irwin on 2024-08-10.
-//  Copyright © 2024 Jayden Irwin. All rights reserved.
+//  Created by 256 Arts Developer on 2024-08-10.
+//  Copyright © 2024 256 Arts Developer. All rights reserved.
 //
 
 import SwiftUI

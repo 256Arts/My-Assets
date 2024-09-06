@@ -25,21 +25,26 @@ struct IncomeSourceView: View {
     var body: some View {
         Form {
             SymbolPickerLink(symbol: $income.symbol)
+                .disabled(income.fromAsset != nil)
             TextField("Name", text: $nameCopy)
                 #if !os(macOS)
                 .textInputAutocapitalization(.words)
                 #endif
+                .disabled(income.fromAsset != nil)
             OptionalCurrencyField("Monthly Earnings", value: $income.monthlyEarnings)
+                .disabled(income.fromAsset != nil)
             Toggle("Liquid", isOn: Binding(get: {
                 income.isLiquid ?? true
             }, set: { newValue in
                 income.isLiquid = newValue
             }))
+            .disabled(income.fromAsset != nil)
             Toggle("Passive", isOn: Binding(get: {
                 income.isPassive ?? false
             }, set: { newValue in
                 income.isPassive = newValue
             }))
+            .disabled(income.fromAsset != nil)
             Picker("Transaction Frequency", selection: $income.transactionFrequency) {
                 Text("-")
                     .tag(nil as TransactionFrequency?)

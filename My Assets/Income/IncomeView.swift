@@ -66,20 +66,21 @@ struct IncomeView: View {
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject var data: FinancialData
     
-    @Query(sort: [SortDescriptor(\Income.monthlyEarnings, order: .reverse)]) var nonAssetIncome: [Income]
+    @Query(sort: [SortDescriptor(\Income.monthlyEarnings, order: .reverse)]) var incomes: [Income]
     
     @State var selectedIncome: Double?
     @State var selectedSector: SectorData?
     @State var showingDetail = false
+    @State var showingDeleteError = false
 
     var workingIncome: Double {
-        data.income.filter({ !$0.isPassive! }).reduce(0, { $0 + $1.monthlyEarnings! })
+        incomes.filter({ !$0.isPassive! }).reduce(0, { $0 + $1.monthlyEarnings! })
     }
     var passiveLiquidIncome: Double {
-        data.income.filter({ $0.isPassive! && $0.isLiquid! }).reduce(0, { $0 + $1.monthlyEarnings! })
+        incomes.filter({ $0.isPassive! && $0.isLiquid! }).reduce(0, { $0 + $1.monthlyEarnings! })
     }
     var passiveNonLiquidIncome: Double {
-        data.income.filter({ $0.isPassive! && !$0.isLiquid! }).reduce(0, { $0 + $1.monthlyEarnings! })
+        incomes.filter({ $0.isPassive! && !$0.isLiquid! }).reduce(0, { $0 + $1.monthlyEarnings! })
     }
     var pieChartData: [SectorData] {
         [
@@ -148,7 +149,7 @@ struct IncomeView: View {
                     .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                 }
                 Section {
-                    ForEach(nonAssetIncome) { income in
+                    ForEach(incomes) { income in
                         NavigationLink(value: income) {
                             AmountRow(symbol: income.symbol ?? .defaultSymbol, label: income.name ?? "", amount: income.monthlyEarnings!)
                                 .opacity((selectedSector?.effort ?? .working) == .working ? 1 : 0.5)
@@ -158,14 +159,6 @@ struct IncomeView: View {
                         }
                     }
                     .onDelete(perform: delete)
-                    
-                    ForEach(data.income.filter({ $0.fromAsset && $0.isLiquid! })) { income in
-                        AmountRow(symbol: income.symbol ?? .defaultSymbol, label: income.name ?? "", amount: income.monthlyEarnings!)
-                            .opacity((selectedSector?.effort ?? .passive) == .passive ? 1 : 0.5)
-                            .accessibilityElement()
-                            .accessibilityLabel(income.name ?? "")
-                            .accessibilityValue(currencyFormatter.string(from: NSNumber(value: income.monthlyEarnings!))!)
-                    }
                     
                     HStack {
                         Text("Total")
@@ -178,9 +171,9 @@ struct IncomeView: View {
                         .accessibilityValue(currencyFormatter.string(from: NSNumber(value: data.totalLiquidIncome))!)
                 }
                 
-                if data.income.contains(where: { $0.fromAsset && !$0.isLiquid! }) {
+                if incomes.contains(where: { $0.fromAsset != nil && !$0.isLiquid! }) {
                     Section {
-                        ForEach(data.income.filter({ $0.fromAsset && !$0.isLiquid! })) { income in
+                        ForEach(incomes.filter({ $0.fromAsset != nil && !$0.isLiquid! })) { income in
                             AmountRow(symbol: income.symbol ?? .defaultSymbol, label: income.name ?? "", amount: income.monthlyEarnings!)
                                 .opacity((selectedSector?.effort ?? .passiveNonLiquid) == .passiveNonLiquid ? 1 : 0.5)
                                 .accessibilityElement()
@@ -215,6 +208,11 @@ struct IncomeView: View {
                 IncomeSourceView(income: income)
             }
         }
+        .alert("Unable to Delete", isPresented: $showingDeleteError, actions: {
+            Button("OK") { }
+        }, message: {
+            Text("")
+        })
         .sheet(isPresented: self.$showingDetail) {
             NavigationStack {
                 NewIncomeSourceView()
@@ -229,9 +227,15 @@ struct IncomeView: View {
     
     private func delete(at offsets: IndexSet) {
         for offset in offsets {
-            modelContext.delete(data.nonAssetIncome[offset])
+            let income = incomes[offset]
+            guard income.fromAsset == nil else {
+                showingDeleteError = true
+                return
+            }
+            
+            modelContext.delete(income)
+            data.income = incomes
         }
-        self.data.nonAssetIncome.remove(atOffsets: offsets)
     }
     
     private func findSelectedSector(value: Double) -> SectorData? {

@@ -16,6 +16,8 @@ struct SettingsView: View {
     @AppStorage(UserDefaults.Key.otherHouseholdNetWorth) var otherHouseholdNetWorth = 0.0
     @AppStorage(UserDefaults.Key.summaryScreenShowBalance) var summaryScreenShowBalance = true
     @AppStorage(UserDefaults.Key.summaryScreenShowNetWorth) var summaryScreenShowNetWorth = true
+    @AppStorage(UserDefaults.Key.summaryScreenShowCashFlows) var summaryScreenShowCashFlows = true
+    @AppStorage(UserDefaults.Key.summaryScreenShowInsights) var summaryScreenShowInsights = true
     
     @State var birthday = Date(timeIntervalSinceReferenceDate: UserDefaults.standard.double(forKey: UserDefaults.Key.birthday))
     
@@ -38,6 +40,8 @@ struct SettingsView: View {
             Section("Summary Screen") {
                 Toggle("Show Balance", isOn: $summaryScreenShowBalance)
                 Toggle("Show Net Worth", isOn: $summaryScreenShowNetWorth)
+                Toggle("Show Cash Flows", isOn: $summaryScreenShowCashFlows)
+                Toggle("Show Insights", isOn: $summaryScreenShowInsights)
             }
             
             Section {

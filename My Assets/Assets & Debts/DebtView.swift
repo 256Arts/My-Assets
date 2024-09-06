@@ -33,6 +33,7 @@ struct DebtView: View {
                 OptionalPercentField("Interest", value: $debt.annualInterestFraction)
                 CurrencyField("Amount", value: $debt.currentValue)
             }
+            
             Section {
                 OptionalCurrencyField("Monthly Payment", value: $debt.monthlyPayment)
             } footer: {
@@ -41,16 +42,19 @@ struct DebtView: View {
                         .foregroundStyle(.secondary)
                 }
             }
+            
             if debt.expense == nil {
                 Section {
-                    VStack(alignment: .leading) {
-                        HStack {
-                            Image(systemName: "exclamationmark.triangle")
+                    Label {
+                        VStack(alignment: .leading) {
                             Text("There is no associated expense for this debt.")
+                            Button("Fix") {
+                                try? debt.generateExpense()
+                            }
+                            .buttonStyle(.borderless)
                         }
-                        Button("Fix") {
-                            try? debt.generateExpense()
-                        }
+                    } icon: {
+                        Image(systemName: "exclamationmark.triangle")
                     }
                 }
             }
@@ -61,7 +65,9 @@ struct DebtView: View {
         #endif
         .onDisappear {
             debt.name = nameCopy
+            debt.expense?.name = debt.name
             debt.expense?.symbol = debt.symbol
+            debt.expense?.colorName = debt.colorName
             debt.expense?.children?.first(where: { $0.name == "Interest" })?.baseMonthlyCost = debt.monthlyInterest
             debt.expense?.children?.first(where: { $0.name == "Principal" })?.baseMonthlyCost = (debt.monthlyPayment ?? debt.monthlyInterest) - debt.monthlyInterest
         }

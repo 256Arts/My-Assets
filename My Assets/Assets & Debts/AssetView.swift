@@ -53,7 +53,7 @@ struct AssetView: View {
             
             switch asset.isLiquid {
             case true:
-                Section {
+                Section("Upcoming Spends") {
                     ForEach(asset.upcomingSpends ?? []) { spend in
                         NavigationLink(value: spend) {
                             LabeledContent(spend.name ?? "", value: currencyFormatter.string(from: NSNumber(value: spend.cost ?? 0)) ?? "")
@@ -77,11 +77,9 @@ struct AssetView: View {
                         }
                         .padding(.vertical)
                     }
-                } header: {
-                    Text("Upcoming Spends")
                 }
             case false:
-                Section {
+                Section("Loans") {
                     ForEach(asset.loans ?? []) { loan in
                         NavigationLink(value: loan) {
                             AmountRow(symbol: loan.symbol ?? .defaultSymbol, label: loan.name ?? "", amount: loan.currentValue)
@@ -106,11 +104,25 @@ struct AssetView: View {
                         }
                         .padding(.vertical)
                     }
-                } header: {
-                    Text("Loans")
                 }
             default:
                 EmptyView()
+            }
+            
+            if asset.income == nil, 0 < asset.monthlyEarnings {
+                Section {
+                    Label {
+                        VStack(alignment: .leading) {
+                            Text("There is no associated income for this asset.")
+                            Button("Fix") {
+                                try? asset.generateIncome()
+                            }
+                            .buttonStyle(.borderless)
+                        }
+                    } icon: {
+                        Image(systemName: "exclamationmark.triangle")
+                    }
+                }
             }
         }
         .navigationTitle("Asset")
@@ -129,6 +141,11 @@ struct AssetView: View {
         }
         .onDisappear {
             asset.name = nameCopy
+            asset.income?.name = asset.name
+            asset.income?.symbol = asset.symbol
+            asset.income?.colorName = asset.colorName
+            asset.income?.monthlyEarnings = asset.monthlyEarnings
+            asset.income?.isLiquid = asset.isLiquid
         }
     }
     
@@ -149,7 +166,6 @@ struct AssetView: View {
             if let loans = asset.loans {
                 modelContext.delete(loans[offset])
             }
-//            asset.loans.remove(at: offset)
         }
     }
     
@@ -158,7 +174,6 @@ struct AssetView: View {
             if let spends = asset.upcomingSpends {
                 modelContext.delete(spends[offset])
             }
-//            asset.upcomingSpends.remove(at: offset)
         }
     }
     

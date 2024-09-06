@@ -60,7 +60,7 @@ struct NewIncomeSourceView: View {
                 Button("Add") {
                     self.income.monthlyEarnings = earnings
                     modelContext.insert(income)
-                    self.data.nonAssetIncome.append(self.income)
+                    self.data.income.append(self.income)
                     self.dismiss()
                 }
                 .disabled(earnings == nil)

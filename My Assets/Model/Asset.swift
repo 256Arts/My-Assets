@@ -34,6 +34,10 @@ final class Asset: Comparable {
         }
     }
     
+    enum AssetError: Error {
+        case missingName, noIncome
+    }
+    
     static func < (lhs: Asset, rhs: Asset) -> Bool {
         lhs.currentValue < rhs.currentValue
     }
@@ -49,7 +53,10 @@ final class Asset: Comparable {
     
     // MARK: Relationships
     
-    @Relationship(deleteRule: .cascade, inverse: \Debt.asset)
+    @Relationship(deleteRule: .cascade, inverse: \Income.fromAsset)
+    var income: Income?
+    
+    @Relationship(deleteRule: .nullify, inverse: \Debt.asset)
     var loans: [Debt]?
     
     @Relationship(deleteRule: .cascade, inverse: \UpcomingSpend.asset)
@@ -128,6 +135,18 @@ final class Asset: Comparable {
         
         let periodsSinceDate = date.timeIntervalSince(prevDate) / compoundFrequency.timeInterval
         return prevValue * pow(1 + (annualInterestFraction / compoundFrequency.periodsPerYear), periodsSinceDate)
+    }
+    
+    func generateIncome(transactionFrequency: TransactionFrequency? = nil, transactionDateStart: Date? = nil) throws {
+        guard let name else { throw AssetError.missingName }
+        guard 0 < monthlyEarnings else { throw AssetError.noIncome }
+        
+        let income = Income(name: name, symbol: symbol ?? .defaultSymbol, isLiquid: isLiquid ?? true, monthlyEarnings: monthlyEarnings, isPassive: true)
+        income.colorName = colorName
+        income.transactionFrequency = transactionFrequency
+        income.transactionDateStart = transactionDateStart
+        
+        self.income = income
     }
     
 }

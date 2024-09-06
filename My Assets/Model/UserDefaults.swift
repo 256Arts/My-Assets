@@ -22,6 +22,8 @@ extension UserDefaults {
         static let summaryScreenShowNetWorth = "summaryScreenShowNetWorth"
         static let summaryScreenNetWorthShowChart = "summaryScreenNetWorthShowChart"
         static let summaryScreenNetWorthShowPercentile = "summaryScreenNetWorthShowPercentile"
+        static let summaryScreenShowCashFlows = "summaryScreenShowCashFlows"
+        static let summaryScreenShowInsights = "summaryScreenShowInsights"
     }
     
     func register() {
@@ -35,7 +37,9 @@ extension UserDefaults {
             Key.summaryScreenBalanceShowChart: true,
             Key.summaryScreenShowNetWorth: true,
             Key.summaryScreenNetWorthShowChart: true,
-            Key.summaryScreenNetWorthShowPercentile: false
+            Key.summaryScreenNetWorthShowPercentile: false,
+            Key.summaryScreenShowCashFlows: true,
+            Key.summaryScreenShowInsights: true
         ])
     }
     

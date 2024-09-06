@@ -20,10 +20,7 @@ final class FinancialData: ObservableObject {
     
     @Published var debts: [Debt]
     
-    @Published var nonAssetIncome: [Income]
-    var income: [Income] {
-        (nonAssetIncome + assets.map({ Income(asset: $0) })).filter({ $0.monthlyEarnings != 0 }).sorted(by: >)
-    }
+    @Published var income: [Income]
     var totalLiquidIncome: Double {
         income.filter({ $0.isLiquid! }).reduce(0, { $0 + $1.monthlyEarnings! })
     }
@@ -98,11 +95,11 @@ final class FinancialData: ObservableObject {
         return netWorth(at: .now, type: type) + fv
     }
     
-    init(nonStockAssets: [Asset], stocks: [Stock], debts: [Debt], nonAssetIncome: [Income], expenses: [Expense]) {
+    init(nonStockAssets: [Asset], stocks: [Stock], debts: [Debt], income: [Income], expenses: [Expense]) {
         self.nonStockAssets = nonStockAssets
         self.stocks = stocks
         self.debts = debts
-        self.nonAssetIncome = nonAssetIncome
+        self.income = income
         self.expenses = expenses.filter { $0.parent == nil }
     }
     

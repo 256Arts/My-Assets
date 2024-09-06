@@ -47,6 +47,13 @@ func testDebt2() {
 }
 
 @Test
+func testLiveOffTime() {
+    let insights = InsightsGenerator(data: FinancialData(nonStockAssets: [Asset(value: 1_000)], stocks: [], debts: [], income: [], expenses: [Expense(monthlyCost: 100)]))
+    
+    #expect(insights.liveOffMonths == 10)
+}
+
+@Test
 func testWorldStats() {
     let dataYear = Calendar.current.date(from: DateComponents(year: 2020))!
     let worldStats = WorldFinanceStats.usHouseholdNetWorthPercentiles(at: dataYear)
@@ -58,7 +65,7 @@ func testWorldStats() {
 
 @Test
 func testNetWorthPercentile() {
-    let insights = InsightsGenerator(data: FinancialData(nonStockAssets: [], stocks: [], debts: [], nonAssetIncome: [], expenses: []))
+    let insights = InsightsGenerator(data: FinancialData(nonStockAssets: [], stocks: [], debts: [], income: [], expenses: []))
     let dataYear = Calendar.current.date(from: DateComponents(year: 2020))!
     let usa = Locale(identifier: "en_US")
     

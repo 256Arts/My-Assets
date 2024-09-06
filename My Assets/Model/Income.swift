@@ -27,8 +27,7 @@ final class Income: Schedulable, Comparable, Hashable {
     
     // MARK: Relationships
     
-    @Transient
-    var fromAsset: Bool = false
+    var fromAsset: Asset?
     
     // MARK: Computed Properties
     
@@ -60,17 +59,6 @@ final class Income: Schedulable, Comparable, Hashable {
         self.isLiquid = true
         self.monthlyEarnings = monthlyEarnings
         self.isPassive = isPassive
-        self.fromAsset = false
-    }
-    
-    init(asset: Asset) {
-        name = asset.name
-        symbol = asset.symbol
-        colorName = asset.colorName
-        isLiquid = asset.isLiquid
-        monthlyEarnings = asset.monthlyEarnings
-        isPassive = true
-        fromAsset = true
     }
     
 }
