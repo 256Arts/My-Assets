@@ -12,8 +12,10 @@ import SwiftUI
 
 struct RootTabView: View {
     
-    enum Tab {
+    enum Tabs: Identifiable {
         case summary, assetsAndDebts, income, expenses, creditCards
+        
+        var id: Self { self }
     }
     
     let welcomeFeatures = [
@@ -29,36 +31,26 @@ struct RootTabView: View {
     @Query var income: [Income]
     @Query var expenses: [Expense]
     
-    @State var selectedTab: Tab = .summary
+    @State var selectedTab: Tabs = .summary
     @State var showingWelcome = false
     
     var body: some View {
         TabView(selection: $selectedTab) {
-            SummaryView()
-                .tabItem {
-                    Label("Summary", systemImage: "chart.line.uptrend.xyaxis")
-                }
-                .tag(Tab.summary)
-            AssetsAndDebtsView()
-                .tabItem {
-                    Label("Assets/Debts", systemImage: "banknote")
-                }
-                .tag(Tab.assetsAndDebts)
-            IncomeView()
-                .tabItem {
-                    Label("Income", systemImage: "tray.and.arrow.down")
-                }
-                .tag(Tab.income)
-            ExpensesView()
-                .tabItem {
-                    Label("Expenses", systemImage: "tray.and.arrow.up")
-                }
-                .tag(Tab.expenses)
-            CreditCardList()
-                .tabItem {
-                    Label("Credit Cards", systemImage: "creditcard")
-                }
-                .tag(Tab.creditCards)
+            Tab("Summary", systemImage: "chart.line.uptrend.xyaxis", value: .summary) {
+                SummaryView()
+            }
+            Tab("Assets/Debts", systemImage: "banknote", value: .assetsAndDebts) {
+                AssetsAndDebtsView()
+            }
+            Tab("Income", systemImage: "tray.and.arrow.down", value: .income) {
+                IncomeView()
+            }
+            Tab("Expenses", systemImage: "tray.and.arrow.up", value: .expenses) {
+                ExpensesView()
+            }
+            Tab("Credit Cards", systemImage: "creditcard", value: .creditCards) {
+                CreditCardList()
+            }
         }
         .accentColor({
             switch selectedTab {

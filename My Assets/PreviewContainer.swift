@@ -24,24 +24,24 @@ let previewDebts = [
 ]
 @MainActor
 let previewIncome = [
-    Income(name: "Work", symbol: .building, isLiquid: true, monthlyEarnings: 10_000, isPassive: false),
-    Income(name: "App Sales", symbol: .app, isLiquid: true, monthlyEarnings: 1_000, isPassive: true),
-    Income(name: "Etsy Store", symbol: .shippingbox, isLiquid: true, monthlyEarnings: 200, isPassive: false)
+    Income(name: "Work", symbol: .building, isLiquid: true, amount: 10_000, isPassive: false),
+    Income(name: "App Sales", symbol: .app, isLiquid: true, amount: 1_000, isPassive: true),
+    Income(name: "Etsy Store", symbol: .shippingbox, isLiquid: true, amount: 200, isPassive: false)
 ]
 @MainActor
 let previewExpenses = [
-    Expense(name: "Electricity", symbol: .bolt, category: .variable, monthlyCost: 150),
-    Expense(name: "Water", symbol: .drop, category: .variable, monthlyCost: 100),
-    Expense(name: "Property Tax", symbol: .house, category: .fixed, monthlyCost: 300),
-    Expense(name: "Credit Card", symbol: .creditcard, category: .discretionary, monthlyCost: 2_000),
-    Expense(name: "Internet", symbol: .wifi, category: .fixed, monthlyCost: 100),
-    Expense(name: "Phone Plan", symbol: .iphone, category: .fixed, monthlyCost: 100),
-    Expense(name: "Streaming", symbol: .tv, category: .fixed, monthlyCost: 25),
-    Expense(name: "Take Out", symbol: .takeoutbag, category: .discretionary, monthlyCost: 50),
-    Expense(name: "Repairs", symbol: .hammer, category: .intermittent, monthlyCost: 200),
-    Expense(name: "Cloud Storage", symbol: .icloud, category: .fixed, monthlyCost: 10),
-    Expense(name: "Home Insurance", symbol: .house, category: .fixed, monthlyCost: 100),
-    Expense(name: "Train Pass", symbol: .tram, category: .intermittent, monthlyCost: 30)
+    Expense(name: "Electricity", symbol: .bolt, category: .variable, baseAmount: 150),
+    Expense(name: "Water", symbol: .drop, category: .variable, baseAmount: 100),
+    Expense(name: "Property Tax", symbol: .house, category: .fixed, baseAmount: 300),
+    Expense(name: "Credit Card", symbol: .creditcard, category: .discretionary, baseAmount: 2_000),
+    Expense(name: "Internet", symbol: .wifi, category: .fixed, baseAmount: 100),
+    Expense(name: "Phone Plan", symbol: .iphone, category: .fixed, baseAmount: 100),
+    Expense(name: "Streaming", symbol: .tv, category: .fixed, baseAmount: 25),
+    Expense(name: "Take Out", symbol: .takeoutbag, category: .discretionary, baseAmount: 50),
+    Expense(name: "Repairs", symbol: .hammer, category: .intermittent, baseAmount: 200),
+    Expense(name: "Cloud Storage", symbol: .icloud, category: .fixed, baseAmount: 10),
+    Expense(name: "Home Insurance", symbol: .house, category: .fixed, baseAmount: 100),
+    Expense(name: "Train Pass", symbol: .tram, category: .intermittent, baseAmount: 30)
 ]
 @MainActor
 let previewCreditCards = [

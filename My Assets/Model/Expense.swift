@@ -64,9 +64,9 @@ final class Expense: Schedulable, Hashable, Comparable {
     var symbol: Symbol?
     var colorName: ColorName?
     var category: Category?
-    var baseMonthlyCost: Double?
-    var transactionDateStart: Date?
-    var transactionFrequency: TransactionFrequency?
+    var baseAmount: Double?
+    var startDate: Date?
+    var frequency: TransactionFrequency?
     
     // MARK: Relationships
     
@@ -81,37 +81,37 @@ final class Expense: Schedulable, Hashable, Comparable {
     // MARK: Computed Properties
     
     var id: String {
-        (name ?? "") + (symbol?.rawValue ?? "") + (colorName?.rawValue ?? "") + String(baseMonthlyCost ?? 0)
+        (name ?? "") + (symbol?.rawValue ?? "") + (colorName?.rawValue ?? "") + String(baseAmount ?? 0)
     }
-    var transactionAmount: Double? {
-        guard let transactionFrequency else { return nil }
+    var amount: Double? {
+        guard let frequency else { return nil }
         
-        return -monthlyCost() / transactionFrequency.timesPerMonth
+        return -monthlyCost() / frequency.timesPerMonth
     }
     var nextTransactionDate: Date? {
-        guard let transactionFrequency, let transactionDateStart else { return nil }
+        guard let frequency, let startDate else { return nil }
         
         let calendar = Calendar.autoupdatingCurrent
-        var nextDate = transactionDateStart
+        var nextDate = startDate
         while nextDate.timeIntervalSince(calendar.startOfDay(for: .now)) < 0 {
-            nextDate = calendar.date(byAdding: transactionFrequency.calendarValues.0, value: transactionFrequency.calendarValues.1, to: nextDate)!
+            nextDate = calendar.date(byAdding: frequency.calendarValues.0, value: frequency.calendarValues.1, to: nextDate)!
         }
         return nextDate
     }
     
     // MARK: Init
     
-    init(name: String = "", symbol: Symbol = .defaultSymbol, category: Category = .discretionary, monthlyCost: Double, children: [Expense] = []) {
+    init(name: String = "", symbol: Symbol = .defaultSymbol, category: Category = .discretionary, baseAmount: Double, children: [Expense] = []) {
         self.name = name
         self.symbol = symbol
         self.colorName = .gray
         self.category = category
-        self.baseMonthlyCost = monthlyCost
+        self.baseAmount = baseAmount
         self.children = children
     }
     
     func monthlyCost(excludingSavings: Bool = false) -> Double {
-        let baseMonthlyCost = (excludingSavings && category == .savings) ? 0.0 : baseMonthlyCost ?? 0.0
+        let baseMonthlyCost = (excludingSavings && category == .savings) ? 0.0 : (baseAmount ?? 0.0) * (frequency?.timesPerMonth ?? 1)
         
         return baseMonthlyCost + (children ?? []).reduce(0, { $0 + $1.monthlyCost(excludingSavings: excludingSavings) })
     }

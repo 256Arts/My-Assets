@@ -35,11 +35,20 @@ struct DebtView: View {
             }
             
             Section {
-                OptionalCurrencyField("Monthly Payment", value: $debt.monthlyPayment)
+                OptionalCurrencyField("Amount", value: $debt.paymentAmount)
+                Picker("Frequency", selection: $debt.paymentFrequency) {
+                    Text("-")
+                        .tag(nil as TransactionFrequency?)
+                    ForEach(TransactionFrequency.allCases) { freq in
+                        Text(freq.rawValue.capitalized)
+                            .tag(freq as TransactionFrequency?)
+                    }
+                }
+            } header: {
+                Text("Payments")
             } footer: {
                 if let monthsToPayOffString = debt.monthsToPayOffString {
                     Text("\(monthsToPayOffString) remaining")
-                        .foregroundStyle(.secondary)
                 }
             }
             
@@ -68,8 +77,9 @@ struct DebtView: View {
             debt.expense?.name = debt.name
             debt.expense?.symbol = debt.symbol
             debt.expense?.colorName = debt.colorName
-            debt.expense?.children?.first(where: { $0.name == "Interest" })?.baseMonthlyCost = debt.monthlyInterest
-            debt.expense?.children?.first(where: { $0.name == "Principal" })?.baseMonthlyCost = (debt.monthlyPayment ?? debt.monthlyInterest) - debt.monthlyInterest
+            debt.expense?.frequency = debt.paymentFrequency
+            debt.expense?.children?.first(where: { $0.name == "Interest" })?.baseAmount = debt.paymentInterest
+            debt.expense?.children?.first(where: { $0.name == "Principal" })?.baseAmount = (debt.paymentAmount ?? debt.paymentInterest) - debt.paymentInterest
         }
     }
 }

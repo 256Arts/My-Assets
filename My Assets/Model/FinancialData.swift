@@ -22,13 +22,13 @@ final class FinancialData: ObservableObject {
     
     @Published var income: [Income]
     var totalLiquidIncome: Double {
-        income.filter({ $0.isLiquid! }).reduce(0, { $0 + $1.monthlyEarnings! })
+        income.filter({ $0.isLiquid == true }).reduce(0, { $0 + ($1.monthlyEarnings ?? 0) })
     }
     var totalPassiveIncome: Double {
-        income.filter({ $0.isPassive! }).reduce(0, { $0 + $1.monthlyEarnings! })
+        income.filter({ $0.isPassive == true }).reduce(0, { $0 + ($1.monthlyEarnings ?? 0) })
     }
     var totalIncome: Double {
-        income.reduce(0, { $0 + $1.monthlyEarnings! })
+        income.reduce(0, { $0 + ($1.monthlyEarnings ?? 0) })
     }
     
     @Published var expenses: [Expense]

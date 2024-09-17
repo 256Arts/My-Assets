@@ -20,10 +20,10 @@ final class Income: Schedulable, Comparable, Hashable {
     var symbol: Symbol?
     var colorName: ColorName?
     var isLiquid: Bool?
-    var monthlyEarnings: Double?
+    var amount: Double?
     var isPassive: Bool?
-    var transactionDateStart: Date?
-    var transactionFrequency: TransactionFrequency?
+    var startDate: Date?
+    var frequency: TransactionFrequency?
     
     // MARK: Relationships
     
@@ -34,30 +34,30 @@ final class Income: Schedulable, Comparable, Hashable {
     var id: String {
         (name ?? "") + (symbol?.rawValue ?? "") + (colorName?.rawValue ?? "") + String(monthlyEarnings ?? 0)
     }
-    var transactionAmount: Double? {
-        guard let monthlyEarnings, let transactionFrequency else { return nil }
+    var monthlyEarnings: Double? {
+        guard let amount, let frequency else { return amount }
         
-        return monthlyEarnings / transactionFrequency.timesPerMonth
+        return amount * frequency.timesPerMonth
     }
     var nextTransactionDate: Date? {
-        guard let transactionFrequency, let transactionDateStart else { return nil }
+        guard let frequency, let startDate else { return nil }
         
         let calendar = Calendar.autoupdatingCurrent
-        var nextDate = transactionDateStart
+        var nextDate = startDate
         while nextDate.timeIntervalSince(calendar.startOfDay(for: .now)) < 0 {
-            nextDate = calendar.date(byAdding: transactionFrequency.calendarValues.0, value: transactionFrequency.calendarValues.1, to: nextDate)!
+            nextDate = calendar.date(byAdding: frequency.calendarValues.0, value: frequency.calendarValues.1, to: nextDate)!
         }
         return nextDate
     }
     
     // MARK: Init
     
-    init(name: String, symbol: Symbol, isLiquid: Bool, monthlyEarnings: Double, isPassive: Bool) {
+    init(name: String, symbol: Symbol, isLiquid: Bool, amount: Double, isPassive: Bool) {
         self.name = name
         self.symbol = symbol
         self.colorName = .gray
         self.isLiquid = true
-        self.monthlyEarnings = monthlyEarnings
+        self.amount = amount
         self.isPassive = isPassive
     }
     

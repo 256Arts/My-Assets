@@ -66,7 +66,7 @@ struct IncomeView: View {
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject var data: FinancialData
     
-    @Query(sort: [SortDescriptor(\Income.monthlyEarnings, order: .reverse)]) var incomes: [Income]
+    @Query(sort: [SortDescriptor(\Income.amount, order: .reverse)]) var incomes: [Income]
     
     @State var selectedIncome: Double?
     @State var selectedSector: SectorData?
@@ -74,13 +74,13 @@ struct IncomeView: View {
     @State var showingDeleteError = false
 
     var workingIncome: Double {
-        incomes.filter({ !$0.isPassive! }).reduce(0, { $0 + $1.monthlyEarnings! })
+        incomes.filter({ $0.isPassive != true }).reduce(0, { $0 + ($1.monthlyEarnings ?? 0) })
     }
     var passiveLiquidIncome: Double {
-        incomes.filter({ $0.isPassive! && $0.isLiquid! }).reduce(0, { $0 + $1.monthlyEarnings! })
+        incomes.filter({ $0.isPassive == true && $0.isLiquid == true }).reduce(0, { $0 + ($1.monthlyEarnings ?? 0) })
     }
     var passiveNonLiquidIncome: Double {
-        incomes.filter({ $0.isPassive! && !$0.isLiquid! }).reduce(0, { $0 + $1.monthlyEarnings! })
+        incomes.filter({ $0.isPassive == true && $0.isLiquid != true }).reduce(0, { $0 + ($1.monthlyEarnings ?? 0) })
     }
     var pieChartData: [SectorData] {
         [
@@ -151,11 +151,11 @@ struct IncomeView: View {
                 Section {
                     ForEach(incomes) { income in
                         NavigationLink(value: income) {
-                            AmountRow(symbol: income.symbol ?? .defaultSymbol, label: income.name ?? "", amount: income.monthlyEarnings!)
+                            AmountRow(symbol: income.symbol ?? .defaultSymbol, label: income.name ?? "", amount: income.monthlyEarnings ?? 0)
                                 .opacity((selectedSector?.effort ?? .working) == .working ? 1 : 0.5)
                                 .accessibilityElement()
                                 .accessibilityLabel(income.name ?? "")
-                                .accessibilityValue(currencyFormatter.string(from: NSNumber(value: income.monthlyEarnings!))!)
+                                .accessibilityValue(currencyFormatter.string(from: NSNumber(value: income.monthlyEarnings ?? 0))!)
                         }
                     }
                     .onDelete(perform: delete)
@@ -174,11 +174,11 @@ struct IncomeView: View {
                 if incomes.contains(where: { $0.fromAsset != nil && !$0.isLiquid! }) {
                     Section {
                         ForEach(incomes.filter({ $0.fromAsset != nil && !$0.isLiquid! })) { income in
-                            AmountRow(symbol: income.symbol ?? .defaultSymbol, label: income.name ?? "", amount: income.monthlyEarnings!)
+                            AmountRow(symbol: income.symbol ?? .defaultSymbol, label: income.name ?? "", amount: income.monthlyEarnings ?? 0)
                                 .opacity((selectedSector?.effort ?? .passiveNonLiquid) == .passiveNonLiquid ? 1 : 0.5)
                                 .accessibilityElement()
                                 .accessibilityLabel(income.name ?? "")
-                                .accessibilityValue(currencyFormatter.string(from: NSNumber(value: income.monthlyEarnings!))!)
+                                .accessibilityValue(currencyFormatter.string(from: NSNumber(value: income.monthlyEarnings ?? 0))!)
                         }
                         
                         HStack {

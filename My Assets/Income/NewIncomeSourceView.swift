@@ -15,7 +15,7 @@ struct NewIncomeSourceView: View {
     
     @EnvironmentObject var data: FinancialData
     
-    @State var income = Income(name: "", symbol: Symbol.defaultSymbol, isLiquid: true, monthlyEarnings: 0, isPassive: false)
+    @Bindable var income = Income(name: "", symbol: Symbol.defaultSymbol, isLiquid: true, amount: 0, isPassive: false)
     @State var earnings: Double?
     
     var body: some View {
@@ -29,7 +29,7 @@ struct NewIncomeSourceView: View {
                     #if !os(macOS)
                     .textInputAutocapitalization(.words)
                     #endif
-                OptionalCurrencyField("Monthly Earnings", value: $earnings)
+                OptionalCurrencyField("Earnings", value: $earnings)
                 Toggle("Liquid", isOn: Binding(get: {
                     income.isLiquid ?? true
                 }, set: { newValue in
@@ -40,6 +40,21 @@ struct NewIncomeSourceView: View {
                 }, set: { newValue in
                     income.isPassive = newValue
                 }))
+                Picker("Frequency", selection: $income.frequency) {
+                    Text("-")
+                        .tag(nil as TransactionFrequency?)
+                    ForEach(TransactionFrequency.allCases) { freq in
+                        Text(freq.rawValue.capitalized)
+                            .tag(freq as TransactionFrequency?)
+                    }
+                }
+                if income.frequency != nil {
+                    DatePicker("Starting Date", selection: Binding(get: {
+                        income.startDate ?? .now
+                    }, set: { newValue in
+                        income.startDate = newValue
+                    }), displayedComponents: .date)
+                }
             }
             Section {
                 SymbolPicker(selected: Binding(get: {
@@ -58,7 +73,7 @@ struct NewIncomeSourceView: View {
             }
             ToolbarItem(placement: .confirmationAction) {
                 Button("Add") {
-                    self.income.monthlyEarnings = earnings
+                    self.income.amount = earnings
                     modelContext.insert(income)
                     self.data.income.append(self.income)
                     self.dismiss()

@@ -21,9 +21,9 @@ struct NewDebtView: View {
     @State var interest: Double?
     @State var value: Double?
     @State var minimumMonthlyPayment: Double?
-    @State var monthlyPayment: Double?
-    @State var transactionFrequency: TransactionFrequency?
-    @State var transactionDateStart: Date?
+    @State var paymentAmount: Double?
+    @State var frequency: TransactionFrequency?
+    @State var startDate: Date?
     
     var body: some View {
         Form {
@@ -39,9 +39,10 @@ struct NewDebtView: View {
                 OptionalCurrencyField("Value", value: $value)
                 OptionalPercentField("Annual Interest", value: $interest)
             }
-            Section {
-                OptionalCurrencyField("Monthly Payment", value: $monthlyPayment)
-                Picker("Transaction Frequency", selection: $transactionFrequency) {
+            
+            Section("Payments") {
+                OptionalCurrencyField("Amount", value: $paymentAmount)
+                Picker("Frequency", selection: $frequency) {
                     Text("-")
                         .tag(nil as TransactionFrequency?)
                     ForEach(TransactionFrequency.allCases) { freq in
@@ -49,14 +50,15 @@ struct NewDebtView: View {
                             .tag(freq as TransactionFrequency?)
                     }
                 }
-                if transactionFrequency != nil {
+                if frequency != nil {
                     DatePicker("Starting Date", selection: Binding(get: {
-                        transactionDateStart ?? .now
+                        startDate ?? .now
                     }, set: { newValue in
-                        transactionDateStart = newValue
+                        startDate = newValue
                     }), displayedComponents: .date)
                 }
             }
+            
             Section {
                 SymbolPicker(selected: Binding(get: {
                     debt.symbol ?? .defaultSymbol
@@ -86,8 +88,8 @@ struct NewDebtView: View {
         .onChange(of: interest) { _, newValue in
             debt.annualInterestFraction = newValue
         }
-        .onChange(of: monthlyPayment) { _, newValue in
-            debt.monthlyPayment = newValue
+        .onChange(of: paymentAmount) { _, newValue in
+            debt.paymentAmount = newValue
         }
         .onChange(of: debt.symbol) { _, newValue in
             if (debt.name ?? "").isEmpty {
@@ -103,7 +105,7 @@ struct NewDebtView: View {
         self.debt.annualInterestFraction = interest
         self.debt.currentValue = value
         
-        try? self.debt.generateExpense(transactionFrequency: transactionFrequency, transactionDateStart: transactionDateStart)
+        try? self.debt.generateExpense(startDate: startDate)
         
         modelContext.insert(debt)
         if let parentAsset {

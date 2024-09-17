@@ -31,15 +31,15 @@ final class InsightsGenerator {
         // Note: We only care about liquid values in this entire func.
         guard 0 < data.balance(at: .now) else { return 0.0 }
         
-        let passiveIncome = data.income.filter { $0.isPassive! && $0.isLiquid! }
-        let totalPassiveIncome = passiveIncome.reduce(0.0, { $0 + $1.monthlyEarnings! })
+        let passiveIncome = data.income.filter { $0.isPassive == true && $0.isLiquid == true }
+        let totalPassiveIncome = passiveIncome.reduce(0.0, { $0 + ($1.monthlyEarnings ?? 0) })
         guard totalPassiveIncome < data.totalExpenses else { return .infinity }
         
         // Static = Same amount every month
         // Exclude debt interest since it's included in `avgAnnualBalanceInterest`
         let totalStaticExpenses = data.expenses.filter { $0.fromDebt == nil }.reduce(0.0, { $0 + $1.monthlyCost(excludingSavings: true) })
         // Exclude asset interest since it's included in `avgAnnualBalanceInterest`
-        let totalStaticPassiveIncome = passiveIncome.filter({ $0.fromAsset == nil }).reduce(0.0, { $0 + $1.monthlyEarnings! })
+        let totalStaticPassiveIncome = passiveIncome.filter({ $0.fromAsset == nil }).reduce(0.0, { $0 + ($1.monthlyEarnings ?? 0) })
         let staticMonthlyDrain = totalStaticExpenses - totalStaticPassiveIncome
         
         // Dynamic = Different amount every month based on interest percentages
@@ -131,7 +131,7 @@ final class InsightsGenerator {
         guard 0 < avgAnnualBalanceInterest else { return nil }
         
         let totalStaticExpenses = data.expenses.filter { $0.fromDebt == nil }.reduce(0.0, { $0 + $1.monthlyCost(excludingSavings: true) })
-        let totalStaticPassiveIncome = data.income.filter { $0.isPassive! && $0.fromAsset == nil }.reduce(0.0, { $0 + $1.monthlyEarnings! })
+        let totalStaticPassiveIncome = data.income.filter { $0.isPassive! && $0.fromAsset == nil }.reduce(0.0, { $0 + ($1.monthlyEarnings ?? 0) })
         let staticMonthlyDrain = totalStaticExpenses - totalStaticPassiveIncome
         
         let requiredNewAssets = staticMonthlyDrain / (avgAnnualBalanceInterest / 12)

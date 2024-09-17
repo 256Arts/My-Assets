@@ -112,23 +112,6 @@ final class Asset: Comparable {
         prevValue = stock.price ?? 0.00 * Double(stock.quantity ?? 1)
         prevDate = Date()
     }
-
-    enum CodingKeys: String, CodingKey {
-        case name, symbol, colorName, isLiquid, compoundFrequency, annualInterestFraction, prevValue, prevDate
-    }
-
-    // For legacy decode
-    init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        name = try values.decode(String.self, forKey: .name)
-        symbol = try values.decode(Symbol.self, forKey: .symbol)
-        colorName = try values.decode(ColorName.self, forKey: .colorName)
-        isLiquid = (try? values.decode(Bool.self, forKey: .isLiquid)) ?? true
-        compoundFrequency = (try? values.decode(CompoundFrequency.self, forKey: .compoundFrequency)) ?? Asset.CompoundFrequency.none
-        annualInterestFraction = try values.decode(Double.self, forKey: .annualInterestFraction)
-        prevValue = try values.decode(Double.self, forKey: .prevValue)
-        prevDate = try values.decode(Date.self, forKey: .prevDate)
-    }
     
     func currentValue(at date: Date) -> Double {
         guard let prevDate, let prevValue, let compoundFrequency, let annualInterestFraction else { return .nan }
@@ -137,14 +120,14 @@ final class Asset: Comparable {
         return prevValue * pow(1 + (annualInterestFraction / compoundFrequency.periodsPerYear), periodsSinceDate)
     }
     
-    func generateIncome(transactionFrequency: TransactionFrequency? = nil, transactionDateStart: Date? = nil) throws {
+    func generateIncome(frequency: TransactionFrequency? = nil, startDate: Date? = nil) throws {
         guard let name else { throw AssetError.missingName }
         guard 0 < monthlyEarnings else { throw AssetError.noIncome }
         
-        let income = Income(name: name, symbol: symbol ?? .defaultSymbol, isLiquid: isLiquid ?? true, monthlyEarnings: monthlyEarnings, isPassive: true)
+        let income = Income(name: name, symbol: symbol ?? .defaultSymbol, isLiquid: isLiquid ?? true, amount: monthlyEarnings, isPassive: true)
         income.colorName = colorName
-        income.transactionFrequency = transactionFrequency
-        income.transactionDateStart = transactionDateStart
+        income.frequency = frequency
+        income.startDate = startDate
         
         self.income = income
     }

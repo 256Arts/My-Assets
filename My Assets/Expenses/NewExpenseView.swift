@@ -17,7 +17,7 @@ struct NewExpenseView: View {
     
     @EnvironmentObject var data: FinancialData
     
-    @Bindable var expense = Expense(name: "", symbol: Symbol.defaultSymbol, category: .discretionary, monthlyCost: 0)
+    @Bindable var expense = Expense(name: "", symbol: Symbol.defaultSymbol, category: .discretionary, baseAmount: 0)
     @State var cost: Double?
     
     var body: some View {
@@ -31,12 +31,27 @@ struct NewExpenseView: View {
                 #if !os(macOS)
                 .textInputAutocapitalization(.words)
                 #endif
-                OptionalCurrencyField("Monthly Cost", value: $cost)
+                OptionalCurrencyField("Amount", value: $cost)
                 Picker("Category", selection: $expense.category) {
                     ForEach(Expense.Category.allCases) { category in
                         Text(category.name)
                             .tag(category as Expense.Category?)
                     }
+                }
+                Picker("Frequency", selection: $expense.frequency) {
+                    Text("-")
+                        .tag(nil as TransactionFrequency?)
+                    ForEach(TransactionFrequency.allCases) { freq in
+                        Text(freq.rawValue.capitalized)
+                            .tag(freq as TransactionFrequency?)
+                    }
+                }
+                if expense.frequency != nil {
+                    DatePicker("Starting Date", selection: Binding(get: {
+                        expense.startDate ?? .now
+                    }, set: { newValue in
+                        expense.startDate = newValue
+                    }), displayedComponents: .date)
                 }
             }
             Section {
@@ -56,7 +71,7 @@ struct NewExpenseView: View {
             }
             ToolbarItem(placement: .confirmationAction) {
                 Button("Add") {
-                    self.expense.baseMonthlyCost = cost
+                    self.expense.baseAmount = cost
                     modelContext.insert(expense)
                     if let parentExpense = self.parentExpense {
                         expense.parent = parentExpense

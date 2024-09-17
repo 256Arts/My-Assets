@@ -13,6 +13,7 @@ enum TransactionFrequency: String, CaseIterable, Codable, Identifiable {
     case biweekly
     case bimonthly
     case monthly
+    case yearly
     
     var id: Self { self }
     
@@ -26,6 +27,8 @@ enum TransactionFrequency: String, CaseIterable, Codable, Identifiable {
             2
         case .monthly:
             1
+        case .yearly:
+            1 / 12
         }
     }
     
@@ -39,6 +42,8 @@ enum TransactionFrequency: String, CaseIterable, Codable, Identifiable {
             (.day, 15)
         case .monthly:
             (.month, 1)
+        case .yearly:
+            (.year, 1)
         }
     }
 }

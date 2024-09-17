@@ -15,7 +15,7 @@ struct ExpensesView: View {
     
     @Query(filter: #Predicate<Expense> {
         $0.parent == nil
-    }, sort: [SortDescriptor(\.baseMonthlyCost, order: .reverse)]) var expenses: [Expense]
+    }, sort: [SortDescriptor(\.baseAmount, order: .reverse)]) var expenses: [Expense]
     
     var body: some View {
         List {

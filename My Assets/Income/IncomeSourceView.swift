@@ -31,7 +31,7 @@ struct IncomeSourceView: View {
                 .textInputAutocapitalization(.words)
                 #endif
                 .disabled(income.fromAsset != nil)
-            OptionalCurrencyField("Monthly Earnings", value: $income.monthlyEarnings)
+            OptionalCurrencyField("Earnings", value: $income.amount)
                 .disabled(income.fromAsset != nil)
             Toggle("Liquid", isOn: Binding(get: {
                 income.isLiquid ?? true
@@ -45,7 +45,7 @@ struct IncomeSourceView: View {
                 income.isPassive = newValue
             }))
             .disabled(income.fromAsset != nil)
-            Picker("Transaction Frequency", selection: $income.transactionFrequency) {
+            Picker("Frequency", selection: $income.frequency) {
                 Text("-")
                     .tag(nil as TransactionFrequency?)
                 ForEach(TransactionFrequency.allCases) { freq in
@@ -53,11 +53,11 @@ struct IncomeSourceView: View {
                         .tag(freq as TransactionFrequency?)
                 }
             }
-            if income.transactionFrequency != nil {
+            if income.frequency != nil {
                 DatePicker("Starting Date", selection: Binding(get: {
-                    income.transactionDateStart ?? .now
+                    income.startDate ?? .now
                 }, set: { newValue in
-                    income.transactionDateStart = newValue
+                    income.startDate = newValue
                 }), displayedComponents: .date)
             }
         }
@@ -72,5 +72,5 @@ struct IncomeSourceView: View {
 }
 
 #Preview {
-    IncomeSourceView(income: Income(name: "", symbol: Symbol.defaultSymbol, isLiquid: true, monthlyEarnings: 100.00, isPassive: true))
+    IncomeSourceView(income: Income(name: "", symbol: Symbol.defaultSymbol, isLiquid: true, amount: 100.00, isPassive: true))
 }

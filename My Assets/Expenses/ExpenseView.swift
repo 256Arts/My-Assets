@@ -38,7 +38,7 @@ struct ExpenseView: View {
                     .textInputAutocapitalization(.words)
                     #endif
                     .disabled(expense.fromDebt != nil)
-                OptionalCurrencyField("Monthly Cost", value: $expense.baseMonthlyCost)
+                OptionalCurrencyField("Amount", value: $expense.baseAmount)
                     .disabled(expense.fromDebt != nil)
                 Picker("Category", selection: $expense.category) {
                     ForEach(Expense.Category.allCases) { category in
@@ -46,7 +46,7 @@ struct ExpenseView: View {
                             .tag(category as Expense.Category?)
                     }
                 }
-                Picker("Transaction Frequency", selection: $expense.transactionFrequency) {
+                Picker("Frequency", selection: $expense.frequency) {
                     Text("-")
                         .tag(nil as TransactionFrequency?)
                     ForEach(TransactionFrequency.allCases) { freq in
@@ -54,11 +54,11 @@ struct ExpenseView: View {
                             .tag(freq as TransactionFrequency?)
                     }
                 }
-                if expense.transactionFrequency != nil {
+                if expense.frequency != nil {
                     DatePicker("Starting Date", selection: Binding(get: {
-                        expense.transactionDateStart ?? .now
+                        expense.startDate ?? .now
                     }, set: { newValue in
-                        expense.transactionDateStart = newValue
+                        expense.startDate = newValue
                     }), displayedComponents: .date)
                 }
             }
@@ -111,5 +111,5 @@ struct ExpenseView: View {
 }
 
 #Preview {
-    ExpenseView(expense: Expense(name: "", symbol: Symbol.defaultSymbol, category: .discretionary, monthlyCost: 9.99))
+    ExpenseView(expense: Expense(name: "", symbol: Symbol.defaultSymbol, category: .discretionary, baseAmount: 9.99))
 }

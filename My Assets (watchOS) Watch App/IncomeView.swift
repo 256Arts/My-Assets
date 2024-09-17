@@ -13,7 +13,7 @@ struct IncomeView: View {
     
     @EnvironmentObject var data: FinancialData
     
-    @Query(sort: [SortDescriptor(\Income.monthlyEarnings, order: .reverse)]) var incomes: [Income]
+    @Query(sort: [SortDescriptor(\Income.amount, order: .reverse)]) var incomes: [Income]
     
     var body: some View {
         List {

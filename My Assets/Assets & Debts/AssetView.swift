@@ -144,7 +144,7 @@ struct AssetView: View {
             asset.income?.name = asset.name
             asset.income?.symbol = asset.symbol
             asset.income?.colorName = asset.colorName
-            asset.income?.monthlyEarnings = asset.monthlyEarnings
+            asset.income?.amount = asset.monthlyEarnings
             asset.income?.isLiquid = asset.isLiquid
         }
     }

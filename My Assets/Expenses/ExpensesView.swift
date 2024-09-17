@@ -32,7 +32,7 @@ struct ExpensesView: View {
     
     @Query(filter: #Predicate<Expense> {
         $0.parent == nil
-    }, sort: [SortDescriptor(\.baseMonthlyCost, order: .reverse)]) var rootExpenses: [Expense]
+    }, sort: [SortDescriptor(\.baseAmount, order: .reverse)]) var rootExpenses: [Expense]
     @Query var expenses: [Expense]
     @Query var debts: [Debt]
     @Query var upcomingSpends: [UpcomingSpend]
@@ -42,7 +42,7 @@ struct ExpensesView: View {
     
     var pieChartData: [SectorData] {
         Expense.Category.allCases.map { category in
-            SectorData(category: category, amount: expenses.filter({ $0.category == category }).reduce(0.0, { $0 + ($1.baseMonthlyCost ?? 0.0) }))
+            SectorData(category: category, amount: expenses.filter({ $0.category == category }).reduce(0.0, { $0 + ($1.baseAmount ?? 0.0) }))
         }
     }
     

@@ -24,7 +24,8 @@ final class Debt: Hashable, Comparable {
     var symbol: Symbol?
     var colorName: ColorName?
     var annualInterestFraction: Double?
-    var monthlyPayment: Double?
+    var paymentAmount: Double?
+    var paymentFrequency: TransactionFrequency?
     private var prevValue: Double?
     private var prevDate: Date?
     
@@ -47,17 +48,19 @@ final class Debt: Hashable, Comparable {
             prevDate = Date()
         }
     }
-    var monthlyInterest: Double {
+    var paymentInterest: Double {
         guard let annualInterestFraction else { return .nan }
         
-        return currentValue * annualInterestFraction / 12.0
+        return currentValue * annualInterestFraction / (12.0 * (paymentFrequency?.timesPerMonth ?? 1))
     }
     var monthsToPayOff: Double {
-        guard let annualInterestFraction, let monthlyPayment else { return .nan }
+        guard let annualInterestFraction, let paymentAmount else { return .nan }
         
-        guard !monthlyPayment.isZero else {
+        guard 0 < paymentAmount else {
             return .infinity
         }
+        
+        let monthlyPayment = paymentAmount * (paymentFrequency?.timesPerMonth ?? 1)
         
         guard !annualInterestFraction.isZero else {
             return currentValue / monthlyPayment
@@ -90,15 +93,17 @@ final class Debt: Hashable, Comparable {
         self.symbol = symbol
         self.colorName = .gray
         self.annualInterestFraction = 0
-        self.monthlyPayment = 0
+        self.paymentAmount = 0
+        self.paymentFrequency = .monthly
         self.prevValue = value
         self.prevDate = Date()
     }
     
     func currentValue(at date: Date) -> Double {
-        guard let prevDate, let prevValue, let annualInterestFraction, let monthlyPayment else { return .nan }
+        guard let prevDate, let prevValue, let annualInterestFraction, let paymentAmount else { return .nan }
         
         let monthsSinceDate = date.timeIntervalSince(prevDate) / TimeInterval.month
+        let monthlyPayment = paymentAmount * (paymentFrequency?.timesPerMonth ?? 1)
         
         guard !annualInterestFraction.isZero else {
             return prevValue - (monthsSinceDate * monthlyPayment)
@@ -109,17 +114,22 @@ final class Debt: Hashable, Comparable {
         return max(0, value)
     }
     
-    func generateExpense(transactionFrequency: TransactionFrequency? = nil, transactionDateStart: Date? = nil) throws {
-        guard let name else { throw DebtError.missingName }
+    func generateExpense(startDate: Date? = nil) throws {
+        guard let name, let paymentFrequency else { throw DebtError.missingName }
         
-        let expense = Expense(name: name, symbol: symbol ?? .defaultSymbol, category: .variable, monthlyCost: 0)
+        let expense = Expense(name: name, symbol: symbol ?? .defaultSymbol, category: .variable, baseAmount: 0)
         expense.colorName = colorName
-        expense.transactionDateStart = transactionDateStart
-        expense.transactionFrequency = transactionFrequency
+        expense.startDate = startDate
+        expense.frequency = paymentFrequency
         expense.fromDebt = self
         
-        let interestExpense = Expense(name: "Interest", symbol: symbol ?? .defaultSymbol, category: .fixed, monthlyCost: monthlyInterest)
-        let principalExpense = Expense(name: "Principal", symbol: symbol ?? .defaultSymbol, category: .savings, monthlyCost: (monthlyPayment ?? monthlyInterest) - monthlyInterest)
+        let interestExpense = Expense(name: "Interest", symbol: symbol ?? .defaultSymbol, category: .fixed, baseAmount: paymentInterest)
+        interestExpense.startDate = startDate
+        interestExpense.frequency = paymentFrequency
+        
+        let principalExpense = Expense(name: "Principal", symbol: symbol ?? .defaultSymbol, category: .savings, baseAmount: (paymentAmount ?? paymentInterest) - paymentInterest)
+        principalExpense.startDate = startDate
+        principalExpense.frequency = paymentFrequency
         
         expense.children = [ interestExpense, principalExpense ]
     }

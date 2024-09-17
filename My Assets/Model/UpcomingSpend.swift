@@ -11,7 +11,7 @@ import SwiftData
 
 protocol Schedulable {
     var name: String? { get }
-    var transactionAmount: Double? { get }
+    var amount: Double? { get }
     var nextTransactionDate: Date? { get }
 }
 
@@ -21,7 +21,8 @@ final class UpcomingSpend: Schedulable, Hashable {
     var name: String?
     var cost: Double?
     var date: Date?
-    var transactionAmount: Double? {
+    
+    var amount: Double? {
         guard let cost else { return nil }
         
         return -cost
