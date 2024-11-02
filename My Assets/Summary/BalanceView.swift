@@ -22,6 +22,7 @@ struct BalanceView: View {
             periodRawValue = period.rawValue
         }
     }
+    @State var chartYears = 5
     
     var insights: InsightsGenerator {
         .init(data: data)
@@ -46,12 +47,19 @@ struct BalanceView: View {
                 }
             }
             
-            Section {
-                FiveYearChart(chartDataSource: .balance)
+            Section("Graph") {
+                LongTermChart(years: $chartYears, chartStyle: .constant(.trajectories), chartDataSource: .balance)
+                
+                Picker("Period", selection: $chartYears) {
+                    Text("2Y").tag(2)
+                    Text("5Y").tag(5)
+                    Text("10Y").tag(10)
+                    Text("20Y").tag(20)
+                }
+                .pickerStyle(.segmented)
+                .labelsHidden()
                 
                 Toggle("Show in Summary", isOn: $summaryScreenBalanceShowChart)
-            } header: {
-                Text("Graph")
             }
         }
         .navigationTitle("Balance")

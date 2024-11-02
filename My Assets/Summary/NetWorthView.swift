@@ -23,6 +23,7 @@ struct NetWorthView: View {
             periodRawValue = period.rawValue
         }
     }
+    @State private var chartYears = 5
     
     var insights: InsightsGenerator {
         .init(data: data)
@@ -47,9 +48,18 @@ struct NetWorthView: View {
                 }
             }
             
-            Section {
-                FiveYearChart(chartDataSource: .netWorth)
+            Section("Graph") {
+                LongTermChart(years: $chartYears, chartStyle: .constant(.trajectories), chartDataSource: .netWorth)
                     .padding(.top, 6)
+                
+                Picker("Period", selection: $chartYears) {
+                    Text("2Y").tag(2)
+                    Text("5Y").tag(5)
+                    Text("10Y").tag(10)
+                    Text("20Y").tag(20)
+                }
+                .pickerStyle(.segmented)
+                .labelsHidden()
                 
                 Toggle("Show in Summary", isOn: $summaryScreenNetWorthShowChart)
                 
@@ -62,8 +72,6 @@ struct NetWorthView: View {
                     
                     chartLineDescription(color: .orange, title: "Unemployed", description: "Net worth with only passive income.", income: data.totalPassiveIncome, expenses: data.totalExpenses)
                 }
-            } header: {
-                Text("Graph")
             }
             
             if let netWorthPercentile = insights.netWorthPercentile() {
@@ -83,6 +91,20 @@ struct NetWorthView: View {
                 } footer: {
                     Text("Based on 2023 data from the USA, adjusted for inflation, and converted to your currency.")
                 }
+            }
+            
+            Section("Assets VS Debts") {
+                LongTermChart(years: $chartYears, chartStyle: .constant(.assetsVSDebts), chartDataSource: .netWorth)
+                    .padding(.top, 6)
+                
+                Picker("Period", selection: $chartYears) {
+                    Text("2Y").tag(2)
+                    Text("5Y").tag(5)
+                    Text("10Y").tag(10)
+                    Text("20Y").tag(20)
+                }
+                .pickerStyle(.segmented)
+                .labelsHidden()
             }
         }
         .navigationTitle("Net Worth")

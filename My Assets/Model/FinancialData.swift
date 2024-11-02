@@ -27,6 +27,12 @@ final class FinancialData: ObservableObject {
     var totalPassiveIncome: Double {
         income.filter({ $0.isPassive == true }).reduce(0, { $0 + ($1.monthlyEarnings ?? 0) })
     }
+    var totalNonAssetIncome: Double {
+        income.filter({ $0.fromAsset == nil }).reduce(0, { $0 + ($1.monthlyEarnings ?? 0) })
+    }
+    var totalNonAssetPassiveIncome: Double {
+        income.filter({ $0.fromAsset == nil && $0.isPassive == true }).reduce(0, { $0 + ($1.monthlyEarnings ?? 0) })
+    }
     var totalIncome: Double {
         income.reduce(0, { $0 + ($1.monthlyEarnings ?? 0) })
     }
@@ -65,8 +71,15 @@ final class FinancialData: ObservableObject {
     }
 
     func netWorth(at date: Date, type: NetWorthType) -> Double {
+        let components = netWorthComponents(at: date, type: type)
+        return components.assets - components.debts
+    }
+    
+    func netWorthComponents(at date: Date, type: NetWorthType) -> (assets: Double, debts: Double) {
+        let assetsAtDate = assets.reduce(0, { $0 + $1.currentValue(at: date) })
+        let debtsAtDate = debts.reduce(0, { $0 + $1.currentValue(at: date) })
         if abs(date.timeIntervalSinceNow) < 10 {
-            return assets.reduce(0, { $0 + $1.currentValue(at: date) }) - debts.reduce(0, { $0 + $1.currentValue(at: date) })
+            return (assetsAtDate, debtsAtDate)
         }
         
         // Calculate all income and expenses within this time, and assume they have the same average interest as the user's current net worth
@@ -74,9 +87,9 @@ final class FinancialData: ObservableObject {
         let income: Double = {
             switch type {
             case .working:
-                totalIncome
+                totalNonAssetIncome
             case .natural, .notWorking:
-                totalPassiveIncome
+                totalNonAssetPassiveIncome
             }
         }()
         let expenses: Double = {
@@ -92,7 +105,7 @@ final class FinancialData: ObservableObject {
         let n = date.timeIntervalSinceNow / TimeInterval.month
         let fv = pmt * (pow(1 + r, n) - 1) / r
         
-        return netWorth(at: .now, type: type) + fv
+        return (assetsAtDate + fv, debtsAtDate)
     }
     
     init(nonStockAssets: [Asset], stocks: [Stock], debts: [Debt], income: [Income], expenses: [Expense]) {

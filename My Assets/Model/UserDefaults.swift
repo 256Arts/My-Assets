@@ -11,10 +11,10 @@ import Foundation
 extension UserDefaults {
     
     struct Key {
-        static let whatsNewVersion = "whatsNewVersion"
         static let userType = "userType"
         static let otherHouseholdNetWorth = "otherHouseholdNetWorth"
         static let birthday = "birthday"
+        static let tabViewCustomization = "tabViewCustomization"
         static let amountMarqueePeriod = "amountMarqueePeriod"
         static let amountMarqueeShowAsCombinedValue = "amountMarqueeShowAsCombinedValue"
         static let summaryScreenShowBalance = "summaryScreenShowBalance"
@@ -28,7 +28,6 @@ extension UserDefaults {
     
     func register() {
         register(defaults: [
-            Key.whatsNewVersion: 0,
             Key.userType: UserType.individual.rawValue,
             Key.otherHouseholdNetWorth: 0.0,
             Key.amountMarqueePeriod: Period.month.rawValue,

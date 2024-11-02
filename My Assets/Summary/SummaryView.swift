@@ -63,8 +63,8 @@ struct SummaryView: View {
                                     Toggle("Show Combined Value", isOn: $showAsCombinedValue)
                                 }
                                 
-                                if summaryScreenBalanceShowChart {
-                                    FiveYearChart(chartDataSource: .balance)
+                                if summaryScreenBalanceShowChart, !data.balance(at: .now).isZero {
+                                    LongTermChart(years: .constant(5), chartStyle: .constant(.trajectories), chartDataSource: .balance)
                                 }
                             }
                         }
@@ -88,8 +88,8 @@ struct SummaryView: View {
                                     Toggle("Show as Combined", isOn: $showAsCombinedValue)
                                 }
                                 
-                                if summaryScreenNetWorthShowChart {
-                                    FiveYearChart(chartDataSource: .netWorth)
+                                if summaryScreenNetWorthShowChart, !data.netWorth(at: .now, type: .working).isZero {
+                                    LongTermChart(years: .constant(5), chartStyle: .constant(.trajectories), chartDataSource: .netWorth)
                                 }
                                 
                                 if summaryScreenNetWorthShowPercentile, let netWorthPercentile = insights.netWorthPercentile() {

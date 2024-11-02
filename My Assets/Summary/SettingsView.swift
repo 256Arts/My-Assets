@@ -30,11 +30,10 @@ struct SettingsView: View {
                             .tag(userType.rawValue)
                     }
                 }
+                DatePicker("Birthday", selection: $birthday, in: ...Date.now, displayedComponents: .date)
                 if userTypeValue == UserType.individual.rawValue {
                     CurrencyField("Partner's Net Worth", value: $otherHouseholdNetWorth)
                 }
-            
-                DatePicker("Birthday", selection: $birthday, in: ...Date.now, displayedComponents: .date)
             }
             
             Section("Summary Screen") {

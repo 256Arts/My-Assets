@@ -1,5 +1,5 @@
 //
-//  FiveYearChart.swift
+//  LongTermChart.swift
 //  My Assets
 //
 //  Created by 256 Arts Developer on 2023-09-01.
@@ -9,11 +9,17 @@
 import SwiftUI
 import Charts
 
-struct FiveYearChart: View {
+struct LongTermChart: View {
     
     enum ChartDataSource: String, Identifiable, CaseIterable {
         case balance = "Balance"
         case netWorth = "Net Worth"
+        
+        var id: Self { self }
+    }
+    enum ChartStyle: String, Identifiable, CaseIterable {
+        case trajectories = "Trajectories"
+        case assetsVSDebts = "Assets/Debts"
         
         var id: Self { self }
     }
@@ -24,16 +30,20 @@ struct FiveYearChart: View {
     }
     
     @EnvironmentObject var data: FinancialData
+    @Binding var years: Int
+    @Binding var chartStyle: ChartStyle
     
-    let nowThrough5Years = (0...5).map { Date.now + TimeInterval($0) * .year }
     let chartDataSource: ChartDataSource
     
+    var dates: [Date] {
+        (0...years).map { Date.now + TimeInterval($0) * .year }
+    }
     var insights: InsightsGenerator {
         .init(data: data)
     }
     
     var chartData: [ValueAtDate] {
-        nowThrough5Years.map {
+        dates.map {
             let value: Double
             switch chartDataSource {
             case .balance:
@@ -47,15 +57,25 @@ struct FiveYearChart: View {
     var passiveAssetsAndDebtsNetWorthChartData: [ValueAtDate] {
         guard chartDataSource == .netWorth else { return [] }
         
-        return nowThrough5Years.map {
+        return dates.map {
             ValueAtDate(value: data.netWorth(at: $0, type: .natural), date: $0)
         }
     }
     var notWorkingNetWorthChartData: [ValueAtDate] {
         guard chartDataSource == .netWorth else { return [] }
         
-        return nowThrough5Years.map {
+        return dates.map {
             ValueAtDate(value: data.netWorth(at: $0, type: .notWorking), date: $0)
+        }
+    }
+    var assetsChartData: [ValueAtDate] {
+        dates.map {
+            ValueAtDate(value: data.netWorthComponents(at: $0, type: .working).assets, date: $0)
+        }
+    }
+    var debtsChartData: [ValueAtDate] {
+        dates.map {
+            ValueAtDate(value: -data.netWorthComponents(at: $0, type: .working).debts, date: $0)
         }
     }
     var chartInflationData: [ValueAtDate] {
@@ -66,8 +86,8 @@ struct FiveYearChart: View {
         case .netWorth:
             startingValue = data.netWorth(at: .now, type: .working)
         }
-        let nowThrough5Years = (0...5)
-        return nowThrough5Years.map {
+        let nowThroughYears = (0...years)
+        return nowThroughYears.map {
             let value = startingValue * pow(1 + WorldFinanceStats.averageAnnualUSInflation, Double($0))
             let date = Date.now + TimeInterval($0) * .year
             return ValueAtDate(value: value, date: date)
@@ -99,26 +119,53 @@ struct FiveYearChart: View {
                     .interpolationMethod(.cardinal)
                     .foregroundStyle(by: .value("Data", chartDataSource.rawValue))
             }
-            if data.totalIncome != data.totalPassiveIncome {
-                if data.totalExpenses != data.totalPassiveExpenses {
-                    ForEach(passiveAssetsAndDebtsNetWorthChartData) { datum in
-                        LineMark(x: .value("Date", datum.date), y: .value("Value", datum.value), series: .value("Data", "Natural"))
+            
+            switch chartStyle {
+            case .trajectories:
+                if data.totalIncome != data.totalPassiveIncome {
+                    if data.totalExpenses != data.totalPassiveExpenses {
+                        ForEach(passiveAssetsAndDebtsNetWorthChartData) { datum in
+                            LineMark(x: .value("Date", datum.date), y: .value("Value", datum.value), series: .value("Data", "Natural"))
+                                .interpolationMethod(.cardinal)
+                                .foregroundStyle(by: .value("Data", "Natural"))
+                        }
+                    }
+                    
+                    ForEach(notWorkingNetWorthChartData) { datum in
+                        LineMark(x: .value("Date", datum.date), y: .value("Value", datum.value), series: .value("Data", "Unemployed"))
                             .interpolationMethod(.cardinal)
-                            .foregroundStyle(by: .value("Data", "Natural"))
+                            .foregroundStyle(by: .value("Data", "Unemployed"))
                     }
                 }
-                ForEach(notWorkingNetWorthChartData) { datum in
-                    LineMark(x: .value("Date", datum.date), y: .value("Value", datum.value), series: .value("Data", "Unemployed"))
+            case .assetsVSDebts:
+                ForEach(assetsChartData) { datum in
+                    AreaMark(x: .value("Date", datum.date), y: .value("Value", datum.value), series: .value("Data", "Assets"))
                         .interpolationMethod(.cardinal)
-                        .foregroundStyle(by: .value("Data", "Unemployed"))
+                        .foregroundStyle(Color.green.opacity(0.25))
+                    LineMark(x: .value("Date", datum.date), y: .value("Value", datum.value), series: .value("Data", "Assets"))
+                        .interpolationMethod(.cardinal)
+                        .foregroundStyle(Color.green)
+                }
+                
+                ForEach(debtsChartData) { datum in
+                    AreaMark(x: .value("Date", datum.date), y: .value("Value", datum.value), series: .value("Data", "Debts"))
+                        .interpolationMethod(.cardinal)
+                        .foregroundStyle(Color.red.opacity(0.25))
+                    LineMark(x: .value("Date", datum.date), y: .value("Value", datum.value), series: .value("Data", "Debts"))
+                        .interpolationMethod(.cardinal)
+                        .foregroundStyle(Color.red)
                 }
             }
+            
             ForEach(chartInflationData) { datum in
                 LineMark(x: .value("Date", datum.date), y: .value("Value", datum.value), series: .value("Data", "Inflation"))
                     .interpolationMethod(.cardinal)
                     .foregroundStyle(Color.secondary)
                     .lineStyle(StrokeStyle(lineWidth: 2, lineCap: .round, dash: [0.01, 4]))
             }
+        }
+        .chartYAxis {
+            AxisMarks(format: .currency(code: Locale.autoupdatingCurrent.currency?.identifier ?? "USD").notation(.compactName))
         }
         .frame(height: 200)
         .overlay(alignment: .topLeading) {
@@ -131,5 +178,5 @@ struct FiveYearChart: View {
 }
 
 #Preview {
-    FiveYearChart(chartDataSource: .balance)
+    LongTermChart(years: .constant(5), chartStyle: .constant(.trajectories), chartDataSource: .balance)
 }

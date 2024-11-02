@@ -7,7 +7,6 @@
 //
 
 import SwiftUI
-import JaydenCodeGenerator
 
 struct NewAssetView: View {
     
@@ -25,11 +24,6 @@ struct NewAssetView: View {
     @State var interest: Double?
     @State var value1YearAgo: Double?
     @State var value: Double?
-    @State var showingJaydenCode = false
-    
-    var jaydenCode: String {
-        JaydenCodeGenerator.generateCode(secret: "T1HTN6HAKH")
-    }
     
     var body: some View {
         Form {
@@ -38,11 +32,7 @@ struct NewAssetView: View {
                     asset.name ?? ""
                 }, set: { newValue in
                     asset.name = newValue
-                })) {
-                    if asset.name == "The World" {
-                        showingJaydenCode = true
-                    }
-                }
+                }))
                 #if !os(macOS)
                 .textInputAutocapitalization(.words)
                 #endif
@@ -108,14 +98,6 @@ struct NewAssetView: View {
                 }
                 .disabled(value == nil)
             }
-        }
-        .alert("Secret Code: \(jaydenCode)", isPresented: $showingJaydenCode) {
-            Button("Copy") {
-                #if canImport(UIKit)
-                UIPasteboard.general.string = jaydenCode
-                #endif
-            }
-            Button("OK", role: .cancel, action: { })
         }
         .onChange(of: value) { _, newValue in
             guard let value = newValue else { return }

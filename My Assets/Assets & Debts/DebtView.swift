@@ -78,8 +78,14 @@ struct DebtView: View {
             debt.expense?.symbol = debt.symbol
             debt.expense?.colorName = debt.colorName
             debt.expense?.frequency = debt.paymentFrequency
-            debt.expense?.children?.first(where: { $0.name == "Interest" })?.baseAmount = debt.paymentInterest
-            debt.expense?.children?.first(where: { $0.name == "Principal" })?.baseAmount = (debt.paymentAmount ?? debt.paymentInterest) - debt.paymentInterest
+            
+            let interest = debt.expense?.children?.first(where: { $0.name == "Interest" })
+            interest?.baseAmount = debt.paymentInterest
+            interest?.frequency = debt.paymentFrequency
+            
+            let principal = debt.expense?.children?.first(where: { $0.name == "Principal" })
+            principal?.baseAmount = (debt.paymentAmount ?? debt.paymentInterest) - debt.paymentInterest
+            principal?.frequency = debt.paymentFrequency
         }
     }
 }

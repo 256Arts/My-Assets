@@ -9,8 +9,6 @@
 import SwiftUI
 import SwiftData
 
-let appWhatsNewVersion = 1
-
 @main
 struct MyAssetsApp: App {
     

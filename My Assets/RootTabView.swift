@@ -6,52 +6,51 @@
 //  Copyright © 2020 256 Arts Developer. All rights reserved.
 //
 
-import WelcomeKit
 import SwiftData
 import SwiftUI
 
 struct RootTabView: View {
     
-    enum Tabs: Identifiable {
+    enum Tabs: String, Identifiable {
         case summary, assetsAndDebts, income, expenses, creditCards
         
-        var id: Self { self }
+        var id: String { rawValue }
     }
     
-    let welcomeFeatures = [
-        WelcomeFeature(image: Image(systemName: "banknote"), title: "Your Assets", body: "Track investments you own."),
-        WelcomeFeature(image: Image(systemName: "tray.and.arrow.down"), title: "Income", body: "Track monthly income items."),
-        WelcomeFeature(image: Image(systemName: "tray.and.arrow.up"), title: "Expenses", body: "Track monthly expense items.")
-    ]
-    
-    @AppStorage(UserDefaults.Key.whatsNewVersion) var whatsNewVersion = 0
     @Query var nonStockAssets: [Asset]
     @Query var debts: [Debt]
     @Query var stocks: [Stock]
     @Query var income: [Income]
     @Query var expenses: [Expense]
     
+    @AppStorage(UserDefaults.Key.tabViewCustomization) var tabViewCustomization: TabViewCustomization
+    
     @State var selectedTab: Tabs = .summary
-    @State var showingWelcome = false
     
     var body: some View {
         TabView(selection: $selectedTab) {
             Tab("Summary", systemImage: "chart.line.uptrend.xyaxis", value: .summary) {
                 SummaryView()
             }
+            .customizationID(Tabs.summary.id)
             Tab("Assets/Debts", systemImage: "banknote", value: .assetsAndDebts) {
                 AssetsAndDebtsView()
             }
+            .customizationID(Tabs.assetsAndDebts.id)
             Tab("Income", systemImage: "tray.and.arrow.down", value: .income) {
                 IncomeView()
             }
+            .customizationID(Tabs.income.id)
             Tab("Expenses", systemImage: "tray.and.arrow.up", value: .expenses) {
                 ExpensesView()
             }
+            .customizationID(Tabs.expenses.id)
             Tab("Credit Cards", systemImage: "creditcard", value: .creditCards) {
                 CreditCardList()
             }
+            .customizationID(Tabs.creditCards.id)
         }
+        .tabViewCustomization($tabViewCustomization)
         .accentColor({
             switch selectedTab {
             case .summary, .assetsAndDebts, .creditCards:
@@ -62,18 +61,6 @@ struct RootTabView: View {
                 return .red
             }
         }())
-        .onAppear {
-            if whatsNewVersion < appWhatsNewVersion {
-                showingWelcome = true
-            }
-        }
-        .sheet(isPresented: $showingWelcome, onDismiss: {
-            if whatsNewVersion < appWhatsNewVersion {
-                whatsNewVersion = appWhatsNewVersion
-            }
-        }, content: {
-            WelcomeView(isFirstLaunch: whatsNewVersion == 0, appName: "My Assets", features: welcomeFeatures)
-        })
         .environmentObject(financialData)
     }
     

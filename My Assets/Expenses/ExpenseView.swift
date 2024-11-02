@@ -54,6 +54,7 @@ struct ExpenseView: View {
                             .tag(freq as TransactionFrequency?)
                     }
                 }
+                .disabled(expense.fromDebt != nil)
                 if expense.frequency != nil {
                     DatePicker("Starting Date", selection: Binding(get: {
                         expense.startDate ?? .now
