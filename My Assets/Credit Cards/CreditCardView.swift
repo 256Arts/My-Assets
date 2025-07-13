@@ -32,6 +32,12 @@ struct CreditCardView: View {
                 }, set: { newValue in
                     creditCard.notes = newValue
                 }))
+                .overlay(alignment: .leading) {
+                    if creditCard.notes?.isEmpty ?? true {
+                        Text("Notes")
+                            .foregroundStyle(.secondary)
+                    }
+                }
             }
             Section {
                 OptionalCurrencyField("Monthly Spend", value: $creditCard.monthlySpend)

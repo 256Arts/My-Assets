@@ -14,7 +14,7 @@ struct CreditCardList: View {
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject var data: FinancialData
     
-    @Query var creditCards: [CreditCard]
+    @Query(sort: [SortDescriptor(\CreditCard.name)]) var creditCards: [CreditCard]
     
     @State private var showingDetail: Bool = false
     
@@ -59,11 +59,8 @@ struct CreditCardList: View {
             .navigationTitle("Credit Cards")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
-                    Button(action: {
+                    Button("Add", systemImage: "plus") {
                         self.showingDetail.toggle()
-                    }) {
-                        Image(systemName: "plus.circle")
-                            .symbolVariant(.fill)
                     }
                 }
             }

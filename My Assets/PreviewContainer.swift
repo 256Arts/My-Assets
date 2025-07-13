@@ -11,16 +11,16 @@ import SwiftData
 
 @MainActor
 let previewAssets = [
-    Asset(name: "House", symbol: .house, value: 500_000),
-    Asset(name: "Bank Account", symbol: .bank, value: 10_000),
-    Asset(name: "Stocks", symbol: .stocks, value: 100_000),
-    Asset(name: "Car", symbol: .car, value: 30_000),
-    Asset(name: "Bitcoin Wallet", symbol: .bitcoin, value: 50_000)
+    Asset(name: "House", symbol: .house, value: 500_000, annualInterestFraction: 0.03),
+    Asset(name: "Bank Account", symbol: .bank, value: 10_000, annualInterestFraction: 0.02),
+    Asset(name: "Stocks", symbol: .stocks, value: 100_000, annualInterestFraction: 0.1),
+    Asset(name: "Car", symbol: .car, value: 30_000, annualInterestFraction: -0.1),
+    Asset(name: "Bitcoin Wallet", symbol: .bitcoin, value: 50_000, annualInterestFraction: 0.1)
 ]
 @MainActor
 let previewDebts = [
-    Debt(name: "Mortgage", symbol: .house, value: 150_000),
-    Debt(name: "Car Loan", symbol: .car, value: 15_000)
+    Debt(name: "Mortgage", symbol: .house, value: 150_000, paymentAmount: 2000),
+    Debt(name: "Car Loan", symbol: .car, value: 15_000, paymentAmount: 1000)
 ]
 @MainActor
 let previewIncome = [
@@ -47,7 +47,7 @@ let previewExpenses = [
 let previewCreditCards = [
     CreditCard(name: "VISA", colorName: .gray, cardFee: 50, pointsPerDollar: 2, pointValue: 0.01, monthlySpend: 1000),
     CreditCard(name: "Mastercard", colorName: .red, cardFee: 0, pointsPerDollar: 3, pointValue: 0.01, monthlySpend: 1000),
-    CreditCard(name: "Amex", colorName: .blue, cardFee: 1000, pointsPerDollar: 5, pointValue: 0.01, monthlySpend: 1000),
+    CreditCard(name: "Amex", colorName: .blue, cardFee: 100, pointsPerDollar: 5, pointValue: 0.01, monthlySpend: 1000),
 ]
 
 @MainActor

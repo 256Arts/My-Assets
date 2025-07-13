@@ -78,6 +78,8 @@ final class FinancialData: ObservableObject {
     func netWorthComponents(at date: Date, type: NetWorthType) -> (assets: Double, debts: Double) {
         let assetsAtDate = assets.reduce(0, { $0 + $1.currentValue(at: date) })
         let debtsAtDate = debts.reduce(0, { $0 + $1.currentValue(at: date) })
+        
+        // Within 10 seconds of now
         if abs(date.timeIntervalSinceNow) < 10 {
             return (assetsAtDate, debtsAtDate)
         }

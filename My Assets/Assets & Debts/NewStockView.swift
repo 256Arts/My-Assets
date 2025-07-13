@@ -30,14 +30,12 @@ struct NewStockView: View {
             .navigationTitle("New Stock")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button(role: .cancel) {
+                    Button("Cancel", systemImage: "xmark", role: .cancel) {
                         self.dismiss()
-                    } label: {
-                        Text("Cancel")
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button {
+                    Button("Add", systemImage: "checkmark") {
                         Task {
                             let stock = Stock(symbol: self.stockSymbol, quantity: self.quantity)
                             try? await stock.fetchPrices()
@@ -45,8 +43,6 @@ struct NewStockView: View {
                             self.data.stocks.append(stock)
                         }
                         self.dismiss()
-                    } label: {
-                        Text("Add")
                     }
                 }
             }

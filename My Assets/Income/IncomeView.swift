@@ -149,7 +149,7 @@ struct IncomeView: View {
                     .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                 }
                 Section {
-                    ForEach(incomes) { income in
+                    ForEach(incomes.filter({ $0.isLiquid! })) { income in
                         NavigationLink(value: income) {
                             AmountRow(symbol: income.symbol ?? .defaultSymbol, label: income.name ?? "", amount: income.monthlyEarnings ?? 0)
                                 .opacity((selectedSector?.effort ?? .working) == .working ? 1 : 0.5)
@@ -171,9 +171,9 @@ struct IncomeView: View {
                         .accessibilityValue(currencyFormatter.string(from: NSNumber(value: data.totalLiquidIncome))!)
                 }
                 
-                if incomes.contains(where: { $0.fromAsset != nil && !$0.isLiquid! }) {
+                if incomes.contains(where: { !$0.isLiquid! }) {
                     Section {
-                        ForEach(incomes.filter({ $0.fromAsset != nil && !$0.isLiquid! })) { income in
+                        ForEach(incomes.filter({ !$0.isLiquid! })) { income in
                             AmountRow(symbol: income.symbol ?? .defaultSymbol, label: income.name ?? "", amount: income.monthlyEarnings ?? 0)
                                 .opacity((selectedSector?.effort ?? .passiveNonLiquid) == .passiveNonLiquid ? 1 : 0.5)
                                 .accessibilityElement()
@@ -196,12 +196,12 @@ struct IncomeView: View {
             .navigationTitle("Income")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
-                    Button {
+                    Button("Add", systemImage: "plus") {
                         self.showingDetail.toggle()
-                    } label: {
-                        Image(systemName: "plus.circle")
-                            .symbolVariant(.fill)
                     }
+                    .buttonStyle(.borderedProminent)
+                    .buttonBorderShape(.circle)
+                    .tint(.green)
                 }
             }
             .navigationDestination(for: Income.self) { income in
@@ -210,8 +210,6 @@ struct IncomeView: View {
         }
         .alert("Unable to Delete", isPresented: $showingDeleteError, actions: {
             Button("OK") { }
-        }, message: {
-            Text("")
         })
         .sheet(isPresented: self.$showingDetail) {
             NavigationStack {

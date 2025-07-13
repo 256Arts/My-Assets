@@ -60,10 +60,8 @@ struct AssetView: View {
                         }
                     }
                     .onDelete(perform: deleteUpcomingSpend)
-                    Button {
+                    Button("Add", systemImage: "plus.circle") {
                         showingSpend = true
-                    } label: {
-                        Label("Add", systemImage: "plus.circle")
                     }
                     if let savingsForUpcomingSpendsFraction {
                         VStack {
@@ -86,10 +84,8 @@ struct AssetView: View {
                         }
                     }
                     .onDelete(perform: deleteLoan)
-                    Button {
+                    Button("Add", systemImage: "plus.circle") {
                         showingLoan = true
-                    } label: {
-                        Label("Add", systemImage: "plus.circle")
                     }
                     if let loans = asset.loans, let loansPaidFraction {
                         VStack {

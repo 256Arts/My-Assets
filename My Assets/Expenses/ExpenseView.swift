@@ -63,12 +63,11 @@ struct ExpenseView: View {
                     }), displayedComponents: .date)
                 }
             }
-            Section {
+            
+            Section("Subexpenses") {
                 if expense.fromDebt == nil {
-                    Button {
+                    Button("Add", systemImage: "plus.circle") {
                         showingSubexpense = true
-                    } label: {
-                        Label("Add", systemImage: "plus.circle")
                     }
                     
                     ForEach(children) { child in
@@ -82,8 +81,6 @@ struct ExpenseView: View {
                         AmountRow(symbol: child.symbol ?? .defaultSymbol, label: child.name ?? "", amount: child.monthlyCost())
                     }
                 }
-            } header: {
-                Text("Subexpenses")
             }
         }
         .navigationTitle("Expense")

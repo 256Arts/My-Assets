@@ -88,12 +88,12 @@ final class Debt: Hashable, Comparable {
     
     // MARK: Init
     
-    init(name: String = "", symbol: Symbol = .defaultSymbol, value: Double = 0) {
+    init(name: String = "", symbol: Symbol = .defaultSymbol, value: Double = 0, paymentAmount: Double = 0) {
         self.name = name
         self.symbol = symbol
         self.colorName = .gray
         self.annualInterestFraction = 0
-        self.paymentAmount = 0
+        self.paymentAmount = paymentAmount
         self.paymentFrequency = .monthly
         self.prevValue = value
         self.prevDate = Date()

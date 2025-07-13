@@ -135,12 +135,12 @@ struct ExpensesView: View {
             .navigationTitle("Expenses")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
-                    Button(action: {
+                    Button("Add", systemImage: "plus") {
                         self.showingDetail.toggle()
-                    }) {
-                        Image(systemName: "plus.circle")
-                            .symbolVariant(.fill)
                     }
+                    .buttonStyle(.borderedProminent)
+                    .buttonBorderShape(.circle)
+                    .tint(.red)
                 }
             }
             .navigationDestination(for: Expense.self) { expense in

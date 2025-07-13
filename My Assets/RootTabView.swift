@@ -33,7 +33,7 @@ struct RootTabView: View {
                 SummaryView()
             }
             .customizationID(Tabs.summary.id)
-            Tab("Assets/Debts", systemImage: "banknote", value: .assetsAndDebts) {
+            Tab("Assets/Debts", systemImage: "house", value: .assetsAndDebts) {
                 AssetsAndDebtsView()
             }
             .customizationID(Tabs.assetsAndDebts.id)

@@ -32,59 +32,50 @@ struct AssetsAndDebtsView: View {
     var body: some View {
         NavigationStack {
             List {
-                Section {
+                Section("Assets") {
                     ForEach(nonStockAssets) { asset in
                         NavigationLink(value: asset) {
                             AmountRow(symbol: asset.symbol ?? .defaultSymbol, label: asset.name ?? "", amount: asset.currentValue)
                         }
                     }
                     .onDelete(perform: deleteAsset)
-                    Button {
+                    
+                    Button("New Asset", systemImage: "plus") {
                         self.showingNewAsset = true
-                    } label: {
-                        Label("New Asset", systemImage: "plus")
                     }
-                } header: {
-                    Text("Assets")
                 }
                 .symbolVariant(.fill)
                 
-                Section {
+                Section("Debts") {
                     ForEach(debts) { debt in
                         NavigationLink(value: debt) {
                             AmountRow(symbol: debt.symbol ?? .defaultSymbol, label: debt.name ?? "", amount: debt.currentValue)
                         }
                     }
                     .onDelete(perform: deleteDebt)
-                    Button {
+                    
+                    Button("New Debt", systemImage: "plus") {
                         self.showingNewDebt = true
-                    } label: {
-                        Label("New Debt", systemImage: "plus")
                     }
-                } header: {
-                    Text("Debts")
                 }
             }
             .headerProminence(.increased)
             .navigationTitle("Assets & Debts")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
-                    Menu {
-                        Button {
+                    Menu("Add", systemImage: "plus") {
+                        Button("New Asset", systemImage: "plus.square") {
                             self.showingNewAsset = true
-                        } label: {
-                            Label("New Asset", systemImage: "plus.square")
                         }
-                        Button {
+                        
+                        Button("New Debt", systemImage: "minus.square") {
                             self.showingNewDebt = true
-                        } label: {
-                            Label("New Debt", systemImage: "minus.square")
                         }
-                    } label: {
-                        Image(systemName: "plus.circle")
-                            .symbolVariant(.fill)
                     }
-                    .menuStyle(.borderlessButton)
+                    .menuStyle(.button)
+                    .buttonStyle(.borderedProminent)
+                    .buttonBorderShape(.circle)
+                    .tint(.blue)
                 }
             }
             .navigationDestination(for: Asset.self) { asset in

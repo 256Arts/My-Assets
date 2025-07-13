@@ -125,15 +125,30 @@ struct SummaryView: View {
             .headerProminence(.increased)
             .navigationTitle("Summary")
             .toolbar {
-                #if !os(macOS)
-                ToolbarItem(placement: .topBarLeading) {
-                    Button {
+                ToolbarItemGroup(placement: .secondaryAction) {
+                    Section {
+                        Toggle("Show Balance", isOn: $summaryScreenShowBalance)
+                        Toggle("Show Net Worth", isOn: $summaryScreenShowNetWorth)
+                        Toggle("Show Cash Flows", isOn: $summaryScreenShowCashFlows)
+                        Toggle("Show Insights", isOn: $summaryScreenShowInsights)
+                    }
+                    
+                    Button("Settings", systemImage: "gear") {
                         showingSettings = true
-                    } label: {
-                        Image(systemName: "gear")
+                    }
+                    
+                    Section {
+                        Link(destination: URL(string: "https://www.256arts.com/")!) {
+                            Label("Developer Website", systemImage: "safari")
+                        }
+                        Link(destination: URL(string: "https://www.256arts.com/joincommunity/")!) {
+                            Label("Join Community", systemImage: "bubble.left.and.bubble.right")
+                        }
+                        Link(destination: URL(string: "https://github.com/256Arts/My-Assets")!) {
+                            Label("Contribute on GitHub", systemImage: "chevron.left.forwardslash.chevron.right")
+                        }
                     }
                 }
-                #endif
             }
             .navigationDestination(for: Subpage.self) { subpage in
                 switch subpage {

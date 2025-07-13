@@ -14,10 +14,6 @@ struct SettingsView: View {
     
     @AppStorage(UserDefaults.Key.userType) var userTypeValue = UserType.individual.rawValue
     @AppStorage(UserDefaults.Key.otherHouseholdNetWorth) var otherHouseholdNetWorth = 0.0
-    @AppStorage(UserDefaults.Key.summaryScreenShowBalance) var summaryScreenShowBalance = true
-    @AppStorage(UserDefaults.Key.summaryScreenShowNetWorth) var summaryScreenShowNetWorth = true
-    @AppStorage(UserDefaults.Key.summaryScreenShowCashFlows) var summaryScreenShowCashFlows = true
-    @AppStorage(UserDefaults.Key.summaryScreenShowInsights) var summaryScreenShowInsights = true
     
     @State var birthday = Date(timeIntervalSinceReferenceDate: UserDefaults.standard.double(forKey: UserDefaults.Key.birthday))
     
@@ -35,25 +31,6 @@ struct SettingsView: View {
                     CurrencyField("Partner's Net Worth", value: $otherHouseholdNetWorth)
                 }
             }
-            
-            Section("Summary Screen") {
-                Toggle("Show Balance", isOn: $summaryScreenShowBalance)
-                Toggle("Show Net Worth", isOn: $summaryScreenShowNetWorth)
-                Toggle("Show Cash Flows", isOn: $summaryScreenShowCashFlows)
-                Toggle("Show Insights", isOn: $summaryScreenShowInsights)
-            }
-            
-            Section {
-                Link(destination: URL(string: "https://www.256arts.com/")!) {
-                    Label("Developer Website", systemImage: "safari")
-                }
-                Link(destination: URL(string: "https://www.256arts.com/joincommunity/")!) {
-                    Label("Join Community", systemImage: "bubble.left.and.bubble.right")
-                }
-                Link(destination: URL(string: "https://github.com/256Arts/My-Assets")!) {
-                    Label("Contribute on GitHub", systemImage: "chevron.left.forwardslash.chevron.right")
-                }
-            }
         }
         .navigationTitle("Settings")
         #if os(macOS)
@@ -61,7 +38,7 @@ struct SettingsView: View {
         #else
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
-                Button("Done") {
+                Button("Done", systemImage: "checkmark") {
                     dismiss()
                 }
             }
