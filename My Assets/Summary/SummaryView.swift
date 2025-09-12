@@ -125,7 +125,8 @@ struct SummaryView: View {
             .headerProminence(.increased)
             .navigationTitle("Summary")
             .toolbar {
-                ToolbarItemGroup(placement: .secondaryAction) {
+                ToolbarItemGroup(placement: toolbarPlacement) {
+                    #if !os(macOS)
                     Section {
                         Toggle("Show Balance", isOn: $summaryScreenShowBalance)
                         Toggle("Show Net Worth", isOn: $summaryScreenShowNetWorth)
@@ -136,8 +137,10 @@ struct SummaryView: View {
                     Button("Settings", systemImage: "gear") {
                         showingSettings = true
                     }
+                    #endif
                     
-                    Section {
+                    // In submenu since there are already lots of menu items
+                    Menu("About App", systemImage: "info.circle") {
                         Link(destination: URL(string: "https://www.256arts.com/")!) {
                             Label("Developer Website", systemImage: "safari")
                         }
@@ -165,6 +168,15 @@ struct SummaryView: View {
             }
         }
     }
+    
+    private var toolbarPlacement: ToolbarItemPlacement {
+        #if os(macOS)
+        .primaryAction
+        #else
+        .secondaryAction
+        #endif
+    }
+    
 }
 
 #Preview {

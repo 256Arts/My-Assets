@@ -70,7 +70,7 @@ struct ExpensesView: View {
                         .chartForegroundStyleScale(range: pieChartData.map({ $0.category.color }))
                         .padding(6)
                         .frame(idealHeight: .infinity, maxHeight: .infinity)
-                        .background(Color(UIColor.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 12))
+                        .background(rowBackgroundColor, in: RoundedRectangle(cornerRadius: 12))
                         
                         if spentIncome.isFinite, 0 < spentIncome {
                             VStack(spacing: 0) {
@@ -88,11 +88,12 @@ struct ExpensesView: View {
                             }
                             .padding(6)
                             .frame(idealHeight: .infinity, maxHeight: .infinity)
-                            .background(Color(UIColor.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 12))
+                            .background(rowBackgroundColor, in: RoundedRectangle(cornerRadius: 12))
                         }
                     }
                     .frame(height: 130)
                     .listRowBackground(Color.clear)
+                    .listRowSeparator(.hidden) // For macOS
                     .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                 }
                 Section {
@@ -160,6 +161,14 @@ struct ExpensesView: View {
                 NewExpenseView(parentExpense: nil)
             }
         }
+    }
+    
+    private var rowBackgroundColor: Color {
+        #if canImport(UIKit)
+        Color(UIColor.secondarySystemGroupedBackground)
+        #else
+        Color(NSColor.secondarySystemFill)
+        #endif
     }
     
     private func deleteExpense(at offsets: IndexSet) {

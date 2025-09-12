@@ -108,7 +108,9 @@ struct NetWorthView: View {
             }
         }
         .navigationTitle("Net Worth")
+        #if !os(macOS)
         .navigationBarTitleDisplayMode(.inline)
+        #endif
     }
     
     @ViewBuilder

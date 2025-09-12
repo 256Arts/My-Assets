@@ -12,6 +12,11 @@ import SwiftData
 @main
 struct MyAssetsApp: App {
     
+    @AppStorage(UserDefaults.Key.summaryScreenShowBalance) var summaryScreenShowBalance = true
+    @AppStorage(UserDefaults.Key.summaryScreenShowNetWorth) var summaryScreenShowNetWorth = true
+    @AppStorage(UserDefaults.Key.summaryScreenShowCashFlows) var summaryScreenShowCashFlows = true
+    @AppStorage(UserDefaults.Key.summaryScreenShowInsights) var summaryScreenShowInsights = true
+    
     init() {
         UserDefaults.standard.register()
     }
@@ -21,7 +26,15 @@ struct MyAssetsApp: App {
             RootTabView()
         }
         .defaultSize(width: 500, height: 800)
-        #if targetEnvironment(simulator)
+        .commands {
+            CommandGroup(before: .toolbar) {
+                Toggle("Show Balance", isOn: $summaryScreenShowBalance)
+                Toggle("Show Net Worth", isOn: $summaryScreenShowNetWorth)
+                Toggle("Show Cash Flows", isOn: $summaryScreenShowCashFlows)
+                Toggle("Show Insights", isOn: $summaryScreenShowInsights)
+            }
+        }
+        #if targetEnvironment(simulator) || ((os(macOS) || targetEnvironment(macCatalyst)) && DEBUG)
         .modelContainer(previewContainer)
         #else
         .modelContainer(for: [Asset.self, Debt.self, Stock.self, UpcomingSpend.self, Income.self, Expense.self, CreditCard.self])

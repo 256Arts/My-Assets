@@ -15,10 +15,11 @@ struct My_Assets__watchOS__Watch_AppApp: App {
         WindowGroup {
             RootTabView()
         }
-        .modelContainer(for: [Asset.self, Debt.self, Stock.self, UpcomingSpend.self, Income.self, Expense.self])
-//        #if DEBUG
-//        .modelContainer(previewContainer)
-//        #endif
+        #if targetEnvironment(simulator)
+        .modelContainer(previewContainer)
+        #else
+        .modelContainer(for: [Asset.self, Debt.self, Stock.self, UpcomingSpend.self, Income.self, Expense.self, CreditCard.self])
+        #endif
     }
 }
 

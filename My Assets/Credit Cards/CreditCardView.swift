@@ -90,7 +90,9 @@ struct CreditCardView: View {
             }
         }
         .navigationTitle("Credit Card")
+        #if !os(macOS)
         .navigationBarTitleDisplayMode(.inline)
+        #endif
     }
 }
 

@@ -86,7 +86,9 @@ struct NewCreditCardView: View {
             }
         }
         .navigationTitle("New Credit Card")
+        #if !os(macOS)
         .navigationBarTitleDisplayMode(.inline)
+        #endif
     }
 }
 

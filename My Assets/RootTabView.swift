@@ -50,6 +50,9 @@ struct RootTabView: View {
             }
             .customizationID(Tabs.creditCards.id)
         }
+        #if os(macOS)
+        .tabViewStyle(.sidebarAdaptable)
+        #endif
         .tabViewCustomization($tabViewCustomization)
         .accentColor({
             switch selectedTab {

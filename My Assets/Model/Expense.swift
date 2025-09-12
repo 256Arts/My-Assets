@@ -101,12 +101,16 @@ final class Expense: Schedulable, Hashable, Comparable {
     
     // MARK: Init
     
-    init(name: String = "", symbol: Symbol = .defaultSymbol, category: Category = .discretionary, baseAmount: Double, children: [Expense] = []) {
+    init(name: String = "", symbol: Symbol = .defaultSymbol, category: Category = .discretionary, baseAmount: Double, startDate: Date? = nil, children: [Expense] = []) {
         self.name = name
         self.symbol = symbol
         self.colorName = .gray
         self.category = category
         self.baseAmount = baseAmount
+        self.startDate = startDate
+        if startDate != nil {
+            self.frequency = .monthly
+        }
         self.children = children
     }
     

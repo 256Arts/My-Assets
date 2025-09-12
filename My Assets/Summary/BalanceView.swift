@@ -63,7 +63,9 @@ struct BalanceView: View {
             }
         }
         .navigationTitle("Balance")
+        #if !os(macOS)
         .navigationBarTitleDisplayMode(.inline)
+        #endif
     }
 }
 

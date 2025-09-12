@@ -52,13 +52,17 @@ final class Income: Schedulable, Comparable, Hashable {
     
     // MARK: Init
     
-    init(name: String, symbol: Symbol, isLiquid: Bool, amount: Double, isPassive: Bool) {
+    init(name: String, symbol: Symbol, isLiquid: Bool, amount: Double, isPassive: Bool, startDate: Date? = nil) {
         self.name = name
         self.symbol = symbol
         self.colorName = .gray
         self.isLiquid = true
         self.amount = amount
         self.isPassive = isPassive
+        self.startDate = startDate
+        if startDate != nil {
+            self.frequency = .monthly
+        }
     }
     
 }
