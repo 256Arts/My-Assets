@@ -29,7 +29,7 @@ struct SummaryView: View {
     @AppStorage(UserDefaults.Key.summaryScreenShowInsights) var summaryScreenShowInsights = true
     
     @Environment(\.modelContext) private var modelContext
-    @EnvironmentObject var data: FinancialData
+    @Environment(FinancialData.self) private var data
     @Environment(\.horizontalSizeClass) private var hSizeClass
 
     @State var showingSettings = false

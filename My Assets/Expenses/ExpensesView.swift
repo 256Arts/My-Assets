@@ -28,7 +28,7 @@ struct ExpensesView: View {
     }
     
     @Environment(\.modelContext) private var modelContext
-    @EnvironmentObject var data: FinancialData
+    @Environment(FinancialData.self) private var data
     
     @Query(filter: #Predicate<Expense> {
         $0.parent == nil

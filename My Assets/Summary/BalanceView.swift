@@ -14,7 +14,7 @@ struct BalanceView: View {
     @AppStorage(UserDefaults.Key.amountMarqueeShowAsCombinedValue) var showAsCombinedValue = false
     @AppStorage(UserDefaults.Key.summaryScreenBalanceShowChart) var summaryScreenBalanceShowChart = true
     
-    @EnvironmentObject var data: FinancialData
+    @Environment(FinancialData.self) private var data
     @Environment(\.dismiss) private var dismiss
     
     @State var period = Period(rawValue: UserDefaults.standard.string(forKey: UserDefaults.Key.amountMarqueePeriod) ?? "") ?? .month {

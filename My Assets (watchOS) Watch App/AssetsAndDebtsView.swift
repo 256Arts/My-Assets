@@ -12,7 +12,7 @@ import SwiftData
 struct AssetsAndDebtsView: View {
     
     @Environment(\.modelContext) private var modelContext
-    @EnvironmentObject var data: FinancialData
+    @Environment(FinancialData.self) private var data
     
     @Query var unsortedNonStockAssets: [Asset]
     @Query var unsortedDebts: [Debt]

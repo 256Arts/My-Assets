@@ -7,13 +7,15 @@
 //
 
 import SwiftUI
+import StoreKit
 
 struct NewStockView: View {
     
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) var dismiss
+    @Environment(\.requestReview) private var requestReview
     
-    @EnvironmentObject var data: FinancialData
+    @Environment(FinancialData.self) private var data
     
     @State var stockSymbol = ""
     @State var quantity = 0.0
@@ -41,6 +43,7 @@ struct NewStockView: View {
                             try? await stock.fetchPrices()
                             modelContext.insert(stock)
                             self.data.stocks.append(stock)
+                            if UserDefaults.standard.incrementItemsCreated() { requestReview() }
                         }
                         self.dismiss()
                     }

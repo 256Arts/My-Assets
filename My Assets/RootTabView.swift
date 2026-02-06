@@ -26,6 +26,7 @@ struct RootTabView: View {
     @AppStorage(UserDefaults.Key.tabViewCustomization) var tabViewCustomization: TabViewCustomization
     
     @State var selectedTab: Tabs = .summary
+    @State var showingEvent = false
     
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -64,7 +65,17 @@ struct RootTabView: View {
                 return .red
             }
         }())
-        .environmentObject(financialData)
+        .environment(financialData)
+        .alert("Event Intro", isPresented: $showingEvent) {
+            Button("OK", role: .close) { }
+        } message: {
+            Text("Now let's celebrate by logging an income or expense and trying out the new features!")
+        }
+        .onOpenURL { url in
+            if url.path().contains("myassets/appstoreevent") {
+                showingEvent = true
+            }
+        }
     }
     
     private var financialData: FinancialData {

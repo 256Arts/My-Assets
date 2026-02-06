@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import StoreKit
 
 struct NewAssetView: View {
     
@@ -16,8 +17,9 @@ struct NewAssetView: View {
     
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) var dismiss
+    @Environment(\.requestReview) private var requestReview
     
-    @EnvironmentObject var data: FinancialData
+    @Environment(FinancialData.self) private var data
     
     @State var asset = Asset()
     @State var interestInputMode: InterestInputMode = .direct
@@ -94,6 +96,8 @@ struct NewAssetView: View {
                     
                     modelContext.insert(asset)
                     self.data.nonStockAssets.append(self.asset)
+                    
+                    if UserDefaults.standard.incrementItemsCreated() { requestReview() }
                     self.dismiss()
                 }
                 .disabled(value == nil)

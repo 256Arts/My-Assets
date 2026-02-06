@@ -7,15 +7,16 @@
 //
 
 import SwiftUI
+import StoreKit
 
 struct NewDebtView: View {
     
     var parentAsset: Asset?
     
     @Environment(\.dismiss) var dismiss
-    
     @Environment(\.modelContext) private var modelContext
-    @EnvironmentObject var data: FinancialData
+    @Environment(FinancialData.self) private var data
+    @Environment(\.requestReview) private var requestReview
     
     @State var debt = Debt()
     @State var interest: Double?
@@ -114,6 +115,8 @@ struct NewDebtView: View {
             self.data.debts.append(self.debt)
 //            self.data.expenses.append(expense)
         }
+        
+        if UserDefaults.standard.incrementItemsCreated() { requestReview() }
         
         dismiss()
     }

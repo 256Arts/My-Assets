@@ -11,7 +11,7 @@ import SwiftUI
 struct AssetView: View {
     
     @Environment(\.modelContext) private var modelContext
-    @EnvironmentObject var data: FinancialData
+    @Environment(FinancialData.self) private var data
     
     @Bindable var asset: Asset
     

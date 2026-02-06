@@ -11,6 +11,8 @@ import Foundation
 extension UserDefaults {
     
     struct Key {
+        static let itemsCreatedCount = "itemsCreatedCount"
+        
         static let userType = "userType"
         static let otherHouseholdNetWorth = "otherHouseholdNetWorth"
         static let birthday = "birthday"
@@ -40,6 +42,13 @@ extension UserDefaults {
             Key.summaryScreenShowCashFlows: true,
             Key.summaryScreenShowInsights: true
         ])
+    }
+    
+    /// Increment count and return true if we should request an app review
+    func incrementItemsCreated() -> Bool {
+        let count = integer(forKey: Key.itemsCreatedCount) + 1
+        setValue(count, forKey: Key.itemsCreatedCount)
+        return [5, 20, 50, 100].contains(count)
     }
     
 }

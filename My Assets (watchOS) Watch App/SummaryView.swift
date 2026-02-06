@@ -10,7 +10,7 @@ import SwiftUI
 
 struct SummaryView: View {
     
-    @EnvironmentObject var data: FinancialData
+    @Environment(FinancialData.self) private var data
     
     var body: some View {
         List {

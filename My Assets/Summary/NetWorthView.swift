@@ -15,7 +15,7 @@ struct NetWorthView: View {
     @AppStorage(UserDefaults.Key.summaryScreenNetWorthShowChart) var summaryScreenNetWorthShowChart = true
     @AppStorage(UserDefaults.Key.summaryScreenNetWorthShowPercentile) var summaryScreenNetWorthShowPercentile = true
     
-    @EnvironmentObject var data: FinancialData
+    @Environment(FinancialData.self) private var data
     @Environment(\.dismiss) private var dismiss
     
     @State var period = Period(rawValue: UserDefaults.standard.string(forKey: UserDefaults.Key.amountMarqueePeriod) ?? "") ?? .month {

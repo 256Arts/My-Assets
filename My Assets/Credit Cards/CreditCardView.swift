@@ -10,7 +10,7 @@ import SwiftUI
 
 struct CreditCardView: View {
     
-    @EnvironmentObject var data: FinancialData
+    @Environment(FinancialData.self) private var data
     
     var insights: InsightsGenerator {
         .init(data: data)

@@ -11,7 +11,7 @@ import SwiftData
 
 struct ExpensesView: View {
     
-    @EnvironmentObject var data: FinancialData
+    @Environment(FinancialData.self) private var data
     
     @Query(filter: #Predicate<Expense> {
         $0.parent == nil

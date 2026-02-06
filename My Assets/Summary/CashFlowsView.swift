@@ -19,7 +19,7 @@ struct CashFlowsView: View {
         var id: String { name + String(amount) + nextTransactionDate.description }
     }
     
-    @EnvironmentObject var data: FinancialData
+    @Environment(FinancialData.self) private var data
     @Query var upcomingSpends: [UpcomingSpend]
     
     private let dateFormatter: DateFormatter = {

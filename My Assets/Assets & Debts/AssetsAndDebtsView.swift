@@ -13,7 +13,7 @@ import Charts
 struct AssetsAndDebtsView: View {
     
     @Environment(\.modelContext) private var modelContext
-    @EnvironmentObject var data: FinancialData
+    @Environment(FinancialData.self) private var data
     @Environment(\.horizontalSizeClass) private var hSizeClass
     
     @Query var unsortedNonStockAssets: [Asset]

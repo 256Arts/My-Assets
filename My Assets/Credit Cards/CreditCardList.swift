@@ -12,7 +12,7 @@ import SwiftUI
 struct CreditCardList: View {
     
     @Environment(\.modelContext) private var modelContext
-    @EnvironmentObject var data: FinancialData
+    @Environment(FinancialData.self) private var data
     
     @Query(sort: [SortDescriptor(\CreditCard.name)]) var creditCards: [CreditCard]
     

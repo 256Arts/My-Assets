@@ -7,13 +7,15 @@
 //
 
 import SwiftUI
+import StoreKit
 
 struct NewIncomeSourceView: View {
     
+    @Environment(\.requestReview) private var requestReview
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) var dismiss
     
-    @EnvironmentObject var data: FinancialData
+    @Environment(FinancialData.self) private var data
     
     @Bindable var income = Income(name: "", symbol: Symbol.defaultSymbol, isLiquid: true, amount: 0, isPassive: false)
     @State var earnings: Double?
@@ -76,6 +78,7 @@ struct NewIncomeSourceView: View {
                     self.income.amount = earnings
                     modelContext.insert(income)
                     self.data.income.append(self.income)
+                    if UserDefaults.standard.incrementItemsCreated() { requestReview() }
                     self.dismiss()
                 }
                 .disabled(earnings == nil)

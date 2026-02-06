@@ -7,11 +7,13 @@
 //
 
 import SwiftUI
+import StoreKit
 
 struct NewCreditCardView: View {
     
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) var dismiss
+    @Environment(\.requestReview) private var requestReview
     
     @Bindable var creditCard: CreditCard = CreditCard()
     
@@ -80,6 +82,7 @@ struct NewCreditCardView: View {
             ToolbarItem(placement: .confirmationAction) {
                 Button("Add") {
                     modelContext.insert(creditCard)
+                    if UserDefaults.standard.incrementItemsCreated() { requestReview() }
                     self.dismiss()
                 }
                 .disabled(creditCard.name?.isEmpty != false)

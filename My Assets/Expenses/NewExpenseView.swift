@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import StoreKit
 
 struct NewExpenseView: View {
     
@@ -14,8 +15,9 @@ struct NewExpenseView: View {
     
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) var dismiss
+    @Environment(\.requestReview) private var requestReview
     
-    @EnvironmentObject var data: FinancialData
+    @Environment(FinancialData.self) private var data
     
     @Bindable var expense = Expense(name: "", symbol: Symbol.defaultSymbol, category: .discretionary, baseAmount: 0)
     @State var cost: Double?
@@ -79,6 +81,7 @@ struct NewExpenseView: View {
                     } else {
                         self.data.expenses.append(self.expense)
                     }
+                    if UserDefaults.standard.incrementItemsCreated() { requestReview() }
                     self.dismiss()
                 }
                 .disabled(cost == nil)

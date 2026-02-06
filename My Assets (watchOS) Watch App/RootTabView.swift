@@ -82,7 +82,7 @@ struct RootTabView: View {
                 }
             }
         }
-        .environmentObject(financialData)
+        .environment(financialData)
     }
     
     private var financialData: FinancialData {

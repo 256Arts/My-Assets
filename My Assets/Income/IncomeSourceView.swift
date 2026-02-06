@@ -10,7 +10,7 @@ import SwiftUI
 
 struct IncomeSourceView: View {
     
-    @EnvironmentObject var data: FinancialData
+    @Environment(FinancialData.self) private var data
     
     @Bindable var income: Income
     

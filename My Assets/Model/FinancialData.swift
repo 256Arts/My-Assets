@@ -8,19 +8,20 @@
 
 import SwiftUI
 
-final class FinancialData: ObservableObject {
+@Observable
+final class FinancialData {
     
     static let newestFileVersion = 1
     
-    @Published var nonStockAssets: [Asset]
-    @Published var stocks: [Stock]
+    var nonStockAssets: [Asset]
+    var stocks: [Stock]
     var assets: [Asset] {
         (nonStockAssets + stocks.map({ Asset(stock: $0) })).sorted(by: >)
     }
     
-    @Published var debts: [Debt]
+    var debts: [Debt]
     
-    @Published var income: [Income]
+    var income: [Income]
     var totalLiquidIncome: Double {
         income.filter({ $0.isLiquid == true }).reduce(0, { $0 + ($1.monthlyEarnings ?? 0) })
     }
@@ -37,7 +38,7 @@ final class FinancialData: ObservableObject {
         income.reduce(0, { $0 + ($1.monthlyEarnings ?? 0) })
     }
     
-    @Published var expenses: [Expense]
+    var expenses: [Expense]
     var totalExpenses: Double {
         expenses.reduce(0, { $0 + $1.monthlyCost(excludingSavings: true) })
     }

@@ -29,7 +29,7 @@ struct LongTermChart: View {
         var id: Date { date }
     }
     
-    @EnvironmentObject var data: FinancialData
+    @Environment(FinancialData.self) private var data
     @Binding var years: Int
     @Binding var chartStyle: ChartStyle
     
