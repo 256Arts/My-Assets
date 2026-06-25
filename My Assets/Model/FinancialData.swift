@@ -47,10 +47,12 @@ final class FinancialData {
     }
     
     var avgAnnualNetWorthInterest: Double {
-        // Calculate weigted average
+        // Weighted by net worth, so this is a return-on-equity figure: it is amplified by
+        // leverage (debt). It is the rate at which net worth grows on its own, and is the
+        // headline "YoY" shown on the net-worth chart.
         let totalWeight = netWorth(at: .now, type: .natural)
         guard !totalWeight.isZero else { return 0.0 }
-        
+
         var avgInterest = 0.0
         for asset in assets {
             avgInterest += asset.effectiveAnnualInterestFraction * asset.currentValue
@@ -59,6 +61,22 @@ final class FinancialData {
             avgInterest -= (debt.annualInterestFraction ?? 0) * debt.currentValue
         }
         return avgInterest / totalWeight
+    }
+
+    var avgAnnualSavingsInterest: Double {
+        // Blended interest rate earned by liquid assets, weighted by their value. Unlike
+        // `avgAnnualNetWorthInterest` (return on equity), this is NOT leverage-amplified —
+        // newly saved cash joins your liquid holdings and earns this rate, so it's the
+        // correct rate for compounding future savings contributions in projections.
+        let liquidAssets = assets.filter { $0.isLiquid ?? true }
+        let totalLiquid = liquidAssets.reduce(0.0, { $0 + $1.currentValue })
+        guard !totalLiquid.isZero else { return 0.0 }
+
+        let weightedInterest = liquidAssets.reduce(0.0) { sum, asset in
+            let rate = asset.effectiveAnnualInterestFraction
+            return sum + (rate.isFinite ? rate : 0) * asset.currentValue
+        }
+        return weightedInterest / totalLiquid
     }
     
     func balance(at date: Date) -> Double {
@@ -104,7 +122,9 @@ final class FinancialData {
             }
         }()
         let pmt = income - expenses
-        let r = avgAnnualNetWorthInterest / 12
+        // New savings earn the (un-leveraged) rate on liquid assets, not the leveraged
+        // return on equity — assets/debts above are already projected at their own rates.
+        let r = avgAnnualSavingsInterest / 12
         let n = date.timeIntervalSinceNow / TimeInterval.month
         // Future value of an annuity. When the rate is zero the standard formula divides
         // by zero (0/0 → NaN), so fall back to its r→0 limit: payments with no compounding.

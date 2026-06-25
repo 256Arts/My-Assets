@@ -93,21 +93,30 @@ struct LongTermChart: View {
             return ValueAtDate(value: value, date: date)
         }
     }
-    var chartYoYString: Text? {
+    @ViewBuilder
+    var chartYoYLabels: some View {
         switch chartDataSource {
         case .balance:
             let fraction = insights.avgAnnualBalanceInterest
             if 0 < fraction {
-                return Text("YoY: \(percentFormatter.string(from: NSNumber(value: fraction))!)")
-            } else {
-                return nil
+                Text("YoY: \(percentFormatter.string(from: NSNumber(value: fraction))!)")
+                    .font(.headline)
             }
         case .netWorth:
-            let fraction = data.avgAnnualNetWorthInterest
-            if 0 < fraction {
-                return Text("YoY: \(percentFormatter.string(from: NSNumber(value: fraction))!)")
-            } else {
-                return nil
+            // Headline is return on equity (leverage-amplified); the asset yield underneath
+            // is the un-leveraged rate your money — and your future savings — actually earn.
+            let roe = data.avgAnnualNetWorthInterest
+            let assetYield = data.avgAnnualSavingsInterest
+            VStack(alignment: .leading, spacing: 0) {
+                if 0 < roe {
+                    Text("YoY: \(percentFormatter.string(from: NSNumber(value: roe))!)")
+                        .font(.headline)
+                }
+                if 0 < assetYield {
+                    Text("Assets: \(percentFormatter.string(from: NSNumber(value: assetYield))!)")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
             }
         }
     }
@@ -169,10 +178,7 @@ struct LongTermChart: View {
         }
         .frame(height: 200)
         .overlay(alignment: .topLeading) {
-            if let chartYoYString {
-                chartYoYString
-                    .font(.headline)
-            }
+            chartYoYLabels
         }
     }
 }

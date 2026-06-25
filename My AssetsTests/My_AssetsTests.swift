@@ -85,6 +85,30 @@ func testNetWorthProjectionWithZeroInterest() {
 }
 
 @Test
+func testSavingsCompoundAtAssetYieldNotROE() {
+    // $200k liquid assets @ 5%, $150k debt @ 0% with no payments (stays flat).
+    // Net worth = $50k, so return on equity is amplified by leverage:
+    //   net interest $10k / $50k net worth = 20% ROE.
+    // But newly saved cash earns the asset yield, not ROE:
+    //   $10k / $200k assets = 5%.
+    let asset = Asset(value: 200_000, annualInterestFraction: 0.05)
+    let debt = Debt(value: 150_000, paymentAmount: 0)
+    debt.annualInterestFraction = 0
+    let income = Income(name: "Salary", symbol: .banknote, isLiquid: true, amount: 2_000, isPassive: false)
+    let data = FinancialData(nonStockAssets: [asset], stocks: [], debts: [debt], income: [income], expenses: [])
+
+    #expect((data.avgAnnualNetWorthInterest * 100).rounded() == 20) // leveraged ROE (headline)
+    #expect((data.avgAnnualSavingsInterest * 100).rounded() == 5)   // un-leveraged asset yield
+
+    // One-year projection: assets 200k → 210k, debt flat at 150k, plus a $2,000/mo
+    // savings annuity compounded at 5% (≈ $24,557). Net worth ≈ $84,557.
+    // If savings wrongly compounded at the 20% ROE the annuity would be ≈ $26,326,
+    // pushing net worth to ≈ $86,326 — the "YoY net is too high" bug.
+    let projected = data.netWorth(at: .init(timeIntervalSinceNow: .year), type: .working)
+    #expect(abs(projected - 84_557) < 2)
+}
+
+@Test
 func testWorldStats() {
     // Query at the 2023 base year so no inflation projection is applied and the raw reference data is returned.
     let dataYear = Calendar.current.date(from: DateComponents(year: 2023))!
