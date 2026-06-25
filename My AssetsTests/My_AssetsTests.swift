@@ -109,6 +109,20 @@ func testSavingsCompoundAtAssetYieldNotROE() {
 }
 
 @Test
+func testSavingsInterestBlendsAllAssets() {
+    // Birds-eye savings yield weights across ALL assets, including illiquid ones:
+    // liquid $200k @ 5% plus an illiquid home $100k @ 3%.
+    //   (0.05 × 200k + 0.03 × 100k) / 300k = $13k / $300k ≈ 4.33%.
+    // A liquid-only weighting would instead give 5%.
+    let liquid = Asset(value: 200_000, annualInterestFraction: 0.05)
+    let home = Asset(value: 100_000, annualInterestFraction: 0.03)
+    home.isLiquid = false
+    let data = FinancialData(nonStockAssets: [liquid, home], stocks: [], debts: [], income: [], expenses: [])
+
+    #expect((data.avgAnnualSavingsInterest * 1_000).rounded() == 43) // 4.33%, not 5%
+}
+
+@Test
 func testWorldStats() {
     // Query at the 2023 base year so no inflation projection is applied and the raw reference data is returned.
     let dataYear = Calendar.current.date(from: DateComponents(year: 2023))!

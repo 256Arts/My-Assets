@@ -64,19 +64,18 @@ final class FinancialData {
     }
 
     var avgAnnualSavingsInterest: Double {
-        // Blended interest rate earned by liquid assets, weighted by their value. Unlike
-        // `avgAnnualNetWorthInterest` (return on equity), this is NOT leverage-amplified —
-        // newly saved cash joins your liquid holdings and earns this rate, so it's the
-        // correct rate for compounding future savings contributions in projections.
-        let liquidAssets = assets.filter { $0.isLiquid ?? true }
-        let totalLiquid = liquidAssets.reduce(0.0, { $0 + $1.currentValue })
-        guard !totalLiquid.isZero else { return 0.0 }
+        // Blended interest rate earned across all assets, weighted by their value. Unlike
+        // `avgAnnualNetWorthInterest` (return on equity), this is NOT leverage-amplified.
+        // For the long-term birds-eye projection, savings are assumed to be deployed across
+        // the whole portfolio over time, so this is the rate used to compound future savings.
+        let totalAssets = assets.reduce(0.0, { $0 + $1.currentValue })
+        guard !totalAssets.isZero else { return 0.0 }
 
-        let weightedInterest = liquidAssets.reduce(0.0) { sum, asset in
+        let weightedInterest = assets.reduce(0.0) { sum, asset in
             let rate = asset.effectiveAnnualInterestFraction
             return sum + (rate.isFinite ? rate : 0) * asset.currentValue
         }
-        return weightedInterest / totalLiquid
+        return weightedInterest / totalAssets
     }
     
     func balance(at date: Date) -> Double {
