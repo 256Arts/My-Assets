@@ -69,6 +69,22 @@ func testAvgAnnualNetWorthInterest() {
 }
 
 @Test
+func testNetWorthProjectionWithZeroInterest() {
+    // A $1,000 cash asset at 0% interest, plus $100/mo net income and no expenses.
+    // With a zero weighted-average interest rate the annuity formula's `/r` term is
+    // a 0/0 singularity; the projection must fall back to simple (uncompounded) growth
+    // instead of producing NaN. After one year: $1,000 + $100 × 12 = $2,200.
+    let asset = Asset(value: 1_000, annualInterestFraction: 0)
+    let income = Income(name: "Salary", symbol: .banknote, isLiquid: true, amount: 100, isPassive: false)
+    let data = FinancialData(nonStockAssets: [asset], stocks: [], debts: [], income: [income], expenses: [])
+
+    #expect(data.avgAnnualNetWorthInterest.isZero)
+    let projected = data.netWorth(at: .init(timeIntervalSinceNow: .year), type: .working)
+    #expect(projected.isNaN == false)
+    #expect(projected.rounded() == 2_200)
+}
+
+@Test
 func testWorldStats() {
     // Query at the 2023 base year so no inflation projection is applied and the raw reference data is returned.
     let dataYear = Calendar.current.date(from: DateComponents(year: 2023))!

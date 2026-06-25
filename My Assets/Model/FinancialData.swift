@@ -106,8 +106,10 @@ final class FinancialData {
         let pmt = income - expenses
         let r = avgAnnualNetWorthInterest / 12
         let n = date.timeIntervalSinceNow / TimeInterval.month
-        let fv = pmt * (pow(1 + r, n) - 1) / r
-        
+        // Future value of an annuity. When the rate is zero the standard formula divides
+        // by zero (0/0 → NaN), so fall back to its r→0 limit: payments with no compounding.
+        let fv = r.isZero ? pmt * n : pmt * (pow(1 + r, n) - 1) / r
+
         return (assetsAtDate + fv, debtsAtDate)
     }
     
