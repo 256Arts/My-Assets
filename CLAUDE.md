@@ -6,6 +6,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **My Assets** is a personal net-worth / cash-flow tracking app built in SwiftUI. It runs as a native app across iOS, macOS, visionOS (`xros`), and watchOS. There is no CocoaPods/SPM dependency manifest — it relies entirely on Apple frameworks (SwiftUI, SwiftData, Swift Charts, Swift Testing).
 
+## Design philosophy
+
+Design the app around **big-picture, long-term thinking about finance** — it's a birds-eye wealth tool, not a day-to-day budgeting app. When a feature or calculation can be framed either narrowly (this month, this account, mechanically precise) or broadly (the whole portfolio, years out, how wealth compounds overall), **prefer the broad framing**. Favor metrics and projections that show the trajectory of net worth over years, and surface signals that inform long-term strategy.
+
+Concrete expressions of this principle already in the code:
+- The net-worth chart's headline **YoY** is *return on equity* (`avgAnnualNetWorthInterest`), a leverage-aware signal of how fast net worth compounds — kept as the headline precisely because it gives big-picture strategic feedback (e.g. that borrowing is growing wealth), even though it can look "high."
+- Future savings compound at the **blended yield across *all* assets** (`avgAnnualSavingsInterest`), illiquid holdings included — a whole-portfolio long-term view, deliberately chosen over a mechanically precise liquid-only rate.
+
+When in doubt on a modeling or display question, pick the option that best serves the multi-year, whole-finances perspective, and ask if a trade-off is genuinely the user's call.
+
 ## Build, Run & Test
 
 This is an Xcode project (`My Assets.xcodeproj`). Two shared schemes exist: `My Assets` (iOS/macOS/visionOS) and `My Assets (watchOS) Watch App`. Pick a concrete `-destination` for the current toolchain (e.g. an available iOS Simulator from `xcrun simctl list`).
