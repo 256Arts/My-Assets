@@ -41,7 +41,15 @@ final class InsightsGenerator {
         // Exclude asset interest since it's included in `avgAnnualBalanceInterest`
         let totalStaticPassiveIncome = passiveIncome.filter({ $0.fromAsset == nil }).reduce(0.0, { $0 + ($1.monthlyEarnings ?? 0) })
         let staticMonthlyDrain = totalStaticExpenses - totalStaticPassiveIncome
-        
+
+        let p = data.balance(at: .now) // Principal value
+        let r = avgAnnualBalanceInterest // Rate
+
+        // With no balance interest the log-based formula divides by zero, so fall back to a flat drain.
+        guard !r.isZero else {
+            return 0 < staticMonthlyDrain ? p / staticMonthlyDrain : .infinity
+        }
+
         // Dynamic = Different amount every month based on interest percentages
         /* Using formulas:
          - Compound interest
@@ -49,12 +57,10 @@ final class InsightsGenerator {
          Note: We get the formula below by solving for t.
         */
         let a = 0.0 // Future value
-        let p = data.balance(at: .now) // Principal value
-        let r = avgAnnualBalanceInterest // Rate
         let n = 12.0 // Compounds per time unit
         let m = -staticMonthlyDrain // Monthly payment
         let t = log((a * r + n * m) / (p * r + n * m)) / (n * log(1 + r / n))
-        
+
         return t * 12
     }
     var retirementDate: Date? {
@@ -156,6 +162,7 @@ final class InsightsGenerator {
             insights.append("Selling assets in January will defer your tax expense.")
         case 11, 12:
             insights.append("Waiting until January to sell assets will defer your tax expense.")
+            insights.append("If you expect to be in a higher tax bracket next year, selling assets before January locks in this year's lower rate.")
         default:
             break
         }

@@ -56,7 +56,7 @@ final class FinancialData {
             avgInterest += asset.effectiveAnnualInterestFraction * asset.currentValue
         }
         for debt in debts {
-            avgInterest -= debt.annualInterestFraction ?? 0 * debt.currentValue
+            avgInterest -= (debt.annualInterestFraction ?? 0) * debt.currentValue
         }
         return avgInterest / totalWeight
     }

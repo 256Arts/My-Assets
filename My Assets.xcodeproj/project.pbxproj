@@ -58,22 +58,6 @@
 		1B7DF80E2E24133C0071B353 /* Exceptions for "My Assets" folder in "My AssetsTests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Model/AlphaVantage.swift,
-				Model/Asset.swift,
-				Model/CreditCard.swift,
-				Model/Debt.swift,
-				Model/Expense.swift,
-				Model/FinancialData.swift,
-				Model/Income.swift,
-				Model/InsightsGenerator.swift,
-				Model/Period.swift,
-				Model/Stock.swift,
-				Model/Symbol.swift,
-				Model/TimeInterval.swift,
-				Model/TransactionFrequency.swift,
-				Model/UpcomingSpend.swift,
-				Model/UserType.swift,
-				Model/WorldFinanceStats.swift,
 			);
 			target = 1B31939D282DDCDF00AA2038 /* My AssetsTests */;
 		};
@@ -367,7 +351,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = VA3SY54YU8;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jaydenirwin.My-AssetsTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -387,7 +371,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = VA3SY54YU8;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jaydenirwin.My-AssetsTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
