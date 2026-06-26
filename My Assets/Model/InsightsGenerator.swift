@@ -7,6 +7,9 @@
 //
 
 import SwiftUI
+#if canImport(FoundationModels)
+import FoundationModels
+#endif
 
 final class InsightsGenerator {
     
@@ -187,5 +190,127 @@ final class InsightsGenerator {
         
         return insights
     }
-    
+
+    /// A compact, plain-language snapshot of the user's finances, fed to the on-device
+    /// model as grounding context for custom insights. Only includes figures the app
+    /// already computes — the model is instructed never to invent numbers beyond these.
+    var financialSummary: String {
+        func money(_ value: Double) -> String {
+            currencyFormatter.string(from: NSNumber(value: value)) ?? "\(value)"
+        }
+        func percent(_ value: Double) -> String {
+            percentFormatter.string(from: NSNumber(value: value)) ?? "\(value)"
+        }
+
+        var lines: [String] = []
+        lines.append("Net worth: \(money(data.netWorth(at: .now, type: .working)))")
+        lines.append("Liquid balance: \(money(data.balance(at: .now)))")
+        lines.append("Projected net worth in 5 years: \(netWorthIn5YearsString)")
+        lines.append("Year-over-year net worth growth (return on equity, leverage-aware): \(percent(data.avgAnnualNetWorthInterest))")
+        lines.append("Blended annual yield across all assets: \(percent(data.avgAnnualSavingsInterest))")
+        lines.append("Monthly income: \(money(data.totalIncome)) (of which passive: \(money(data.totalPassiveIncome)))")
+        lines.append("Monthly expenses: \(money(data.totalExpenses))")
+        if !liveOffMonths.isNaN {
+            lines.append("Could live off savings / passive income for: \(liveOffTimeString)")
+        }
+        if let percentile = netWorthPercentileString {
+            lines.append("Household net worth ranking: \(percentile)")
+        }
+        return lines.joined(separator: "\n")
+    }
+
 }
+
+#if canImport(FoundationModels)
+
+/// Structured output for the on-device model: a short list of insight strings.
+@Generable
+struct GeneratedInsights {
+    @Guide(description: "Three or four distinct, specific insights about the user's long-term financial trajectory. Each is one or two sentences.")
+    var insights: [String]
+}
+
+/// Generates personalized, long-term financial insights on-device via Apple Intelligence
+/// (the Foundation Models framework). Financial data never leaves the device.
+@MainActor
+@Observable
+final class AIInsightsGenerator {
+
+    enum Phase {
+        case idle
+        case generating
+        case loaded([String])
+        case unavailable(String)
+        case failed(String)
+    }
+
+    private(set) var phase: Phase = .idle
+
+    private static let instructions = """
+    You are a financial insights assistant inside "My Assets", a birds-eye net-worth app \
+    focused on long-term wealth strategy — not day-to-day budgeting.
+
+    Given a snapshot of the user's finances, surface three or four distinct insights about \
+    their long-term trajectory. Follow these rules:
+    - Think big-picture and multi-year: how net worth compounds, the effect of leverage, \
+    savings rate, passive income, and time horizon.
+    - Ground every statement only in the figures provided. Never invent numbers, percentages, \
+    or facts that are not in the snapshot.
+    - Be specific to this user's situation. Avoid generic tips like "make a budget" or "spend less".
+    - Keep each insight to one or two sentences, concrete and strategic.
+    - Be direct and encouraging. Do not add disclaimers or hedging.
+    """
+
+    /// Generates insights from a financial summary, unless a generation has already
+    /// succeeded or is in flight. Use `regenerate(summary:)` to force a refresh.
+    func generateIfNeeded(summary: String) async {
+        if case .idle = phase {
+            await regenerate(summary: summary)
+        }
+    }
+
+    func regenerate(summary: String) async {
+        switch SystemLanguageModel.default.availability {
+        case .available:
+            break
+        case .unavailable(.deviceNotEligible):
+            phase = .unavailable("This device doesn't support Apple Intelligence.")
+            return
+        case .unavailable(.appleIntelligenceNotEnabled):
+            phase = .unavailable("Turn on Apple Intelligence in Settings to see custom insights.")
+            return
+        case .unavailable(.modelNotReady):
+            phase = .unavailable("Apple Intelligence is preparing its model. Try again shortly.")
+            return
+        case .unavailable:
+            phase = .unavailable("Apple Intelligence is currently unavailable.")
+            return
+        }
+
+        phase = .generating
+        do {
+            let session = LanguageModelSession(instructions: Self.instructions)
+            let prompt = """
+            Here is the user's current financial snapshot:
+
+            \(summary)
+
+            Generate the insights now.
+            """
+            let response = try await session.respond(to: prompt, generating: GeneratedInsights.self)
+            let cleaned = response.content.insights
+                .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+                .filter { !$0.isEmpty }
+            if cleaned.isEmpty {
+                phase = .failed("No insights were generated.")
+            } else {
+                phase = .loaded(Array(cleaned.prefix(4)))
+            }
+        } catch {
+            phase = .failed("Couldn't generate custom insights right now.")
+        }
+    }
+
+}
+
+#endif

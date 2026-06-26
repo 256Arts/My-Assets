@@ -27,7 +27,12 @@ struct SummaryView: View {
     @AppStorage(UserDefaults.Key.summaryScreenNetWorthShowPercentile) var summaryScreenNetWorthShowPercentile = true
     @AppStorage(UserDefaults.Key.summaryScreenShowCashFlows) var summaryScreenShowCashFlows = true
     @AppStorage(UserDefaults.Key.summaryScreenShowInsights) var summaryScreenShowInsights = true
-    
+    @AppStorage(UserDefaults.Key.summaryScreenShowCustomInsights) var summaryScreenShowCustomInsights = true
+
+    #if canImport(FoundationModels)
+    @State private var aiInsights = AIInsightsGenerator()
+    #endif
+
     @Environment(\.modelContext) private var modelContext
     @Environment(FinancialData.self) private var data
     @Environment(\.horizontalSizeClass) private var hSizeClass
@@ -42,7 +47,48 @@ struct SummaryView: View {
     var insights: InsightsGenerator {
         .init(data: data)
     }
-    
+
+    #if canImport(FoundationModels)
+    @ViewBuilder
+    private var customInsights: some View {
+        Group {
+            switch aiInsights.phase {
+            case .idle, .generating:
+                HStack(spacing: 8) {
+                    ProgressView()
+                    Text("Generating custom insights…")
+                        .foregroundStyle(.secondary)
+                }
+            case .loaded(let items):
+                ForEach(Array(items.enumerated()), id: \.0) { (_, string) in
+                    Label(string, systemImage: "sparkles")
+                }
+                Button("Regenerate", systemImage: "arrow.clockwise") {
+                    Task { await aiInsights.regenerate(summary: insights.financialSummary) }
+                }
+                .font(.footnote)
+            case .unavailable(let message):
+                Label(message, systemImage: "sparkles.slash")
+                    .foregroundStyle(.secondary)
+                    .font(.footnote)
+            case .failed(let message):
+                HStack {
+                    Label(message, systemImage: "exclamationmark.triangle")
+                        .foregroundStyle(.secondary)
+                    Spacer()
+                    Button("Retry") {
+                        Task { await aiInsights.regenerate(summary: insights.financialSummary) }
+                    }
+                }
+                .font(.footnote)
+            }
+        }
+        .task {
+            await aiInsights.generateIfNeeded(summary: insights.financialSummary)
+        }
+    }
+    #endif
+
     var body: some View {
         NavigationStack {
             List {
@@ -119,6 +165,12 @@ struct SummaryView: View {
                         ForEach(Array(insights.generate().enumerated()), id: \.0) { (_, string) in
                             Text(string)
                         }
+
+                        #if canImport(FoundationModels)
+                        if summaryScreenShowCustomInsights {
+                            customInsights
+                        }
+                        #endif
                     }
                 }
             }
@@ -132,6 +184,9 @@ struct SummaryView: View {
                         Toggle("Show Net Worth", isOn: $summaryScreenShowNetWorth)
                         Toggle("Show Cash Flows", isOn: $summaryScreenShowCashFlows)
                         Toggle("Show Insights", isOn: $summaryScreenShowInsights)
+                        #if canImport(FoundationModels)
+                        Toggle("Show Custom Insights", isOn: $summaryScreenShowCustomInsights)
+                        #endif
                     }
                     
                     Button("Settings", systemImage: "gear") {
