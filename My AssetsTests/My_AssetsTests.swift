@@ -23,6 +23,18 @@ func testAsset() {
 }
 
 @Test
+func testStockAssetValueUsesQuantity() {
+    // A holding of 10 shares at $150 is worth $1,500 in net worth — not $150 (one share).
+    // Regression guard for the `price ?? 0 * quantity` precedence bug, where `*` bound
+    // tighter than `??` so a non-nil price ignored quantity entirely.
+    let stock = Stock(symbol: "AAPL", quantity: 10)
+    stock.price = 150
+    let asset = Asset(stock: stock)
+
+    #expect(asset.currentValue.rounded() == 1_500)
+}
+
+@Test
 func testDebt() {
     var debt = Debt()
     debt.currentValue = 1200

@@ -109,7 +109,7 @@ final class Asset: Comparable {
         isLiquid = true
         compoundFrequency = Asset.CompoundFrequency.none
         annualInterestFraction = stock.annualInterestFraction ?? 0.0
-        prevValue = stock.price ?? 0.00 * Double(stock.quantity ?? 1)
+        prevValue = (stock.price ?? 0.00) * Double(stock.quantity ?? 1)
         prevDate = Date()
     }
     
