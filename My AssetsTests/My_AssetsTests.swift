@@ -23,6 +23,20 @@ func testAsset() {
 }
 
 @Test
+func testAssetDepreciation() {
+    // Negative interest models depreciation: a $30,000 car losing 20%/yr.
+    var asset = Asset()
+    asset.currentValue = 30_000
+    asset.annualInterestFraction = -0.20
+
+    #expect(asset.currentValue.rounded() == 30_000)
+    // Default compoundFrequency .none compounds once per year: 30,000 × 0.80 = 24,000.
+    #expect(asset.currentValue(at: .init(timeIntervalSinceNow: .year)).rounded() == 24_000)
+    // A depreciating asset earns negative "income", so the app generates none for it.
+    #expect(asset.monthlyEarnings < 0)
+}
+
+@Test
 func testStockAssetValueUsesQuantity() {
     // A holding of 10 shares at $150 is worth $1,500 in net worth — not $150 (one share).
     // Regression guard for the `price ?? 0 * quantity` precedence bug, where `*` bound

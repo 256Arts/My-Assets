@@ -36,7 +36,9 @@ struct PercentField: View {
                     }
                 }
                 #if !os(macOS)
-                .keyboardType(.decimalPad)
+                // numbersAndPunctuation (not decimalPad) so a minus sign is reachable —
+                // assets can have a negative rate to model depreciation.
+                .keyboardType(.numbersAndPunctuation)
                 #endif
         }
     }
