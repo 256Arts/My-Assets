@@ -24,6 +24,7 @@ struct MyAssetsApp: App {
     var body: some Scene {
         WindowGroup {
             RootTabView()
+                .task { await refreshAppEntityIndex() }
         }
         .defaultSize(width: 500, height: 800)
         .commands {
@@ -34,11 +35,7 @@ struct MyAssetsApp: App {
                 Toggle("Show Insights", isOn: $summaryScreenShowInsights)
             }
         }
-        #if targetEnvironment(simulator) || ((os(macOS) || targetEnvironment(macCatalyst)) && DEBUG)
-        .modelContainer(previewContainer)
-        #else
-        .modelContainer(for: [Asset.self, Debt.self, Stock.self, UpcomingSpend.self, Income.self, Expense.self, CreditCard.self])
-        #endif
+        .modelContainer(sharedModelContainer)
         
         #if os(macOS)
         Settings {

@@ -27,6 +27,8 @@ struct RootTabView: View {
     
     @State var selectedTab: Tabs = .summary
     @State var showingEvent = false
+
+    private var navigator: IntentNavigator { .shared }
     
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -75,6 +77,11 @@ struct RootTabView: View {
             if url.path().contains("myassets/appstoreevent") {
                 showingEvent = true
             }
+        }
+        .onChange(of: navigator.requestedTab) { _, newTab in
+            guard let newTab else { return }
+            selectedTab = newTab
+            navigator.requestedTab = nil
         }
     }
     
