@@ -6,6 +6,7 @@
 //  Copyright © 2021 256 Arts Developer. All rights reserved.
 //
 
+import AppIntents
 import SwiftUI
 
 struct DebtView: View {
@@ -72,6 +73,10 @@ struct DebtView: View {
         #if !os(macOS)
         .navigationBarTitleDisplayMode(.inline)
         #endif
+        .userActivity(AppActivityType.debt, element: debt.persistentModelID) { id, activity in
+            activity.title = debt.name ?? "Debt"
+            activity.appEntityIdentifier = EntityIdentifier(for: DebtEntity.self, identifier: id)
+        }
         .onDisappear {
             debt.name = nameCopy
             debt.expense?.name = debt.name

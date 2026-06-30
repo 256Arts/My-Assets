@@ -6,6 +6,7 @@
 //  Copyright © 2020 256 Arts Developer. All rights reserved.
 //
 
+import AppIntents
 import SwiftUI
 import SwiftData
 import Charts
@@ -108,6 +109,7 @@ struct ExpensesView: View {
                                 }
                             }
                         }
+                        .appEntityIdentifier(EntityIdentifier(for: ExpenseEntity.self, identifier: expense.persistentModelID))
                     }
                     .onDelete(perform: deleteExpense)
                     

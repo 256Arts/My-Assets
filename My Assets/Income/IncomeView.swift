@@ -6,6 +6,7 @@
 //  Copyright © 2020 256 Arts Developer. All rights reserved.
 //
 
+import AppIntents
 import SwiftUI
 import SwiftData
 import Charts
@@ -158,6 +159,7 @@ struct IncomeView: View {
                                 .accessibilityLabel(income.name ?? "")
                                 .accessibilityValue(currencyFormatter.string(from: NSNumber(value: income.monthlyEarnings ?? 0))!)
                         }
+                        .appEntityIdentifier(EntityIdentifier(for: IncomeEntity.self, identifier: income.persistentModelID))
                     }
                     .onDelete(perform: delete)
                     
@@ -180,6 +182,7 @@ struct IncomeView: View {
                                 .accessibilityElement()
                                 .accessibilityLabel(income.name ?? "")
                                 .accessibilityValue(currencyFormatter.string(from: NSNumber(value: income.monthlyEarnings ?? 0))!)
+                                .appEntityIdentifier(EntityIdentifier(for: IncomeEntity.self, identifier: income.persistentModelID))
                         }
                         
                         HStack {

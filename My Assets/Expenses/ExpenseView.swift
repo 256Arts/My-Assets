@@ -6,6 +6,7 @@
 //  Copyright © 2020 256 Arts Developer. All rights reserved.
 //
 
+import AppIntents
 import SwiftUI
 
 struct ExpenseView: View {
@@ -87,6 +88,10 @@ struct ExpenseView: View {
         #if !os(macOS)
         .navigationBarTitleDisplayMode(.inline)
         #endif
+        .userActivity(AppActivityType.expense, element: expense.persistentModelID) { id, activity in
+            activity.title = expense.name ?? "Expense"
+            activity.appEntityIdentifier = EntityIdentifier(for: ExpenseEntity.self, identifier: id)
+        }
         .sheet(isPresented: self.$showingSubexpense) {
             NavigationStack {
                 NewExpenseView(parentExpense: expense)

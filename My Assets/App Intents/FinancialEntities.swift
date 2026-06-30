@@ -24,6 +24,15 @@ extension PersistentIdentifier: @retroactive EntityIdentifierConvertible {
     }
 }
 
+/// `NSUserActivity` types used to make a singular on-screen item (a detail screen) known to Siri.
+/// Registered in Info.plist under `NSUserActivityTypes`.
+enum AppActivityType {
+    static let asset = "com.jaydenirwin.myassets.asset"
+    static let debt = "com.jaydenirwin.myassets.debt"
+    static let income = "com.jaydenirwin.myassets.income"
+    static let expense = "com.jaydenirwin.myassets.expense"
+}
+
 // MARK: - Shared shape
 
 /// The four core model types (`Asset`, `Debt`, `Income`, `Expense`) all surface to Siri and

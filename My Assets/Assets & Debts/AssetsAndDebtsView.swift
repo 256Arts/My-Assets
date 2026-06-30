@@ -6,6 +6,7 @@
 //  Copyright © 2020 256 Arts Developer. All rights reserved.
 //
 
+import AppIntents
 import SwiftUI
 import SwiftData
 import Charts
@@ -37,6 +38,7 @@ struct AssetsAndDebtsView: View {
                         NavigationLink(value: asset) {
                             AmountRow(symbol: asset.symbol ?? .defaultSymbol, label: asset.name ?? "", amount: asset.currentValue)
                         }
+                        .appEntityIdentifier(EntityIdentifier(for: AssetEntity.self, identifier: asset.persistentModelID))
                     }
                     .onDelete(perform: deleteAsset)
                     
@@ -51,6 +53,7 @@ struct AssetsAndDebtsView: View {
                         NavigationLink(value: debt) {
                             AmountRow(symbol: debt.symbol ?? .defaultSymbol, label: debt.name ?? "", amount: debt.currentValue)
                         }
+                        .appEntityIdentifier(EntityIdentifier(for: DebtEntity.self, identifier: debt.persistentModelID))
                     }
                     .onDelete(perform: deleteDebt)
                     

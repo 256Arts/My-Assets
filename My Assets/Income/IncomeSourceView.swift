@@ -6,6 +6,7 @@
 //  Copyright © 2020 256 Arts Developer. All rights reserved.
 //
 
+import AppIntents
 import SwiftUI
 
 struct IncomeSourceView: View {
@@ -65,6 +66,10 @@ struct IncomeSourceView: View {
         #if !os(macOS)
         .navigationBarTitleDisplayMode(.inline)
         #endif
+        .userActivity(AppActivityType.income, element: income.persistentModelID) { id, activity in
+            activity.title = income.name ?? "Income"
+            activity.appEntityIdentifier = EntityIdentifier(for: IncomeEntity.self, identifier: id)
+        }
         .onDisappear {
             income.name = nameCopy
         }
