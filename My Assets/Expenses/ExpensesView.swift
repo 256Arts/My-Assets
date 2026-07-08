@@ -104,7 +104,7 @@ struct ExpensesView: View {
                                 AmountRow(symbol: expense.symbol ?? .defaultSymbol, label: expense.name ?? "", amount: expense.monthlyCost())
                                 ForEach(expense.children?.sorted(by: >) ?? []) { child in
                                     AmountRow(symbol: child.symbol ?? .defaultSymbol, label: child.name ?? "", amount: child.monthlyCost())
-                                        .foregroundColor(.secondary)
+                                        .foregroundStyle(.secondary)
                                         .padding(.leading, 32)
                                 }
                             }
@@ -145,6 +145,7 @@ struct ExpensesView: View {
                     .buttonBorderShape(.circle)
                     .tint(.red)
                 }
+                .visibilityPriority(.primaryAction)
             }
             .navigationDestination(for: Expense.self) { expense in
                 ExpenseView(expense: expense)

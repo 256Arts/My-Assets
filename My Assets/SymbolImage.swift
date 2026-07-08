@@ -15,7 +15,7 @@ struct SymbolImage: View {
     var body: some View {
         Image(systemName: symbol.rawValue)
             .symbolVariant(.fill)
-            .foregroundColor(symbol.color)
+            .foregroundStyle(symbol.color)
             .font(.system(size: 17, weight: .medium))
             .frame(width: 32)
     }

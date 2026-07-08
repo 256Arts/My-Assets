@@ -270,7 +270,9 @@ final class AIInsightsGenerator {
     }
 
     func regenerate(summary: String) async {
-        switch SystemLanguageModel.default.availability {
+        let model = SystemLanguageModel(guardrails: .permissiveContentTransformations)
+        
+        switch model.availability {
         case .available:
             break
         case .unavailable(.deviceNotEligible):
@@ -289,7 +291,7 @@ final class AIInsightsGenerator {
 
         phase = .generating
         do {
-            let session = LanguageModelSession(instructions: Self.instructions)
+            let session = LanguageModelSession(model: model, instructions: Self.instructions)
             let prompt = """
             Here is the user's current financial snapshot:
 
@@ -307,7 +309,7 @@ final class AIInsightsGenerator {
                 phase = .loaded(Array(cleaned.prefix(4)))
             }
         } catch {
-            phase = .failed("Couldn't generate custom insights right now.")
+            phase = .failed("Couldn't generate custom insights right now. \(error.localizedDescription)")
         }
     }
 

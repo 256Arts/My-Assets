@@ -80,6 +80,7 @@ struct AssetsAndDebtsView: View {
                     .buttonBorderShape(.circle)
                     .tint(.blue)
                 }
+                .visibilityPriority(.primaryAction)
             }
             .navigationDestination(for: Asset.self) { asset in
                 AssetView(asset: asset)

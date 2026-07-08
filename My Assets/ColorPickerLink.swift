@@ -26,7 +26,7 @@ struct ColorPickerLink: View {
                 Circle()
                     .fill((colorName ?? .gray).color)
                 Image(systemName: (colorName ?? .gray).rawValue)
-                    .foregroundColor(.white)
+                    .foregroundStyle(.white)
             }
             .frame(height: 42)
             .symbolVariant(.fill)

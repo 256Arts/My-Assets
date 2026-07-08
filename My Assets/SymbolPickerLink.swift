@@ -26,7 +26,7 @@ struct SymbolPickerLink: View {
                 Circle()
                     .fill((symbol ?? .defaultSymbol).color.gradient)
                 Image(systemName: (symbol ?? .defaultSymbol).rawValue)
-                    .foregroundColor(.white)
+                    .foregroundStyle(.white)
             }
             .frame(height: 42)
             .symbolVariant(.fill)

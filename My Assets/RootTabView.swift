@@ -57,7 +57,7 @@ struct RootTabView: View {
         .tabViewStyle(.sidebarAdaptable)
         #endif
         .tabViewCustomization($tabViewCustomization)
-        .accentColor({
+        .tint({
             switch selectedTab {
             case .summary, .assetsAndDebts, .creditCards:
                 return nil

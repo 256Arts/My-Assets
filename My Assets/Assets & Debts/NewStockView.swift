@@ -24,7 +24,7 @@ struct NewStockView: View {
         Form {
             TextField("Symbol", text: $stockSymbol)
                 #if !os(macOS)
-                .autocapitalization(.allCharacters)
+                .textInputAutocapitalization(.characters)
                 #endif
                 .disableAutocorrection(true)
             TextField("Quantity", value: $quantity, formatter: NumberFormatter())

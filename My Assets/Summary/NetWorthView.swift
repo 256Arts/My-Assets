@@ -134,10 +134,10 @@ struct NetWorthView: View {
     private func chartLineIncomeAndExpenses(income: Double, expenses: Double) -> some View {
         HStack {
             Text(currencyDeltaFormatter.string(from: NSNumber(value: income))!)
-                .foregroundColor(.green)
+                .foregroundStyle(.green)
                 .accessibilityLabel("Income")
             Text(currencyDeltaFormatter.string(from: NSNumber(value: -expenses))!)
-                .foregroundColor(.red)
+                .foregroundStyle(.red)
                 .accessibilityLabel("Expenses")
         }
         .font(.footnote)

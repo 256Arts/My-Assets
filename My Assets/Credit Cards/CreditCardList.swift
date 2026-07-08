@@ -63,6 +63,7 @@ struct CreditCardList: View {
                         self.showingDetail.toggle()
                     }
                 }
+                .visibilityPriority(.primaryAction)
             }
             .navigationDestination(for: CreditCard.self) { creditCard in
                 CreditCardView(creditCard: creditCard)

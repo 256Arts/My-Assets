@@ -39,32 +39,32 @@ struct AmountMarquee: View {
                 VStack {
                     Text(currencyDeltaFormatter.string(from: NSNumber(value: combinedNet))!)
                         .font(Font.system(size: 22, weight: .medium, design: .rounded))
-                        .foregroundColor(0 < combinedNet ? .green : .red)
+                        .foregroundStyle(0 < combinedNet ? .green : .red)
                     Text("\(period.rawValue) Net")
                         .font(.caption)
-                        .foregroundColor(tertiaryLabel)
+                        .foregroundStyle(tertiaryLabel)
                 }
             } else {
                 HStack {
                     VStack {
                         Text(currencyDeltaFormatter.string(from: NSNumber(value: monthlyIncome * period.months))!)
                             .font(Font.system(size: 22, weight: .medium, design: .rounded))
-                            .foregroundColor(.green)
+                            .foregroundStyle(.green)
                             .accessibilityLabel("\(period.rawValue) Income")
                         Text("\(period.rawValue) Income")
                             .font(.caption)
-                            .foregroundColor(tertiaryLabel)
+                            .foregroundStyle(tertiaryLabel)
                             .accessibilityHidden(true)
                     }
                     Spacer()
                     VStack {
                         Text(currencyDeltaFormatter.string(from: NSNumber(value: -monthlyExpenses * period.months))!)
                             .font(Font.system(size: 22, weight: .medium, design: .rounded))
-                            .foregroundColor(.red)
+                            .foregroundStyle(.red)
                             .accessibilityLabel("\(period.rawValue) Expenses")
                         Text("\(period.rawValue) Expenses")
                             .font(.caption)
-                            .foregroundColor(tertiaryLabel)
+                            .foregroundStyle(tertiaryLabel)
                             .accessibilityHidden(true)
                     }
                 }

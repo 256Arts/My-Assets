@@ -40,7 +40,7 @@ struct SymbolPicker: View {
                             .fill(unselectedColor)
                     }
                     Image(systemName: symbol.rawValue)
-                        .foregroundColor(symbol == selected ? Color.white : symbol.color)
+                        .foregroundStyle(symbol == selected ? Color.white : symbol.color)
                 }
                 .frame(height: itemSize)
                 .onTapGesture {

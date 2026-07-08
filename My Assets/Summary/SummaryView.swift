@@ -177,36 +177,29 @@ struct SummaryView: View {
             .headerProminence(.increased)
             .navigationTitle("Summary")
             .toolbar {
-                ToolbarItemGroup(placement: toolbarPlacement) {
-                    #if !os(macOS)
-                    Section {
-                        Toggle("Show Balance", isOn: $summaryScreenShowBalance)
-                        Toggle("Show Net Worth", isOn: $summaryScreenShowNetWorth)
-                        Toggle("Show Cash Flows", isOn: $summaryScreenShowCashFlows)
-                        Toggle("Show Insights", isOn: $summaryScreenShowInsights)
-                        #if canImport(FoundationModels)
-                        Toggle("Show Custom Insights", isOn: $summaryScreenShowCustomInsights)
-                        #endif
-                    }
-                    
+                #if os(macOS)
+                ToolbarItem(placement: .primaryAction) {
+                    aboutMenu
+                }
+                #else
+                // Settings is pinned so it stays reachable no matter how tight the bar is.
+                ToolbarItem(placement: .topBarPinnedTrailing) {
                     Button("Settings", systemImage: "gear") {
                         showingSettings = true
                     }
-                    #endif
-                    
-                    // In submenu since there are already lots of menu items
-                    Menu("About App", systemImage: "info.circle") {
-                        Link(destination: URL(string: "https://www.256arts.com/")!) {
-                            Label("Developer Website", systemImage: "safari")
-                        }
-                        Link(destination: URL(string: "https://www.256arts.com/joincommunity/")!) {
-                            Label("Join Community", systemImage: "bubble.left.and.bubble.right")
-                        }
-                        Link(destination: URL(string: "https://github.com/256Arts/My-Assets")!) {
-                            Label("Contribute on GitHub", systemImage: "chevron.left.forwardslash.chevron.right")
-                        }
-                    }
                 }
+                // Display toggles and the About submenu always live in the overflow menu.
+                ToolbarOverflowMenu {
+                    Toggle("Show Balance", isOn: $summaryScreenShowBalance)
+                    Toggle("Show Net Worth", isOn: $summaryScreenShowNetWorth)
+                    Toggle("Show Cash Flows", isOn: $summaryScreenShowCashFlows)
+                    Toggle("Show Insights", isOn: $summaryScreenShowInsights)
+                    #if canImport(FoundationModels)
+                    Toggle("Show Custom Insights", isOn: $summaryScreenShowCustomInsights)
+                    #endif
+                    aboutMenu
+                }
+                #endif
             }
             .navigationDestination(for: Subpage.self) { subpage in
                 switch subpage {
@@ -224,14 +217,20 @@ struct SummaryView: View {
         }
     }
     
-    private var toolbarPlacement: ToolbarItemPlacement {
-        #if os(macOS)
-        .primaryAction
-        #else
-        .secondaryAction
-        #endif
+    private var aboutMenu: some View {
+        Menu("About App", systemImage: "info.circle") {
+            Link(destination: URL(string: "https://www.256arts.com/")!) {
+                Label("Developer Website", systemImage: "safari")
+            }
+            Link(destination: URL(string: "https://www.256arts.com/joincommunity/")!) {
+                Label("Join Community", systemImage: "bubble.left.and.bubble.right")
+            }
+            Link(destination: URL(string: "https://github.com/256Arts/My-Assets")!) {
+                Label("Contribute on GitHub", systemImage: "chevron.left.forwardslash.chevron.right")
+            }
+        }
     }
-    
+
 }
 
 #Preview {
