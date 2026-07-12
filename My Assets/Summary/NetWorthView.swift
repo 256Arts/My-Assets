@@ -14,7 +14,9 @@ struct NetWorthView: View {
     @AppStorage(UserDefaults.Key.amountMarqueeShowAsCombinedValue) var showAsCombinedValue = false
     @AppStorage(UserDefaults.Key.summaryScreenNetWorthShowChart) var summaryScreenNetWorthShowChart = true
     @AppStorage(UserDefaults.Key.summaryScreenNetWorthShowPercentile) var summaryScreenNetWorthShowPercentile = true
-    
+    @AppStorage(UserDefaults.Key.userType) var userTypeValue = UserType.individual.rawValue
+    @AppStorage(UserDefaults.Key.otherHouseholdNetWorth) var otherHouseholdNetWorth = 0.0
+
     @Environment(FinancialData.self) private var data
     @Environment(\.dismiss) private var dismiss
     
@@ -72,6 +74,10 @@ struct NetWorthView: View {
                     
                     chartLineDescription(color: .orange, title: "Unemployed", description: "Net worth with only passive income.", income: data.totalPassiveIncome, expenses: data.totalExpenses)
                 }
+
+                if userTypeValue == UserType.individual.rawValue, otherHouseholdNetWorth != 0 {
+                    chartLineDescription(color: .purple, title: "Partner", description: "Your partner's net worth, growing at their YoY rate.")
+                }
             }
             
             if let netWorthPercentile = insights.netWorthPercentile() {
@@ -114,13 +120,15 @@ struct NetWorthView: View {
     }
     
     @ViewBuilder
-    private func chartLineDescription(color: Color, title: String, description: String, income: Double, expenses: Double) -> some View {
+    private func chartLineDescription(color: Color, title: String, description: String, income: Double? = nil, expenses: Double? = nil) -> some View {
         Label {
             VStack(alignment: .leading) {
                 Text(title)
                     .font(.headline)
                 Text(description)
-                chartLineIncomeAndExpenses(income: income, expenses: expenses)
+                if let income, let expenses {
+                    chartLineIncomeAndExpenses(income: income, expenses: expenses)
+                }
             }
         } icon: {
             Image(systemName: "circle")

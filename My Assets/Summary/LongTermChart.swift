@@ -29,10 +29,14 @@ struct LongTermChart: View {
         var id: Date { date }
     }
     
+    @AppStorage(UserDefaults.Key.userType) private var userTypeValue = UserType.individual.rawValue
+    @AppStorage(UserDefaults.Key.otherHouseholdNetWorth) private var partnerNetWorth = 0.0
+    @AppStorage(UserDefaults.Key.otherHouseholdAnnualNetWorthInterest) private var partnerAnnualNetWorthInterest = 0.0
+
     @Environment(FinancialData.self) private var data
     @Binding var years: Int
     @Binding var chartStyle: ChartStyle
-    
+
     let chartDataSource: ChartDataSource
     
     var dates: [Date] {
@@ -68,6 +72,14 @@ struct LongTermChart: View {
             ValueAtDate(value: data.netWorth(at: $0, type: .notWorking), date: $0)
         }
     }
+    var partnerNetWorthChartData: [ValueAtDate] {
+        guard chartDataSource == .netWorth, userTypeValue == UserType.individual.rawValue, partnerNetWorth != 0 else { return [] }
+
+        return (0...years).map {
+            let value = partnerNetWorth * pow(1 + partnerAnnualNetWorthInterest, Double($0))
+            return ValueAtDate(value: value, date: Date.now + TimeInterval($0) * .year)
+        }
+    }
     var assetsChartData: [ValueAtDate] {
         dates.map {
             ValueAtDate(value: data.netWorthComponents(at: $0, type: .working).assets, date: $0)
@@ -92,6 +104,24 @@ struct LongTermChart: View {
             let date = Date.now + TimeInterval($0) * .year
             return ValueAtDate(value: value, date: date)
         }
+    }
+    /// The by-value series currently plotted, with pinned colors so each trajectory
+    /// keeps its color (and matches the legend dots in NetWorthView) even when
+    /// conditional lines drop out.
+    var chartSeries: [(name: String, color: Color)] {
+        var series = [(chartDataSource.rawValue, Color.blue)]
+        if chartStyle == .trajectories {
+            if chartDataSource == .netWorth, data.totalIncome != data.totalPassiveIncome {
+                if data.totalExpenses != data.totalPassiveExpenses {
+                    series.append(("Natural", .green))
+                }
+                series.append(("Unemployed", .orange))
+            }
+            if !partnerNetWorthChartData.isEmpty {
+                series.append(("Partner", .purple))
+            }
+        }
+        return series
     }
     @ViewBuilder
     var chartYoYLabels: some View {
@@ -146,6 +176,12 @@ struct LongTermChart: View {
                             .foregroundStyle(by: .value("Data", "Unemployed"))
                     }
                 }
+
+                ForEach(partnerNetWorthChartData) { datum in
+                    LineMark(x: .value("Date", datum.date), y: .value("Value", datum.value), series: .value("Data", "Partner"))
+                        .interpolationMethod(.cardinal)
+                        .foregroundStyle(by: .value("Data", "Partner"))
+                }
             case .assetsVSDebts:
                 ForEach(assetsChartData) { datum in
                     AreaMark(x: .value("Date", datum.date), y: .value("Value", datum.value), series: .value("Data", "Assets"))
@@ -173,6 +209,7 @@ struct LongTermChart: View {
                     .lineStyle(StrokeStyle(lineWidth: 2, lineCap: .round, dash: [0.01, 4]))
             }
         }
+        .chartForegroundStyleScale(domain: chartSeries.map(\.name), range: chartSeries.map(\.color))
         .chartYAxis {
             AxisMarks(format: .currency(code: Locale.autoupdatingCurrent.currency?.identifier ?? "USD").notation(.compactName))
         }

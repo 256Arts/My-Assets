@@ -14,6 +14,7 @@ struct SettingsView: View {
     
     @AppStorage(UserDefaults.Key.userType) var userTypeValue = UserType.individual.rawValue
     @AppStorage(UserDefaults.Key.otherHouseholdNetWorth) var otherHouseholdNetWorth = 0.0
+    @AppStorage(UserDefaults.Key.otherHouseholdAnnualNetWorthInterest) var otherHouseholdAnnualNetWorthInterest = 0.0
     
     @State var birthday = Date(timeIntervalSinceReferenceDate: UserDefaults.standard.double(forKey: UserDefaults.Key.birthday))
     
@@ -29,6 +30,7 @@ struct SettingsView: View {
                 DatePicker("Birthday", selection: $birthday, in: ...Date.now, displayedComponents: .date)
                 if userTypeValue == UserType.individual.rawValue {
                     CurrencyField("Partner's Net Worth", value: $otherHouseholdNetWorth)
+                    PercentField("Partner's YoY", value: $otherHouseholdAnnualNetWorthInterest)
                 }
             }
         }
