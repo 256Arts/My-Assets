@@ -38,7 +38,8 @@ extension FinancialData {
             stocks: all(Stock.self),
             debts: all(Debt.self),
             income: all(Income.self),
-            expenses: all(Expense.self)
+            expenses: all(Expense.self),
+            upcomingSpends: all(UpcomingSpend.self)
         )
     }
 }

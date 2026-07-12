@@ -76,7 +76,7 @@ func testDebt2() {
 
 @Test
 func testLiveOffTime() {
-    let insights = InsightsGenerator(data: FinancialData(nonStockAssets: [Asset(value: 1_000)], stocks: [], debts: [], income: [], expenses: [Expense(baseAmount: 100)]))
+    let insights = InsightsGenerator(data: FinancialData(nonStockAssets: [Asset(value: 1_000)], stocks: [], debts: [], income: [], expenses: [Expense(baseAmount: 100)], upcomingSpends: []))
     
     #expect(insights.liveOffMonths == 10)
 }
@@ -89,7 +89,7 @@ func testAvgAnnualNetWorthInterest() {
     let asset = Asset(value: 2_000, annualInterestFraction: 0.10)
     let debt = Debt(value: 1_000)
     debt.annualInterestFraction = 0.05
-    let data = FinancialData(nonStockAssets: [asset], stocks: [], debts: [debt], income: [], expenses: [])
+    let data = FinancialData(nonStockAssets: [asset], stocks: [], debts: [debt], income: [], expenses: [], upcomingSpends: [])
 
     #expect((data.avgAnnualNetWorthInterest * 100).rounded() == 15)
 }
@@ -102,7 +102,7 @@ func testNetWorthProjectionWithZeroInterest() {
     // instead of producing NaN. After one year: $1,000 + $100 × 12 = $2,200.
     let asset = Asset(value: 1_000, annualInterestFraction: 0)
     let income = Income(name: "Salary", symbol: .banknote, isLiquid: true, amount: 100, isPassive: false)
-    let data = FinancialData(nonStockAssets: [asset], stocks: [], debts: [], income: [income], expenses: [])
+    let data = FinancialData(nonStockAssets: [asset], stocks: [], debts: [], income: [income], expenses: [], upcomingSpends: [])
 
     #expect(data.avgAnnualNetWorthInterest.isZero)
     let projected = data.netWorth(at: .init(timeIntervalSinceNow: .year), type: .working)
@@ -121,7 +121,7 @@ func testSavingsCompoundAtAssetYieldNotROE() {
     let debt = Debt(value: 150_000, paymentAmount: 0)
     debt.annualInterestFraction = 0
     let income = Income(name: "Salary", symbol: .banknote, isLiquid: true, amount: 2_000, isPassive: false)
-    let data = FinancialData(nonStockAssets: [asset], stocks: [], debts: [debt], income: [income], expenses: [])
+    let data = FinancialData(nonStockAssets: [asset], stocks: [], debts: [debt], income: [income], expenses: [], upcomingSpends: [])
 
     #expect((data.avgAnnualNetWorthInterest * 100).rounded() == 20) // leveraged ROE (headline)
     #expect((data.avgAnnualSavingsInterest * 100).rounded() == 5)   // un-leveraged asset yield
@@ -143,7 +143,7 @@ func testSavingsInterestBlendsAllAssets() {
     let liquid = Asset(value: 200_000, annualInterestFraction: 0.05)
     let home = Asset(value: 100_000, annualInterestFraction: 0.03)
     home.isLiquid = false
-    let data = FinancialData(nonStockAssets: [liquid, home], stocks: [], debts: [], income: [], expenses: [])
+    let data = FinancialData(nonStockAssets: [liquid, home], stocks: [], debts: [], income: [], expenses: [], upcomingSpends: [])
 
     #expect((data.avgAnnualSavingsInterest * 1_000).rounded() == 43) // 4.33%, not 5%
 }
@@ -161,7 +161,7 @@ func testWorldStats() {
 
 @Test
 func testNetWorthPercentile() {
-    let insights = InsightsGenerator(data: FinancialData(nonStockAssets: [], stocks: [], debts: [], income: [], expenses: []))
+    let insights = InsightsGenerator(data: FinancialData(nonStockAssets: [], stocks: [], debts: [], income: [], expenses: [], upcomingSpends: []))
     // Evaluate against the 2023 base-year brackets (no inflation projection); values picked at bracket boundaries.
     let dataYear = Calendar.current.date(from: DateComponents(year: 2023))!
     let usa = Locale(identifier: "en_US")
@@ -172,4 +172,51 @@ func testNetWorthPercentile() {
     #expect(((insights.netWorthPercentile(householdNetWorth: 192_000, at: dataYear, locale: usa) ?? 0) * 100).rounded() == 50)
     #expect(((insights.netWorthPercentile(householdNetWorth: 252_000, at: dataYear, locale: usa) ?? 0) * 100).rounded() == 55)
     #expect(((insights.netWorthPercentile(householdNetWorth: 13_600_000, at: dataYear, locale: usa) ?? 0) * 100).rounded() == 99)
+}
+
+@Test
+func testUpcomingSpendBendsNetWorth() {
+    // A $100k cash asset at 0% and a one-off $20k purchase a year out. Two years out
+    // the purchase has happened, so projected net worth is $100k − $20k = $80k. The
+    // spend must not touch present-day net worth, and .natural (assets on autopilot,
+    // no human spending) must ignore it entirely.
+    let asset = Asset(value: 100_000, annualInterestFraction: 0)
+    let spend = UpcomingSpend(name: "New Car", cost: 20_000, date: Date(timeIntervalSinceNow: .year))
+    let data = FinancialData(nonStockAssets: [asset], stocks: [], debts: [], income: [], expenses: [], upcomingSpends: [spend])
+
+    #expect(data.netWorth(at: .now, type: .working).rounded() == 100_000)
+    #expect(data.netWorth(at: .init(timeIntervalSinceNow: 2 * .year), type: .working).rounded() == 80_000)
+    #expect(data.netWorth(at: .init(timeIntervalSinceNow: 2 * .year), type: .natural).rounded() == 100_000)
+}
+
+@Test
+func testRepeatingUpcomingSpendSubtractsEveryOccurrence() {
+    // $10k every 2 years, first purchase a year out. Occurrences at +1y, +3y, +5y all
+    // fall on or before the five-year mark, so $30k has been spent by then. Dates are
+    // built with the calendar (matching the stepping loop) rather than TimeInterval.year.
+    let calendar = Calendar.autoupdatingCurrent
+    let start = calendar.date(byAdding: .year, value: 1, to: .now)!
+    let spend = UpcomingSpend(name: "New Car", cost: 10_000, date: start, repeatYears: 2)
+
+    let fiveYearsAndADay = calendar.date(byAdding: .day, value: 1, to: calendar.date(byAdding: .year, value: 5, to: .now)!)!
+    #expect(spend.totalCost(upTo: fiveYearsAndADay) == 30_000)
+
+    let asset = Asset(value: 100_000, annualInterestFraction: 0)
+    let data = FinancialData(nonStockAssets: [asset], stocks: [], debts: [], income: [], expenses: [], upcomingSpends: [spend])
+    let fiveYears = calendar.date(byAdding: .year, value: 5, to: .now)!
+    #expect(data.netWorth(at: fiveYears, type: .working).rounded() == 70_000)
+}
+
+@Test
+func testPastUpcomingSpendIgnoredAndNextDateSteps() {
+    // A purchase dated a year ago contributes nothing to future projections. A one-shot
+    // keeps reporting its (past) date for the cash-flow timeline, but a repeating one
+    // steps its next transaction date into the future.
+    let past = Date(timeIntervalSinceNow: -.year)
+    let oneShot = UpcomingSpend(name: "Old Car", cost: 5_000, date: past)
+    #expect(oneShot.totalCost(upTo: Date(timeIntervalSinceNow: 5 * .year)) == 0)
+    #expect(oneShot.nextTransactionDate == past)
+
+    let repeating = UpcomingSpend(name: "New Car", cost: 5_000, date: past, repeatYears: 2)
+    #expect(repeating.nextTransactionDate! > .now)
 }

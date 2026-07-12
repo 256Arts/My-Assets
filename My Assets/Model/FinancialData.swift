@@ -45,7 +45,9 @@ final class FinancialData {
     var totalPassiveExpenses: Double {
         expenses.filter({ $0.fromDebt != nil }).reduce(0, { $0 + $1.monthlyCost(excludingSavings: true) })
     }
-    
+
+    var upcomingSpends: [UpcomingSpend]
+
     var avgAnnualNetWorthInterest: Double {
         // Weighted by net worth, so this is a return-on-equity figure: it is amplified by
         // leverage (debt). It is the rate at which net worth grows on its own, and is the
@@ -129,15 +131,22 @@ final class FinancialData {
         // by zero (0/0 → NaN), so fall back to its r→0 limit: payments with no compounding.
         let fv = r.isZero ? pmt * n : pmt * (pow(1 + r, n) - 1) / r
 
-        return (assetsAtDate + fv, debtsAtDate)
+        // Upcoming spends are discretionary human purchases, so like totalExpenses they only apply while a human is spending — .natural excludes them.
+        let spends: Double = switch type {
+        case .natural: 0
+        case .working, .notWorking: upcomingSpends.reduce(0) { $0 + $1.totalCost(upTo: date) }
+        }
+
+        return (assetsAtDate + fv - spends, debtsAtDate)
     }
     
-    init(nonStockAssets: [Asset], stocks: [Stock], debts: [Debt], income: [Income], expenses: [Expense]) {
+    init(nonStockAssets: [Asset], stocks: [Stock], debts: [Debt], income: [Income], expenses: [Expense], upcomingSpends: [UpcomingSpend]) {
         self.nonStockAssets = nonStockAssets
         self.stocks = stocks
         self.debts = debts
         self.income = income
         self.expenses = expenses.filter { $0.parent == nil }
+        self.upcomingSpends = upcomingSpends
     }
     
 }

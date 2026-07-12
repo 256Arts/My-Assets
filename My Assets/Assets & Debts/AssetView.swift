@@ -57,7 +57,14 @@ struct AssetView: View {
                 Section("Upcoming Spends") {
                     ForEach(asset.upcomingSpends ?? []) { spend in
                         NavigationLink(value: spend) {
-                            LabeledContent(spend.name ?? "", value: currencyFormatter.string(from: NSNumber(value: spend.cost ?? 0)) ?? "")
+                            LabeledContent {
+                                Text(currencyFormatter.string(from: NSNumber(value: spend.cost ?? 0)) ?? "")
+                            } label: {
+                                Text(spend.name ?? "")
+                                if let repeatDescription = spend.repeatDescription {
+                                    Text(repeatDescription)
+                                }
+                            }
                         }
                     }
                     .onDelete(perform: deleteUpcomingSpend)

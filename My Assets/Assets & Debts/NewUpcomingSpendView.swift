@@ -34,6 +34,12 @@ struct NewUpcomingSpendView: View {
             }, set: { newValue in
                 spend.date = newValue
             }), displayedComponents: .date)
+            Picker("Repeats", selection: $spend.repeatYears) {
+                Text("Never").tag(nil as Int?)
+                ForEach(1...30, id: \.self) { years in
+                    Text(years == 1 ? "Every year" : "Every \(years) years").tag(years as Int?)
+                }
+            }
             if let monthlyCost = spend.monthlyCost {
                 Text("Save \(currencyFormatter.string(from: NSNumber(value: monthlyCost)) ?? "") monthly")
                     .foregroundStyle(.secondary)

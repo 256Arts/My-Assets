@@ -56,7 +56,8 @@ struct RootTabView: View {
     @Query var stocks: [Stock]
     @Query var income: [Income]
     @Query var expenses: [Expense]
-    
+    @Query var upcomingSpends: [UpcomingSpend]
+
     @State private var selectedTab: Tab?
     
     var body: some View {
@@ -86,7 +87,7 @@ struct RootTabView: View {
     }
     
     private var financialData: FinancialData {
-        FinancialData(nonStockAssets: nonStockAssets, stocks: stocks, debts: debts, income: income, expenses: expenses)
+        FinancialData(nonStockAssets: nonStockAssets, stocks: stocks, debts: debts, income: income, expenses: expenses, upcomingSpends: upcomingSpends)
     }
 }
 

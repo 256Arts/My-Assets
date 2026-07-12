@@ -22,7 +22,8 @@ struct RootTabView: View {
     @Query var stocks: [Stock]
     @Query var income: [Income]
     @Query var expenses: [Expense]
-    
+    @Query var upcomingSpends: [UpcomingSpend]
+
     @AppStorage(UserDefaults.Key.tabViewCustomization) var tabViewCustomization: TabViewCustomization
     
     @State var selectedTab: Tabs = .summary
@@ -86,7 +87,7 @@ struct RootTabView: View {
     }
     
     private var financialData: FinancialData {
-        FinancialData(nonStockAssets: nonStockAssets, stocks: stocks, debts: debts, income: income, expenses: expenses)
+        FinancialData(nonStockAssets: nonStockAssets, stocks: stocks, debts: debts, income: income, expenses: expenses, upcomingSpends: upcomingSpends)
     }
 }
 

@@ -120,6 +120,16 @@ let previewExpenses = [
     )
 ]
 @MainActor
+let previewUpcomingSpends = [
+    UpcomingSpend(
+        name: "New Car",
+        cost: 40_000,
+        date: Calendar.autoupdatingCurrent.date(byAdding: .year, value: 2, to: .now)!,
+        asset: previewAssets[1], // Bank Account (liquid)
+        repeatYears: 8
+    )
+]
+@MainActor
 let previewCreditCards = [
     CreditCard(name: "VISA", colorName: .gray, cardFee: 50, pointsPerDollar: 2, pointValue: 0.01, monthlySpend: 1000),
     CreditCard(name: "Mastercard", colorName: .red, cardFee: 0, pointsPerDollar: 3, pointValue: 0.01, monthlySpend: 1000),
@@ -131,7 +141,7 @@ let previewContainer: ModelContainer = {
     let config = ModelConfiguration(isStoredInMemoryOnly: true, cloudKitDatabase: .none)
     let container = try! ModelContainer(for: Asset.self, Debt.self, Stock.self, UpcomingSpend.self, Income.self, Expense.self, CreditCard.self, configurations: config)
 
-    let models: [any PersistentModel] = previewAssets + previewDebts + previewIncome + previewExpenses + previewCreditCards
+    let models: [any PersistentModel] = previewAssets + previewDebts + previewIncome + previewExpenses + previewUpcomingSpends + previewCreditCards
     for model in models {
         container.mainContext.insert(model)
     }
