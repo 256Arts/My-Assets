@@ -1,11 +1,3 @@
-//
-//  SummaryView.swift
-//  My Assets
-//
-//  Created by 256 Arts Developer on 2023-10-23.
-//  Copyright © 2023 256 Arts Developer. All rights reserved.
-//
-
 import SwiftUI
 import SwiftData
 import Charts

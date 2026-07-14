@@ -1,11 +1,3 @@
-//
-//  ExpenseView.swift
-//  My Assets
-//
-//  Created by 256 Arts Developer on 2020-02-07.
-//  Copyright © 2020 256 Arts Developer. All rights reserved.
-//
-
 import AppIntents
 import SwiftUI
 

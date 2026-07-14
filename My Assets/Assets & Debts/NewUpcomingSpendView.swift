@@ -1,11 +1,3 @@
-//
-//  NewUpcomingSpendView.swift
-//  My Assets
-//
-//  Created by 256 Arts Developer on 2024-01-02.
-//  Copyright © 2024 256 Arts Developer. All rights reserved.
-//
-
 import SwiftUI
 
 struct NewUpcomingSpendView: View {

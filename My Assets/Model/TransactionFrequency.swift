@@ -1,11 +1,3 @@
-//
-//  TransactionFrequency.swift
-//  My Assets
-//
-//  Created by 256 Arts Developer on 2024-08-26.
-//  Copyright © 2024 256 Arts Developer. All rights reserved.
-//
-
 import Foundation
 
 enum TransactionFrequency: String, CaseIterable, Codable, Identifiable {

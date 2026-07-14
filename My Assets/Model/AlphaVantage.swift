@@ -1,11 +1,3 @@
-//
-//  AlphaVantage.swift
-//  My Assets
-//
-//  Created by 256 Arts Developer on 2024-08-14.
-//  Copyright © 2024 256 Arts Developer. All rights reserved.
-//
-
 import Foundation
 
 final actor AlphaVantage {

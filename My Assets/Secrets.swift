@@ -1,11 +1,3 @@
-//
-//  Secrets.swift
-//  My Assets
-//
-//  Created by 256 Arts Developer on 2024-08-14.
-//  Copyright © 2024 256 Arts Developer. All rights reserved.
-//
-
 enum Secrets {
     
     static let alphaVantageKey = "MZ4NGAVYGGF4NACP"

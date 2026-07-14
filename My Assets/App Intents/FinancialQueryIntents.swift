@@ -1,11 +1,3 @@
-//
-//  FinancialQueryIntents.swift
-//  My Assets
-//
-//  Created by 256 Arts Developer on 2026-06-29.
-//  Copyright © 2026 256 Arts Developer. All rights reserved.
-//
-
 import AppIntents
 
 /// Lets an App Intent ask the running app to switch tabs (e.g. after "Open my assets").

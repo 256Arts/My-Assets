@@ -1,8 +1,3 @@
-//
-//  ToolbarItemVisibilityPriority+.swift
-//  My Assets
-//
-
 import SwiftUI
 
 extension ToolbarItemVisibilityPriority {

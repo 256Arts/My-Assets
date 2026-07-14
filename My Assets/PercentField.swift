@@ -1,10 +1,3 @@
-//
-//  DecimalField.swift
-//
-//  Created by Edwin Watkeys on 9/20/19.
-//  Copyright © 2019 Edwin Watkeys.
-//
-
 import SwiftUI
 import Combine
 

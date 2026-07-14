@@ -1,11 +1,3 @@
-//
-//  InsightsGenerator.swift
-//  My Assets
-//
-//  Created by 256 Arts Developer on 2022-04-09.
-//  Copyright © 2022 256 Arts Developer. All rights reserved.
-//
-
 import SwiftUI
 #if canImport(FoundationModels)
 import FoundationModels

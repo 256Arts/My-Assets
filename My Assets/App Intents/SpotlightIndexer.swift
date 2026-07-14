@@ -1,11 +1,3 @@
-//
-//  SpotlightIndexer.swift
-//  My Assets
-//
-//  Created by 256 Arts Developer on 2026-06-29.
-//  Copyright © 2026 256 Arts Developer. All rights reserved.
-//
-
 import CoreSpotlight
 
 /// Re-publishes the app's entities to the on-device Spotlight / Siri semantic index, so the new

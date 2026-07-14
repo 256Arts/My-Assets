@@ -1,11 +1,3 @@
-//
-//  NewDebtView.swift
-//  My Assets
-//
-//  Created by 256 Arts Developer on 2021-10-27.
-//  Copyright © 2021 256 Arts Developer. All rights reserved.
-//
-
 import SwiftUI
 import StoreKit
 

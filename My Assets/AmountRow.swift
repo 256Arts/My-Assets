@@ -1,11 +1,3 @@
-//
-//  AmountRow.swift
-//  My Assets
-//
-//  Created by 256 Arts Developer on 2023-07-28.
-//  Copyright © 2023 256 Arts Developer. All rights reserved.
-//
-
 import SwiftUI
 
 struct AmountRow: View {

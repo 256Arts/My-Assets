@@ -1,11 +1,3 @@
-//
-//  EntityActionIntents.swift
-//  My Assets
-//
-//  Created by 256 Arts Developer on 2026-06-29.
-//  Copyright © 2026 256 Arts Developer. All rights reserved.
-//
-
 import AppIntents
 import SwiftData
 

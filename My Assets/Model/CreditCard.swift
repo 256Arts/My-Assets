@@ -1,11 +1,3 @@
-//
-//  CreditCard.swift
-//  My Assets
-//
-//  Created by 256 Arts Developer on 2024-08-10.
-//  Copyright © 2024 256 Arts Developer. All rights reserved.
-//
-
 import SwiftData
 import SwiftUI
 

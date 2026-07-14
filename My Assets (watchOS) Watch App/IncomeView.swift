@@ -1,11 +1,3 @@
-//
-//  IncomeView.swift
-//  My Assets (watchOS) Watch App
-//
-//  Created by 256 Arts Developer on 2023-09-02.
-//  Copyright © 2023 256 Arts Developer. All rights reserved.
-//
-
 import SwiftUI
 import SwiftData
 

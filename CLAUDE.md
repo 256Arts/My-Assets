@@ -33,10 +33,6 @@ xcodebuild -scheme "My Assets" -destination '<destination>' test -only-testing:"
 
 Tests live in `My AssetsTests/` and use Swift Testing (`@Test` / `#expect`), not XCTest. They focus on the financial math in the model layer (compound interest on assets, debt amortization, "live off" runway, net-worth percentiles).
 
-## Backlog
-
-If `REMINDERS.md` exists in the repo root, it is a personal backlog exported from Apple Reminders (gitignored, not committed). Each `- [ ]` line is one to-do item. Many entries are terse shorthand meaningful only to the user — treat it as a source of candidate work, not a spec, and ask before acting on cryptic items. Refresh it with the `export-reminders` skill.
-
 ## Secrets
 
 `My Assets/Secrets.swift` is **gitignored** (see `.gitignore`) and holds the Alpha Vantage API key. It is not in version control, so a fresh checkout will fail to compile until this file is recreated with an `enum Secrets { static let alphaVantageKey = "..." }`. Do not commit it.

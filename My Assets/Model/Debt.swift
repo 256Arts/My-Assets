@@ -1,11 +1,3 @@
-//
-//  Debt.swift
-//  My Assets
-//
-//  Created by 256 Arts Developer on 2021-12-29.
-//  Copyright © 2021 256 Arts Developer. All rights reserved.
-//
-
 import Foundation
 import SwiftData
 
