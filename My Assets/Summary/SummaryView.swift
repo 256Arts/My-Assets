@@ -174,22 +174,26 @@ struct SummaryView: View {
                     aboutMenu
                 }
                 #else
-                // Settings is pinned so it stays reachable no matter how tight the bar is.
-                ToolbarItem(placement: .topBarPinnedTrailing) {
-                    Button("Settings", systemImage: "gear") {
-                        showingSettings = true
+                if #available(iOS 27, visionOS 27, *) {
+                    // Settings is pinned so it stays reachable no matter how tight the bar is.
+                    ToolbarItem(placement: .topBarPinnedTrailing) {
+                        settingsButton
                     }
-                }
-                // Display toggles and the About submenu always live in the overflow menu.
-                ToolbarOverflowMenu {
-                    Toggle("Show Balance", isOn: $summaryScreenShowBalance)
-                    Toggle("Show Net Worth", isOn: $summaryScreenShowNetWorth)
-                    Toggle("Show Cash Flows", isOn: $summaryScreenShowCashFlows)
-                    Toggle("Show Insights", isOn: $summaryScreenShowInsights)
-                    #if canImport(FoundationModels)
-                    Toggle("Show Custom Insights", isOn: $summaryScreenShowCustomInsights)
-                    #endif
-                    aboutMenu
+                    // Display toggles and the About submenu always live in the overflow menu.
+                    ToolbarOverflowMenu {
+                        displayToggles
+                        aboutMenu
+                    }
+                } else {
+                    ToolbarItem(placement: .primaryAction) {
+                        Menu("More", systemImage: "ellipsis") {
+                            displayToggles
+                            aboutMenu
+                        }
+                    }
+                    ToolbarItem(placement: .primaryAction) {
+                        settingsButton
+                    }
                 }
                 #endif
             }
@@ -209,6 +213,23 @@ struct SummaryView: View {
         }
     }
     
+    private var settingsButton: some View {
+        Button("Settings", systemImage: "gear") {
+            showingSettings = true
+        }
+    }
+
+    @ViewBuilder
+    private var displayToggles: some View {
+        Toggle("Show Balance", isOn: $summaryScreenShowBalance)
+        Toggle("Show Net Worth", isOn: $summaryScreenShowNetWorth)
+        Toggle("Show Cash Flows", isOn: $summaryScreenShowCashFlows)
+        Toggle("Show Insights", isOn: $summaryScreenShowInsights)
+        #if canImport(FoundationModels)
+        Toggle("Show Custom Insights", isOn: $summaryScreenShowCustomInsights)
+        #endif
+    }
+
     private var aboutMenu: some View {
         Menu("About App", systemImage: "info.circle") {
             Link(destination: URL(string: "https://www.256arts.com/")!) {

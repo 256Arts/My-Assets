@@ -144,7 +144,7 @@ struct ExpensesView: View {
                     .buttonBorderShape(.circle)
                     .tint(.red)
                 }
-                .visibilityPriority(.primaryAction)
+                .primaryActionVisibilityPriority()
             }
             .navigationDestination(for: Expense.self) { expense in
                 ExpenseView(expense: expense)

@@ -199,7 +199,7 @@ struct IncomeView: View {
                     .buttonBorderShape(.circle)
                     .tint(.green)
                 }
-                .visibilityPriority(.primaryAction)
+                .primaryActionVisibilityPriority()
             }
             .navigationDestination(for: Income.self) { income in
                 IncomeSourceView(income: income)
