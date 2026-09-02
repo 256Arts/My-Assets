@@ -25,6 +25,13 @@
 			remoteGlobalIDString = 1BE1623E2A74928B00E4907D;
 			remoteInfo = "My Assets (watchOS) Watch App";
 		};
+		1BAA000200000000000000B7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1B31BA9023EC823F00B6E63A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1B31BA9723EC823F00B6E63A;
+			remoteInfo = "My Assets";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -45,6 +52,7 @@
 		1B31939E282DDCDF00AA2038 /* My AssetsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "My AssetsTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B31BA9823EC823F00B6E63A /* My Assets.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "My Assets.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BE1623F2A74928B00E4907D /* My Assets.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "My Assets.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1BAA000200000000000000B2 /* My AssetsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "My AssetsUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -111,6 +119,11 @@
 			path = "My Assets (watchOS) Watch App";
 			sourceTree = "<group>";
 		};
+		1BAA000200000000000000B3 /* My AssetsUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "My AssetsUITests";
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,6 +148,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		1BAA000200000000000000B5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -144,6 +164,7 @@
 				1B7DF7AD2E24133C0071B353 /* My Assets */,
 				1B7DF8112E2413400071B353 /* My AssetsTests */,
 				1B7DF8232E24135E0071B353 /* My Assets (watchOS) Watch App */,
+				1BAA000200000000000000B3 /* My AssetsUITests */,
 				1B31BA9923EC823F00B6E63A /* Products */,
 				1BB7E5A927F0116700D51084 /* Frameworks */,
 			);
@@ -155,6 +176,7 @@
 				1B31BA9823EC823F00B6E63A /* My Assets.app */,
 				1B31939E282DDCDF00AA2038 /* My AssetsTests.xctest */,
 				1BE1623F2A74928B00E4907D /* My Assets.app */,
+				1BAA000200000000000000B2 /* My AssetsUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -234,6 +256,29 @@
 			productReference = 1BE1623F2A74928B00E4907D /* My Assets.app */;
 			productType = "com.apple.product-type.application";
 		};
+		1BAA000200000000000000B1 /* My AssetsUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1BAA000200000000000000BB /* Build configuration list for PBXNativeTarget "My AssetsUITests" */;
+			buildPhases = (
+				1BAA000200000000000000B4 /* Sources */,
+				1BAA000200000000000000B5 /* Frameworks */,
+				1BAA000200000000000000B6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1BAA000200000000000000B8 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				1BAA000200000000000000B3 /* My AssetsUITests */,
+			);
+			name = "My AssetsUITests";
+			packageProductDependencies = (
+			);
+			productName = "My AssetsUITests";
+			productReference = 1BAA000200000000000000B2 /* My AssetsUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -255,6 +300,9 @@
 					1BE1623E2A74928B00E4907D = {
 						CreatedOnToolsVersion = 15.0;
 					};
+					1BAA000200000000000000B1 = {
+						TestTargetID = 1B31BA9723EC823F00B6E63A;
+					};
 				};
 			};
 			buildConfigurationList = 1B31BA9323EC823F00B6E63A /* Build configuration list for PBXProject "My Assets" */;
@@ -275,6 +323,7 @@
 				1B31BA9723EC823F00B6E63A /* My Assets */,
 				1B31939D282DDCDF00AA2038 /* My AssetsTests */,
 				1BE1623E2A74928B00E4907D /* My Assets (watchOS) Watch App */,
+				1BAA000200000000000000B1 /* My AssetsUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -295,6 +344,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		1BE1623D2A74928B00E4907D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1BAA000200000000000000B6 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -325,6 +381,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		1BAA000200000000000000B4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -338,6 +401,11 @@
 			platformFilter = ios;
 			target = 1BE1623E2A74928B00E4907D /* My Assets (watchOS) Watch App */;
 			targetProxy = 1BE1624A2A74928D00E4907D /* PBXContainerItemProxy */;
+		};
+		1BAA000200000000000000B8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1B31BA9723EC823F00B6E63A /* My Assets */;
+			targetProxy = 1BAA000200000000000000B7 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -649,6 +717,54 @@
 			};
 			name = Release;
 		};
+		1BAA000200000000000000B9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_ENTITLEMENTS = "My AssetsUITests/My AssetsUITests.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 8;
+				DEVELOPMENT_TEAM = VA3SY54YU8;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 2.1;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.jaydenirwin.My-AssetsUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TEST_TARGET_NAME = "My Assets";
+				XROS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Debug;
+		};
+		1BAA000200000000000000BA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_ENTITLEMENTS = "My AssetsUITests/My AssetsUITests.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 8;
+				DEVELOPMENT_TEAM = VA3SY54YU8;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 2.1;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.jaydenirwin.My-AssetsUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TEST_TARGET_NAME = "My Assets";
+				XROS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -684,6 +800,15 @@
 			buildConfigurations = (
 				1BE1624E2A74928D00E4907D /* Debug */,
 				1BE1624F2A74928D00E4907D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1BAA000200000000000000BB /* Build configuration list for PBXNativeTarget "My AssetsUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1BAA000200000000000000B9 /* Debug */,
+				1BAA000200000000000000BA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
