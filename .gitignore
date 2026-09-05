@@ -8,7 +8,6 @@ DerivedData/
 
 # Screenshot pipeline (Scripts/screenshots.sh)
 build/
-Screenshots/
 
 # Conductor workspace scratch
 .context/
