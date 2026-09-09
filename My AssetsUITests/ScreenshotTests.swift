@@ -99,6 +99,12 @@ final class ScreenshotTests: XCTestCase {
     // MARK: - Capturing
 
     private func capture(_ name: String) {
+        // Every capture below photographs the whole screen, or the frontmost window — never this
+        // app in particular. So an app that has lost the foreground yields another app's UI, filed
+        // under this app's name, at the right size, with nothing to notice. The shared runner holds
+        // a machine-wide lock so that cannot happen; this is the check that it held.
+        XCTAssertEqual(app.state, .runningForeground,
+                       "\(name): the app under test was not frontmost — another app has this device")
         #if os(macOS)
         captureWindow(named: name)
         #else
