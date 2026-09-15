@@ -65,12 +65,22 @@ final class ScreenshotTests: XCTestCase {
     #if os(macOS)
     /// Opens a window when the launch came up without one.
     ///
-    /// macOS restores an app to the windows it was last quit with, and that state can hold none: the
-    /// app then launches as a menu bar and nothing else, every lookup in the walk comes back empty,
-    /// and the run dies on the first wait with the seed sitting in a store no window is showing. The
-    /// runner cannot clear the state from outside — the app is sandboxed, so its saved state lives in
-    /// a container the script has no access to — so the walk opens the window itself, with the app's
+    /// `XCUIApplication.launch()` launches a Mac app in the *background*, and AppKit gives a
+    /// background launch no window — it holds it until the user arrives. The app comes up as a menu
+    /// bar and nothing else, every lookup in the walk comes back empty, and the run dies on the
+    /// first wait with the seed sitting in a store no window is showing. `activate()` is not what
+    /// AppKit waits for: only a reopen, the event a Dock icon click sends, builds the window, and a
+    /// test runner has no way to send one — so the walk asks for the window itself, with the app's
     /// own New Window.
+    ///
+    /// Whether a launch gets away without this depends on who started the run: LaunchServices
+    /// activates a launched app only while the process that launched it is frontmost, so the same
+    /// walk comes up with a window when it is run by hand from a frontmost Terminal and with
+    /// nothing but a menu bar when an agent runs it in the background.
+    ///
+    /// Waiting first rather than counting windows straight after `launch()`, which returns on idle
+    /// and can beat the window into the accessibility tree — ⌘N would then open a second, empty one
+    /// and the walk would photograph that.
     private func openWindowIfNeeded() {
         if app.windows.firstMatch.waitForExistence(timeout: 10) { return }
         app.typeKey("n", modifierFlags: .command)
