@@ -78,7 +78,7 @@ final class ScreenshotTests: XCTestCase {
     /// walk comes up with a window when it is run by hand from a frontmost Terminal and with
     /// nothing but a menu bar when an agent runs it in the background.
     ///
-    /// Waiting first rather than counting windows straight after `launch()`, which returns on idle
+    /// Waits first rather than counting windows straight after `launch()`, which returns on idle
     /// and can beat the window into the accessibility tree — ⌘N would then open a second, empty one
     /// and the walk would photograph that.
     private func openWindowIfNeeded() {
