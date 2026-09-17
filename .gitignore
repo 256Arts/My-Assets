@@ -11,3 +11,6 @@ build/
 
 # Conductor workspace scratch
 .context/
+
+# Xcode state, build products, agent scratchpad, macOS
+.DS_Store
