@@ -1,4 +1,3 @@
-#if DEBUG
 import SwiftData
 import Foundation
 
@@ -140,4 +139,3 @@ let previewContainer: ModelContainer = {
     
     return container
 }()
-#endif

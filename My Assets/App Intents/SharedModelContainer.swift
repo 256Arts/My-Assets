@@ -8,10 +8,9 @@ import SwiftData
 /// `previewContainer`; device/release builds use the real CloudKit-backed store.
 @MainActor
 let sharedModelContainer: ModelContainer = {
-    #if DEBUG
-    // A screenshot run always gets the seeded in-memory store, whichever platform it is shot on.
+    // A screenshot run always gets the seeded in-memory store, whichever platform or configuration
+    // it is shot on.
     if ScreenshotMode.isActive { return ScreenshotMode.container }
-    #endif
     #if targetEnvironment(simulator) || ((os(macOS) || targetEnvironment(macCatalyst)) && DEBUG)
     return previewContainer
     #else

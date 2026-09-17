@@ -1,4 +1,3 @@
-#if DEBUG
 import Foundation
 import SwiftData
 
@@ -10,8 +9,8 @@ import SwiftData
 /// previews use — so a screenshot run neither shows nor disturbs the real data on the machine
 /// taking the shots, and there is only one set of demo numbers to keep looking good.
 ///
-/// Debug-only, because the demo data it leans on is. `Scripts/screenshots.sh` runs the UI tests
-/// through the Screenshots scheme's test action, which builds Debug.
+/// Not DEBUG-gated, and neither is the demo data it leans on: the shared screenshot runner builds
+/// Release, so the shots carry no developer UI.
 enum ScreenshotMode {
 
     /// Whether this launch is a screenshot run. Read once, by `sharedModelContainer`.
@@ -23,4 +22,3 @@ enum ScreenshotMode {
     @MainActor
     static var container: ModelContainer { previewContainer }
 }
-#endif
