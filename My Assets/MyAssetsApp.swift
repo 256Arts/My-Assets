@@ -17,6 +17,7 @@ struct MyAssetsApp: App {
         WindowGroup {
             RootTabView()
                 .task { await refreshAppEntityIndex() }
+                .screenshotModeStatus()
         }
         .defaultSize(width: 500, height: 800)
         .commands {

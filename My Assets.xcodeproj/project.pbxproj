@@ -83,6 +83,7 @@
 				Model/FinancialData.swift,
 				Model/Income.swift,
 				Model/Period.swift,
+				Model/ScreenshotMode.swift,
 				Model/Stock.swift,
 				Model/Symbol.swift,
 				Model/TimeInterval.swift,

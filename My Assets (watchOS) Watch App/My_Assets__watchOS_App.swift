@@ -6,6 +6,7 @@ struct My_Assets__watchOS__Watch_AppApp: App {
     var body: some Scene {
         WindowGroup {
             RootTabView()
+                .screenshotModeStatus()
         }
         #if targetEnvironment(simulator)
         .modelContainer(previewContainer)
