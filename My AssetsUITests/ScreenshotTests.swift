@@ -148,17 +148,18 @@ final class ScreenshotTests: XCTestCase {
 
     /// Tabs surface as different element types per platform — a tab is a `Button` on iOS, and a
     /// sidebar row on macOS, where the tab view is `.sidebarAdaptable` — so look through the types
-    /// that can actually be activated rather than guessing one.
+    /// that can actually be activated rather than guessing one. `firstMatch` because iPadOS nests a
+    /// tab's button inside another button with the same label, and tapping an ambiguous query fails.
     private func control(_ label: String) -> XCUIElement {
         for query in [app.buttons, app.radioButtons, app.descendants(matching: .tab)] {
-            let element = query[label]
+            let element = query[label].firstMatch
             if element.exists { return element }
         }
         // A macOS sidebar row carries its title as the static text's *value*, which the subscripts
         // above cannot see; clicking that text hits the row.
         let row = text(label)
         if row.exists { return row }
-        return app.buttons[label]   // nothing matched; let the caller's assertion name the miss
+        return app.buttons[label].firstMatch   // nothing matched; let the caller's assertion name the miss
     }
 
     /// Text addressed by whichever of the two the platform filled in. SwiftUI labels a `Text` on iOS
