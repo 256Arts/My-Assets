@@ -1,6 +1,6 @@
 import SwiftData
 
-/// The single SwiftData container shared by the app UI and every App Intent.
+/// The single SwiftData container shared by the app UI, the watch app, and every App Intent.
 ///
 /// App Intents can be launched by Siri while the app is in the background, so they need
 /// the same store the UI uses. This mirrors the build-conditional swap that `MyAssetsApp`

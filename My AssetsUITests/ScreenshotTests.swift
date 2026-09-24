@@ -40,6 +40,9 @@ final class ScreenshotTests: XCTestCase {
 
         checkSeedIsThrowaway()
 
+        #if os(watchOS)
+        walkWatch()
+        #else
         // Assets is where the seed is most obviously present, so prove it landed before shooting.
         activate(control("Assets/Debts"), "Assets/Debts tab")
         // Rows read as "House, $500,000.00" — the row's amount is part of its label, so match the name.
@@ -65,7 +68,41 @@ final class ScreenshotTests: XCTestCase {
         activate(control("Summary"), "Summary tab")
         settle()
         capture("01-summary")
+        #endif
     }
+
+    #if os(watchOS)
+    /// The watch app is a menu of the same screens, each pushed onto one navigation stack, with no
+    /// Credit Cards screen — so the walk opens each in turn and comes back to the menu between them.
+    private func walkWatch() {
+        activate(control("Summary"), "Summary row")
+        settle()
+        capture("01-summary")
+        goBack()
+
+        activate(control("Assets/Debts"), "Assets/Debts row")
+        waitFor(text("House"), "the seeded House row", shot: "02-assets-debts")
+        settle(seconds: 1)
+        capture("02-assets-debts")
+        goBack()
+
+        activate(control("Income"), "Income row")
+        settle(seconds: 1)
+        capture("03-income")
+        goBack()
+
+        // The menu's last row sits below the fold, and the list builds no cell for it until it scrolls.
+        app.swipeUp()
+        activate(control("Expenses"), "Expenses row")
+        settle(seconds: 1)
+        capture("04-expenses")
+    }
+
+    private func goBack() {
+        activate(app.navigationBars.buttons.element(boundBy: 0), "the back button")
+        settle(seconds: 1)
+    }
+    #endif
 
     // MARK: - The seed
 
@@ -103,6 +140,8 @@ final class ScreenshotTests: XCTestCase {
     private static var platform: String {
         #if os(macOS)
         "macOS"
+        #elseif os(watchOS)
+        "watchOS"
         #elseif targetEnvironment(macCatalyst)
         "Mac Catalyst"
         #elseif os(visionOS)
@@ -209,7 +248,11 @@ final class ScreenshotTests: XCTestCase {
         XCTAssertEqual(app.state, .runningForeground,
                        "\(name): the app under test was not frontmost — another app has this device")
         #if os(macOS)
-        captureWindow(named: name)
+        captureExternally(named: name)
+        #elseif os(visionOS)
+        // visionOS has no screen for `XCUIScreen.main.screenshot()` to return — it comes back 1x1 —
+        // so the runner takes the shot from outside with `simctl io screenshot`.
+        captureExternally(named: name)
         #else
         // The simulator's screen already *is* the store's canvas, at the exact required pixel size.
         attach(XCTAttachment(screenshot: XCUIScreen.main.screenshot()), named: name)
@@ -222,9 +265,10 @@ final class ScreenshotTests: XCTestCase {
         add(attachment)
     }
 
-    #if os(macOS)
+    #if os(macOS) || os(visionOS)
 
-    /// Asks the shell running the tests to photograph the window, and waits for it.
+    /// Asks the shell running the tests to photograph the window (on visionOS, the whole simulated
+    /// view), and waits for it.
     ///
     /// The good capture is `screencapture -l`, which reads the window's own buffer: correctly masked
     /// to the rounded corners, with real alpha and the system's own shadow. (`XCUIElement.screenshot()`
@@ -238,7 +282,7 @@ final class ScreenshotTests: XCTestCase {
     /// /tmp, and its own container is unreadable to the script, so the two would have nowhere to meet.
     private static let handshakeDirectory = URL(fileURLWithPath: "/tmp/app-store-screenshots")
 
-    private func captureWindow(named name: String) {
+    private func captureExternally(named name: String) {
         let files = FileManager.default
         let handshake = Self.handshakeDirectory
         let done = handshake.appendingPathComponent("done-\(name)")

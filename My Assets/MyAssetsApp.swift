@@ -19,7 +19,7 @@ struct MyAssetsApp: App {
                 .task { await refreshAppEntityIndex() }
                 .screenshotModeStatus()
         }
-        .defaultSize(width: 500, height: 800)
+        .defaultSize(width: 900, height: 620)
         .commands {
             CommandGroup(before: .toolbar) {
                 Toggle("Show Balance", isOn: $summaryScreenShowBalance)

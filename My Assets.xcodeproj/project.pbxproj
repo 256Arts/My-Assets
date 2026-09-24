@@ -11,6 +11,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		1BAA000300000000000000C7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1B31BA9023EC823F00B6E63A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1BE1623E2A74928B00E4907D;
+			remoteInfo = "My Assets (watchOS) Watch App";
+		};
 		1B3193A2282DDCDF00AA2038 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 1B31BA9023EC823F00B6E63A /* Project object */;
@@ -49,6 +56,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1BAA000300000000000000C2 /* My AssetsWatchUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "My AssetsWatchUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B31939E282DDCDF00AA2038 /* My AssetsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "My AssetsTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B31BA9823EC823F00B6E63A /* My Assets.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "My Assets.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BE1623F2A74928B00E4907D /* My Assets.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "My Assets.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -74,6 +82,7 @@
 			membershipExceptions = (
 				AmountRow.swift,
 				App.icon,
+				"App Intents/SharedModelContainer.swift",
 				Model/AlphaVantage.swift,
 				Model/Asset.swift,
 				Model/ColorName.swift,
@@ -128,6 +137,13 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		1BAA000300000000000000C5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		1B31939B282DDCDF00AA2038 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -178,6 +194,7 @@
 				1B31939E282DDCDF00AA2038 /* My AssetsTests.xctest */,
 				1BE1623F2A74928B00E4907D /* My Assets.app */,
 				1BAA000200000000000000B2 /* My AssetsUITests.xctest */,
+				1BAA000300000000000000C2 /* My AssetsWatchUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -192,6 +209,29 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		1BAA000300000000000000C1 /* My AssetsWatchUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1BAA000300000000000000CB /* Build configuration list for PBXNativeTarget "My AssetsWatchUITests" */;
+			buildPhases = (
+				1BAA000300000000000000C4 /* Sources */,
+				1BAA000300000000000000C5 /* Frameworks */,
+				1BAA000300000000000000C6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1BAA000300000000000000C8 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				1BAA000200000000000000B3 /* My AssetsUITests */,
+			);
+			name = "My AssetsWatchUITests";
+			packageProductDependencies = (
+			);
+			productName = "My AssetsWatchUITests";
+			productReference = 1BAA000300000000000000C2 /* My AssetsWatchUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		1B31939D282DDCDF00AA2038 /* My AssetsTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1B3193A6282DDCDF00AA2038 /* Build configuration list for PBXNativeTarget "My AssetsTests" */;
@@ -304,6 +344,9 @@
 					1BAA000200000000000000B1 = {
 						TestTargetID = 1B31BA9723EC823F00B6E63A;
 					};
+					1BAA000300000000000000C1 = {
+						TestTargetID = 1BE1623E2A74928B00E4907D;
+					};
 				};
 			};
 			buildConfigurationList = 1B31BA9323EC823F00B6E63A /* Build configuration list for PBXProject "My Assets" */;
@@ -330,11 +373,19 @@
 				1B31939D282DDCDF00AA2038 /* My AssetsTests */,
 				1BE1623E2A74928B00E4907D /* My Assets (watchOS) Watch App */,
 				1BAA000200000000000000B1 /* My AssetsUITests */,
+				1BAA000300000000000000C1 /* My AssetsWatchUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		1BAA000300000000000000C6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		1B31939C282DDCDF00AA2038 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -366,6 +417,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		1BAA000300000000000000C4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		1B31939A282DDCDF00AA2038 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -397,6 +455,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		1BAA000300000000000000C8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1BE1623E2A74928B00E4907D /* My Assets (watchOS) Watch App */;
+			targetProxy = 1BAA000300000000000000C7 /* PBXContainerItemProxy */;
+		};
 		1B3193A3282DDCDF00AA2038 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 1B31BA9723EC823F00B6E63A /* My Assets */;
@@ -416,6 +479,48 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		1BAA000300000000000000C9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 8;
+				DEVELOPMENT_TEAM = VA3SY54YU8;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_WKApplication = YES;
+				MARKETING_VERSION = 2.1;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.jaydenirwin.My-AssetsWatchUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SUPPORTED_PLATFORMS = "watchos watchsimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = "My Assets (watchOS) Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Debug;
+		};
+		1BAA000300000000000000CA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 8;
+				DEVELOPMENT_TEAM = VA3SY54YU8;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_WKApplication = YES;
+				MARKETING_VERSION = 2.1;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.jaydenirwin.My-AssetsWatchUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SUPPORTED_PLATFORMS = "watchos watchsimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = "My Assets (watchOS) Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Release;
+		};
 		1B3193A4282DDCDF00AA2038 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -778,6 +883,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		1BAA000300000000000000CB /* Build configuration list for PBXNativeTarget "My AssetsWatchUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1BAA000300000000000000C9 /* Debug */,
+				1BAA000300000000000000CA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		1B3193A6282DDCDF00AA2038 /* Build configuration list for PBXNativeTarget "My AssetsTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
