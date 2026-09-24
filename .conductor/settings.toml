@@ -14,11 +14,6 @@ available_in = ["local"]
 default = true
 icon = "camera"
 
-[scripts.run.screenshots-mac]
-command = "\"${CONDUCTOR_WORKSPACE_PATH:-.}/Scripts/screenshots.sh\" mac"
-available_in = ["local"]
-icon = "monitor"
-
 # Capture, then send the results to App Store Connect. Screenshots attach to an App Store version
 # and only one still being prepared can be written to, so this cannot alter a live listing — if no
 # version is editable it reports that and uploads nothing. Add --dry-run to see what would change.
