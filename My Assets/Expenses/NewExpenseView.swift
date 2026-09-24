@@ -36,7 +36,7 @@ struct NewExpenseView: View {
                     Text("-")
                         .tag(nil as TransactionFrequency?)
                     ForEach(TransactionFrequency.allCases) { freq in
-                        Text(freq.rawValue.capitalized)
+                        Text(freq.displayName)
                             .tag(freq as TransactionFrequency?)
                     }
                 }
@@ -81,7 +81,7 @@ struct NewExpenseView: View {
         }
         .onChange(of: expense.symbol) { _, newValue in
             if (expense.name ?? "").isEmpty {
-                expense.name = newValue?.suggestedTitle
+                expense.name = newValue.map { String(localized: $0.suggestedTitle) }
             }
         }
     }

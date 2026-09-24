@@ -11,7 +11,7 @@ struct IncomeView: View {
             case working, passive, passiveNonLiquid
             
             var id: Self { self }
-            var title: String {
+            var title: LocalizedStringResource {
                 switch self {
                 case .working:
                     "Working"
@@ -93,7 +93,7 @@ struct IncomeView: View {
                     HStack {
                         Chart(pieChartData) { sector in
                             SectorMark(angle: .value("Value", sector.income), innerRadius: .ratio(0.5), angularInset: 1)
-                                .foregroundStyle(by: .value("Effort", sector.effort.title))
+                                .foregroundStyle(by: .value("Effort", String(localized: sector.effort.title)))
                                 .cornerRadius(4)
                             //                            .annotation(position: .overlay) {
                             //                                sector.effort.icon

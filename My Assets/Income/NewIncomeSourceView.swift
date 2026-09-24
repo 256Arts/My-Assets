@@ -38,7 +38,7 @@ struct NewIncomeSourceView: View {
                     Text("-")
                         .tag(nil as TransactionFrequency?)
                     ForEach(TransactionFrequency.allCases) { freq in
-                        Text(freq.rawValue.capitalized)
+                        Text(freq.displayName)
                             .tag(freq as TransactionFrequency?)
                     }
                 }
@@ -79,7 +79,7 @@ struct NewIncomeSourceView: View {
         .navigationTitle(income.name ?? "")
         .onChange(of: income.symbol) { _, newValue in
             if (income.name ?? "").isEmpty {
-                income.name = newValue?.suggestedTitle
+                income.name = newValue.map { String(localized: $0.suggestedTitle) }
             }
         }
     }

@@ -45,7 +45,7 @@ enum Symbol: String, CaseIterable, Identifiable, Codable {
     
     var id: Self { self }
     
-    var suggestedTitle: String {
+    var suggestedTitle: LocalizedStringResource {
         switch self {
         case .banknote:
             "Cash"

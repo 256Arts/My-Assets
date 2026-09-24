@@ -8,7 +8,22 @@ enum TransactionFrequency: String, CaseIterable, Codable, Identifiable {
     case yearly
     
     var id: Self { self }
-    
+
+    var displayName: LocalizedStringResource {
+        switch self {
+        case .weekly:
+            "Weekly"
+        case .biweekly:
+            "Biweekly"
+        case .bimonthly:
+            "Bimonthly"
+        case .monthly:
+            "Monthly"
+        case .yearly:
+            "Yearly"
+        }
+    }
+
     var timesPerMonth: Double {
         switch self {
         case .weekly:

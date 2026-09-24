@@ -5,4 +5,13 @@ enum UserType: String, Identifiable, CaseIterable {
     case household = "Household"
     
     var id: Self { self }
+
+    var displayName: LocalizedStringResource {
+        switch self {
+        case .individual:
+            "Individual"
+        case .household:
+            "Household"
+        }
+    }
 }

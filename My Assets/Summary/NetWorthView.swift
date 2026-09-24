@@ -33,7 +33,7 @@ struct NetWorthView: View {
                     .contextMenu {
                         Picker("Period", selection: $period) {
                             ForEach(Period.allCases) {
-                                Text($0.rawValue)
+                                Text($0.displayName)
                                     .tag($0)
                             }
                         }
@@ -112,7 +112,7 @@ struct NetWorthView: View {
     }
     
     @ViewBuilder
-    private func chartLineDescription(color: Color, title: String, description: String, income: Double? = nil, expenses: Double? = nil) -> some View {
+    private func chartLineDescription(color: Color, title: LocalizedStringKey, description: LocalizedStringKey, income: Double? = nil, expenses: Double? = nil) -> some View {
         Label {
             VStack(alignment: .leading) {
                 Text(title)

@@ -7,7 +7,7 @@ struct RootTabView: View {
         case summary, assetsAndDebts, income, expenses
         
         var id: Self { self }
-        var title: String {
+        var title: LocalizedStringResource {
             switch self {
             case .summary:
                 "Summary"
@@ -55,7 +55,11 @@ struct RootTabView: View {
     var body: some View {
         NavigationStack {
             List(Tab.allCases, selection: $selectedTab) { tab in
-                Label(tab.title, systemImage: tab.iconName)
+                Label {
+                    Text(tab.title)
+                } icon: {
+                    Image(systemName: tab.iconName)
+                }
                     .symbolVariant(.fill)
                     .foregroundStyle(tab.color)
             }

@@ -30,7 +30,7 @@ struct BalanceView: View {
                     .contextMenu {
                         Picker("Period", selection: $period) {
                             ForEach(Period.allCases) {
-                                Text($0.rawValue)
+                                Text($0.displayName)
                                     .tag($0)
                             }
                         }

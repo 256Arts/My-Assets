@@ -42,7 +42,7 @@ struct IncomeSourceView: View {
                 Text("-")
                     .tag(nil as TransactionFrequency?)
                 ForEach(TransactionFrequency.allCases) { freq in
-                    Text(freq.rawValue.capitalized)
+                    Text(freq.displayName)
                         .tag(freq as TransactionFrequency?)
                 }
             }

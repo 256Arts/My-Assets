@@ -35,7 +35,7 @@ struct AssetView: View {
                 OptionalPercentField("Interest", value: $asset.annualInterestFraction)
                 Picker("Compound Frequency", selection: $asset.compoundFrequency) {
                     ForEach(Asset.CompoundFrequency.allCases) { freq in
-                        Text(freq.rawValue.capitalized)
+                        Text(freq.displayName)
                             .tag(freq as Asset.CompoundFrequency?)
                     }
                 }

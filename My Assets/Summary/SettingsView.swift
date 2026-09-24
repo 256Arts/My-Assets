@@ -15,7 +15,7 @@ struct SettingsView: View {
             Section {
                 Picker("User Type", selection: $userTypeValue) {
                     ForEach(UserType.allCases) { userType in
-                        Text(userType.rawValue)
+                        Text(userType.displayName)
                             .tag(userType.rawValue)
                     }
                 }

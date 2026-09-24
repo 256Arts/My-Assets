@@ -8,7 +8,7 @@ final class Expense: Schedulable, Hashable, Comparable {
         case fixed, variable, intermittent, discretionary, savings
         
         var id: Self { self }
-        var name: String {
+        var name: LocalizedStringResource {
             switch self {
             case .fixed:
                 "Fixed"

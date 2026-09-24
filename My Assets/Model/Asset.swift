@@ -24,6 +24,18 @@ final class Asset: Comparable {
         var periodsPerYear: Double {
             TimeInterval.year / timeInterval
         }
+        var displayName: LocalizedStringResource {
+            switch self {
+            case .yearly:
+                "Yearly"
+            case .monthly:
+                "Monthly"
+            case .biweekly:
+                "Biweekly"
+            case .none:
+                "None"
+            }
+        }
     }
     
     enum AssetError: Error {

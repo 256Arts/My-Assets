@@ -52,7 +52,7 @@ struct NewAssetView: View {
                 }
                 Picker("Compound Frequency", selection: $asset.compoundFrequency) {
                     ForEach(Asset.CompoundFrequency.allCases) { freq in
-                        Text(freq.rawValue.capitalized)
+                        Text(freq.displayName)
                             .tag(freq as Asset.CompoundFrequency?)
                     }
                 }
@@ -119,7 +119,7 @@ struct NewAssetView: View {
         }
         .onChange(of: asset.symbol) { _, newValue in
             if (asset.name ?? "").isEmpty {
-                asset.name = newValue?.suggestedTitle
+                asset.name = newValue.map { String(localized: $0.suggestedTitle) }
             }
         }
     }

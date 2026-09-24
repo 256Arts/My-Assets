@@ -50,7 +50,7 @@ struct ExpensesView: View {
                     HStack {
                         Chart(pieChartData) { sector in
                             SectorMark(angle: .value("Value", sector.amount), innerRadius: .ratio(0.5), angularInset: 1)
-                                .foregroundStyle(by: .value("Category", sector.category.name))
+                                .foregroundStyle(by: .value("Category", String(localized: sector.category.name)))
                                 .cornerRadius(4)
                             //                            .annotation(position: .overlay) {
                             //                                sector.category.icon
