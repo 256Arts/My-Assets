@@ -24,6 +24,8 @@ struct LongTermChart: View {
     @AppStorage(UserDefaults.Key.userType) private var userTypeValue = UserType.individual.rawValue
     @AppStorage(UserDefaults.Key.otherHouseholdNetWorth) private var partnerNetWorth = 0.0
     @AppStorage(UserDefaults.Key.otherHouseholdAnnualNetWorthInterest) private var partnerAnnualNetWorthInterest = 0.0
+    @AppStorage(UserDefaults.Key.birthday) private var birthdayTimeSinceReference = 0.0
+    @AppStorage(UserDefaults.Key.retirementAge) private var retirementAge = 65
 
     @Environment(FinancialData.self) private var data
     @Binding var years: Int
@@ -36,6 +38,14 @@ struct LongTermChart: View {
     }
     var insights: InsightsGenerator {
         .init(data: data)
+    }
+    
+    /// Only set when retirement falls within the charted years.
+    var retirementDate: Date? {
+        guard let date = InsightsGenerator.retirementDate(birthdayTimeSinceReference: birthdayTimeSinceReference, retirementAge: retirementAge),
+              let lastDate = dates.last,
+              (Date.now...lastDate).contains(date) else { return nil }
+        return date
     }
     
     var chartData: [ValueAtDate] {
@@ -199,6 +209,18 @@ struct LongTermChart: View {
                     .interpolationMethod(.cardinal)
                     .foregroundStyle(Color.secondary)
                     .lineStyle(StrokeStyle(lineWidth: 2, lineCap: .round, dash: [0.01, 4]))
+            }
+            
+            if let retirementDate {
+                RuleMark(x: .value("Retirement", retirementDate))
+                    .foregroundStyle(Color.secondary.opacity(0.5))
+                    .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 4]))
+                    .annotation(position: .top, alignment: .trailing) {
+                        Image(systemName: "beach.umbrella")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .accessibilityLabel("Retirement")
+                    }
             }
         }
         .chartForegroundStyleScale(domain: chartSeries.map(\.name), range: chartSeries.map(\.color))

@@ -60,12 +60,17 @@ final class InsightsGenerator {
         return t * 12
     }
     var retirementDate: Date? {
-        let birthdayTimeSinceReference = UserDefaults.standard.double(forKey: UserDefaults.Key.birthday)
-        
+        Self.retirementDate(
+            birthdayTimeSinceReference: UserDefaults.standard.double(forKey: UserDefaults.Key.birthday),
+            retirementAge: UserDefaults.standard.integer(forKey: UserDefaults.Key.retirementAge)
+        )
+    }
+    /// Returns nil when no birthday is set (stored as 0).
+    static func retirementDate(birthdayTimeSinceReference: Double, retirementAge: Int) -> Date? {
         guard birthdayTimeSinceReference != 0 else { return nil }
         
         let birthday = Date(timeIntervalSinceReferenceDate: birthdayTimeSinceReference)
-        return birthday + (65 * .year)
+        return Calendar.current.date(byAdding: .year, value: retirementAge, to: birthday)
     }
     var retirementBalance: Double? {
         guard let retirementDate = retirementDate, 0 < retirementDate.timeIntervalSinceNow else { return nil }

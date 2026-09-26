@@ -294,3 +294,12 @@ func testAlphaVantageMissingTimeSeriesThrows() {
         try AlphaVantage.parseMonthlyCloses(data: Data("{}".utf8), timeSeriesKey: "Monthly Time Series", closeKey: "4. close")
     }
 }
+
+@Test
+func testRetirementDate() {
+    #expect(InsightsGenerator.retirementDate(birthdayTimeSinceReference: 0, retirementAge: 65) == nil)
+    
+    let birthday = Calendar.current.date(from: DateComponents(year: 1990, month: 6, day: 15))!
+    let retirement = InsightsGenerator.retirementDate(birthdayTimeSinceReference: birthday.timeIntervalSinceReferenceDate, retirementAge: 45)!
+    #expect(Calendar.current.dateComponents([.year, .month, .day], from: retirement) == DateComponents(year: 2035, month: 6, day: 15))
+}

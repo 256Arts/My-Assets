@@ -9,6 +9,7 @@ extension UserDefaults {
         static let otherHouseholdNetWorth = "otherHouseholdNetWorth"
         static let otherHouseholdAnnualNetWorthInterest = "otherHouseholdAnnualNetWorthInterest"
         static let birthday = "birthday"
+        static let retirementAge = "retirementAge"
         static let tabViewCustomization = "tabViewCustomization"
         static let amountMarqueePeriod = "amountMarqueePeriod"
         static let amountMarqueeShowAsCombinedValue = "amountMarqueeShowAsCombinedValue"
@@ -27,6 +28,7 @@ extension UserDefaults {
             Key.userType: UserType.individual.rawValue,
             Key.otherHouseholdNetWorth: 0.0,
             Key.otherHouseholdAnnualNetWorthInterest: 0.0,
+            Key.retirementAge: 65,
             Key.amountMarqueePeriod: Period.month.rawValue,
             Key.amountMarqueeShowAsCombinedValue: false,
             Key.summaryScreenShowBalance: true,
