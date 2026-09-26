@@ -172,6 +172,14 @@ func testWorldStats() {
 }
 
 @Test
+func testAdjustForInflation() {
+    // Real value = nominal / (1 + i)^t: $1,000 ten years out at 3% is $744, not $737 from × (1 − i)^t.
+    let tenYearsOut = Date(timeIntervalSinceNow: 10 * .year)
+    #expect(WorldFinanceStats.adjustForInflation(value: 1_000, in: tenYearsOut).rounded() == 744)
+    #expect(WorldFinanceStats.adjustForInflation(value: 1_000, in: .now).rounded() == 1_000)
+}
+
+@Test
 func testNetWorthPercentile() {
     let insights = InsightsGenerator(data: FinancialData(nonStockAssets: [], stocks: [], debts: [], income: [], expenses: [], upcomingSpends: []))
     // Evaluate against the 2023 base-year brackets (no inflation projection); values picked at bracket boundaries.

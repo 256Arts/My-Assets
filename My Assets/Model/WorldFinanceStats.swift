@@ -37,7 +37,7 @@ enum WorldFinanceStats {
     
     static func adjustForInflation(value: Double, in futureDate: Date) -> Double {
         let yearsToDate = futureDate.timeIntervalSinceNow / .year
-        return value * pow(1 - averageAnnualUSInflation, yearsToDate)
+        return value / pow(1 + averageAnnualUSInflation, yearsToDate)
     }
     
 }
