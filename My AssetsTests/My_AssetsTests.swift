@@ -212,3 +212,20 @@ func testPastUpcomingSpendIgnoredAndNextDateSteps() {
     let repeating = UpcomingSpend(name: "New Car", cost: 5_000, date: past, repeatYears: 2)
     #expect(repeating.nextTransactionDate! > .now)
 }
+
+@Test
+func testStockReturnRateSign() {
+    // A stock that went 100 → 110 over a year returned +10%/yr, not ≈ -9%.
+    // Regression guard for the inverted `prevPrice / price` ratio.
+    let rising = Stock(symbol: "AAPL", quantity: 1)
+    rising.price = 110
+    rising.prevPrice = 100
+    rising.prevDate = Date(timeIntervalSinceNow: -.year)
+    #expect(abs(rising.annualInterestFraction! - 0.10) < 0.0001)
+
+    let falling = Stock(symbol: "AAPL", quantity: 1)
+    falling.price = 90
+    falling.prevPrice = 100
+    falling.prevDate = Date(timeIntervalSinceNow: -.year)
+    #expect(abs(falling.annualInterestFraction! + 0.10) < 0.0001)
+}

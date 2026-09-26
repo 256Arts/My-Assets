@@ -11,13 +11,15 @@ final class Stock {
     var quantity: Double?
     var price: Double?
     var annualInterestFraction: Double? {
-        guard let prevD = prevDate, let prevP = prevPrice, let curr = price else { return nil }
+        guard let prevD = prevDate, let prevP = prevPrice, prevP > 0, let curr = price else { return nil }
         let yearsSinceDate = Date().timeIntervalSince(prevD) / TimeInterval.year
-        return ((prevP / curr) - 1) / yearsSinceDate
+        guard yearsSinceDate > 0 else { return nil }
+        // Annualized growth (CAGR), matching how Asset compounds once per year.
+        return pow(curr / prevP, 1 / yearsSinceDate) - 1
     }
     
-    private var prevPrice: Double?
-    private var prevDate: Date?
+    var prevPrice: Double?
+    var prevDate: Date?
     
     init(symbol: String, quantity: Double) {
         self.symbol = symbol
