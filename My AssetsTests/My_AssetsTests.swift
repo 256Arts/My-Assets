@@ -229,3 +229,40 @@ func testStockReturnRateSign() {
     falling.prevDate = Date(timeIntervalSinceNow: -.year)
     #expect(abs(falling.annualInterestFraction! + 0.10) < 0.0001)
 }
+
+@Test
+func testAlphaVantageRateLimitThrows() {
+    for key in ["Note", "Information"] {
+        let data = Data("{\"\(key)\": \"Thank you for using Alpha Vantage! Our standard API rate limit is 25 requests per day.\"}".utf8)
+        #expect {
+            try AlphaVantage.parseMonthlyCloses(data: data, timeSeriesKey: "Monthly Time Series", closeKey: "4. close")
+        } throws: { error in
+            if case AlphaVantage.QueryError.rateLimited = error { true } else { false }
+        }
+    }
+}
+
+@Test
+func testAlphaVantageParsesMonthlyCloses() throws {
+    let data = Data("""
+    {
+        "Meta Data": {"2. Symbol": "AAPL"},
+        "Monthly Time Series": {
+            "2026-09-25": {"4. close": "250.00"},
+            "2025-09-30": {"4. close": "200.00"}
+        }
+    }
+    """.utf8)
+    let now = try #require(ISO8601DateFormatter().date(from: "2026-09-26T12:00:00Z"))
+    let result = try AlphaVantage.parseMonthlyCloses(data: data, timeSeriesKey: "Monthly Time Series", closeKey: "4. close", now: now)
+    #expect(result.price == 250)
+    #expect(result.prevPrice == 200)
+    #expect(result.prevDate == ISO8601DateFormatter().date(from: "2025-09-30T00:00:00Z"))
+}
+
+@Test
+func testAlphaVantageMissingTimeSeriesThrows() {
+    #expect(throws: AlphaVantage.QueryError.self) {
+        try AlphaVantage.parseMonthlyCloses(data: Data("{}".utf8), timeSeriesKey: "Monthly Time Series", closeKey: "4. close")
+    }
+}
