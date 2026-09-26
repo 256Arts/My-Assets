@@ -74,6 +74,26 @@ func testLiveOffTime() {
 }
 
 @Test
+func testInsightsTolerateNilSyncedFields() {
+    // CloudKit can deliver records with nil fields; insights must not crash or return NaN.
+    let asset = Asset(value: 1_000)
+    asset.isLiquid = nil
+    let debt = Debt(value: 500)
+    let income = Income(name: "", symbol: .defaultSymbol, isLiquid: true, amount: 100, isPassive: true)
+    income.isLiquid = nil
+    income.isPassive = nil
+    let data = FinancialData(nonStockAssets: [asset], stocks: [], debts: [debt], income: [income], expenses: [Expense(baseAmount: 100)], upcomingSpends: [])
+    let insights = InsightsGenerator(data: data)
+
+    #expect(insights.avgAnnualAssetsInterest.isFinite)
+    _ = insights.requiredBalanceToLiveOffString
+    _ = insights.generate()
+
+    let empty = InsightsGenerator(data: FinancialData(nonStockAssets: [], stocks: [], debts: [debt], income: [], expenses: [], upcomingSpends: []))
+    #expect(empty.avgAnnualAssetsInterest == 0)
+}
+
+@Test
 func testAvgAnnualNetWorthInterest() {
     // Asset earns 10% on $2,000 (+$200/yr); debt accrues 5% on $1,000 (−$50/yr).
     // Weighted average over a $1,000 natural net worth = ($200 − $50) / $1,000 = 15%.

@@ -143,7 +143,7 @@ struct IncomeView: View {
                     .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                 }
                 Section {
-                    ForEach(incomes.filter({ $0.isLiquid! })) { income in
+                    ForEach(incomes.filter({ $0.isLiquid == true })) { income in
                         NavigationLink(value: income) {
                             AmountRow(symbol: income.symbol ?? .defaultSymbol, label: income.name ?? "", amount: income.monthlyEarnings ?? 0)
                                 .opacity((selectedSector?.effort ?? .working) == .working ? 1 : 0.5)
@@ -166,9 +166,9 @@ struct IncomeView: View {
                         .accessibilityValue(currencyFormatter.string(from: NSNumber(value: data.totalLiquidIncome))!)
                 }
                 
-                if incomes.contains(where: { !$0.isLiquid! }) {
+                if incomes.contains(where: { $0.isLiquid != true }) {
                     Section {
-                        ForEach(incomes.filter({ !$0.isLiquid! })) { income in
+                        ForEach(incomes.filter({ $0.isLiquid != true })) { income in
                             AmountRow(symbol: income.symbol ?? .defaultSymbol, label: income.name ?? "", amount: income.monthlyEarnings ?? 0)
                                 .opacity((selectedSector?.effort ?? .passiveNonLiquid) == .passiveNonLiquid ? 1 : 0.5)
                                 .accessibilityElement()

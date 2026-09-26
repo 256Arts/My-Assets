@@ -13,9 +13,10 @@ final class InsightsGenerator {
     
     var avgAnnualAssetsInterest: Double {
         // Uses weighted average
-        let totalAssets = data.assets.filter({ $0.isLiquid! }).reduce(0.0, { $0 + $1.currentValue }) // Excludes debts
-        let avgAnnualAssetInterest = data.assets.filter({ $0.isLiquid! }).reduce(0.0, { $0 + $1.effectiveAnnualInterestFraction * ($1.currentValue / totalAssets) })
-        let avgAnnualDebtInterest = data.debts.reduce(0.0, { $0 + $1.annualInterestFraction! * ($1.currentValue / totalAssets) })
+        let totalAssets = data.assets.filter({ $0.isLiquid ?? true }).reduce(0.0, { $0 + $1.currentValue }) // Excludes debts
+        guard totalAssets != 0 else { return 0 }
+        let avgAnnualAssetInterest = data.assets.filter({ $0.isLiquid ?? true }).reduce(0.0, { $0 + $1.effectiveAnnualInterestFraction * ($1.currentValue / totalAssets) })
+        let avgAnnualDebtInterest = data.debts.reduce(0.0, { $0 + ($1.annualInterestFraction ?? 0) * ($1.currentValue / totalAssets) })
         return avgAnnualAssetInterest - avgAnnualDebtInterest
     }
     var avgAnnualBalanceInterest: Double {
@@ -132,7 +133,7 @@ final class InsightsGenerator {
         guard 0 < avgAnnualBalanceInterest else { return nil }
         
         let totalStaticExpenses = data.expenses.filter { $0.fromDebt == nil }.reduce(0.0, { $0 + $1.monthlyCost(excludingSavings: true) })
-        let totalStaticPassiveIncome = data.income.filter { $0.isPassive! && $0.fromAsset == nil }.reduce(0.0, { $0 + ($1.monthlyEarnings ?? 0) })
+        let totalStaticPassiveIncome = data.income.filter { $0.isPassive == true && $0.fromAsset == nil }.reduce(0.0, { $0 + ($1.monthlyEarnings ?? 0) })
         let staticMonthlyDrain = totalStaticExpenses - totalStaticPassiveIncome
         
         let requiredNewAssets = staticMonthlyDrain / (avgAnnualBalanceInterest / 12)
@@ -164,7 +165,7 @@ final class InsightsGenerator {
         
         if !data.expenses.isEmpty {
             if 0 < liveOffMonths {
-                let earningNetWorthViaAssets = !data.income.filter { $0.isPassive! && $0.fromAsset != nil }.isEmpty
+                let earningNetWorthViaAssets = !data.income.filter { $0.isPassive == true && $0.fromAsset != nil }.isEmpty
                 insights.append(try! AttributedString(markdown: "You could live off your \(earningNetWorthViaAssets ? "assets" : "passive income") for **\(liveOffTimeString)**."))
             }
             if liveOffTimeString != "forever", let requiredBalanceToLiveOffString = requiredBalanceToLiveOffString {

@@ -20,7 +20,7 @@ struct AssetsAndDebtsView: View {
         List {
             Section {
                 ForEach(nonStockAssets) { asset in
-                    AmountRow(symbol: asset.symbol ?? .defaultSymbol, label: asset.name!, amount: asset.currentValue)
+                    AmountRow(symbol: asset.symbol ?? .defaultSymbol, label: asset.name ?? "", amount: asset.currentValue)
                 }
                 .onDelete(perform: deleteAsset)
             } header: {
@@ -28,7 +28,7 @@ struct AssetsAndDebtsView: View {
             }
             Section {
                 ForEach(debts) { debt in
-                    AmountRow(symbol: debt.symbol ?? .defaultSymbol, label: debt.name!, amount: debt.currentValue)
+                    AmountRow(symbol: debt.symbol ?? .defaultSymbol, label: debt.name ?? "", amount: debt.currentValue)
                 }
                 .onDelete(perform: deleteDebt)
             } header: {
