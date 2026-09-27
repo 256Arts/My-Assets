@@ -41,12 +41,11 @@ final class Debt: Hashable, Comparable {
         }
     }
     var paymentInterest: Double {
-        guard let annualInterestFraction else { return .nan }
-        
-        return currentValue * annualInterestFraction / (12.0 * (paymentFrequency?.timesPerMonth ?? 1))
+        currentValue * (annualInterestFraction ?? 0) / (12.0 * (paymentFrequency?.timesPerMonth ?? 1))
     }
     var monthsToPayOff: Double {
-        guard let annualInterestFraction, let paymentAmount else { return .nan }
+        let annualInterestFraction = annualInterestFraction ?? 0
+        let paymentAmount = paymentAmount ?? 0
         
         guard 0 < paymentAmount else {
             return .infinity
@@ -92,10 +91,11 @@ final class Debt: Hashable, Comparable {
     }
     
     func currentValue(at date: Date) -> Double {
-        guard let prevDate, let prevValue, let annualInterestFraction, let paymentAmount else { return .nan }
-        
-        let monthsSinceDate = date.timeIntervalSince(prevDate) / TimeInterval.month
-        let monthlyPayment = paymentAmount * (paymentFrequency?.timesPerMonth ?? 1)
+        // Fields can be nil mid-CloudKit-sync; hold the debt at its last value rather than returning NaN.
+        let prevValue = prevValue ?? 0
+        let annualInterestFraction = annualInterestFraction ?? 0
+        let monthsSinceDate = date.timeIntervalSince(prevDate ?? .now) / TimeInterval.month
+        let monthlyPayment = (paymentAmount ?? 0) * (paymentFrequency?.timesPerMonth ?? 1)
         
         guard !annualInterestFraction.isZero else {
             return prevValue - (monthsSinceDate * monthlyPayment)

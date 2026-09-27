@@ -72,7 +72,7 @@ final class Asset: Comparable {
         (name ?? "") + (symbol?.rawValue ?? "") + (colorName?.rawValue ?? "") + (compoundFrequency?.rawValue ?? "")
     }
     var effectiveAnnualInterestFraction: Double {
-        guard let annualInterestFraction else { return .nan }
+        let annualInterestFraction = annualInterestFraction ?? 0
         
         if let compoundFrequency, compoundFrequency.timeInterval != .year {
             return pow(1 + (annualInterestFraction / compoundFrequency.periodsPerYear), compoundFrequency.periodsPerYear) - 1
@@ -118,10 +118,10 @@ final class Asset: Comparable {
     }
     
     func currentValue(at date: Date) -> Double {
-        guard let prevDate, let prevValue, let compoundFrequency, let annualInterestFraction else { return .nan }
-        
-        let periodsSinceDate = date.timeIntervalSince(prevDate) / compoundFrequency.timeInterval
-        return prevValue * pow(1 + (annualInterestFraction / compoundFrequency.periodsPerYear), periodsSinceDate)
+        // Fields can be nil mid-CloudKit-sync; hold the asset at its last value rather than returning NaN.
+        let compoundFrequency = compoundFrequency ?? .none
+        let periodsSinceDate = date.timeIntervalSince(prevDate ?? .now) / compoundFrequency.timeInterval
+        return (prevValue ?? 0) * pow(1 + ((annualInterestFraction ?? 0) / compoundFrequency.periodsPerYear), periodsSinceDate)
     }
     
     func generateIncome(frequency: TransactionFrequency? = nil, startDate: Date? = nil) throws {

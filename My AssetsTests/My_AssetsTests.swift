@@ -303,3 +303,21 @@ func testRetirementDate() {
     let retirement = InsightsGenerator.retirementDate(birthdayTimeSinceReference: birthday.timeIntervalSinceReferenceDate, retirementAge: 45)!
     #expect(Calendar.current.dateComponents([.year, .month, .day], from: retirement) == DateComponents(year: 2035, month: 6, day: 15))
 }
+
+@Test
+func testNilInterestKeepsNetWorthFinite() {
+    // A partially-synced CloudKit record can arrive with nil interest fields;
+    // it should count at its last value instead of turning net worth into NaN.
+    let asset = Asset(value: 1_000)
+    asset.annualInterestFraction = nil
+    asset.compoundFrequency = nil
+    let debt = Debt(value: 400)
+    debt.annualInterestFraction = nil
+    debt.paymentAmount = nil
+    let data = FinancialData(nonStockAssets: [asset], stocks: [], debts: [debt], income: [], expenses: [], upcomingSpends: [])
+
+    #expect(asset.currentValue.rounded() == 1_000)
+    #expect(debt.currentValue.rounded() == 400)
+    #expect(data.netWorth(at: .now, type: .working).isFinite)
+    #expect(data.netWorth(at: .init(timeIntervalSinceNow: .year), type: .working).isFinite)
+}
