@@ -19,7 +19,7 @@ struct MyAssetsApp: App {
                 .task { await refreshAppEntityIndex() }
                 .screenshotModeStatus()
         }
-        .defaultSize(width: 900, height: 620)
+        .defaultSize(defaultWindowSize)
         .commands {
             CommandGroup(before: .toolbar) {
                 Toggle("Show Balance", isOn: $summaryScreenShowBalance)
@@ -36,6 +36,16 @@ struct MyAssetsApp: App {
         }
         #endif
     }
+}
+
+/// Landscape on the Mac, where the sidebar sits beside the content; portrait in visionOS, where the
+/// tab bar is an ornament and the window is one tall column like the phone app.
+private var defaultWindowSize: CGSize {
+    #if os(visionOS)
+    CGSize(width: 620, height: 840)
+    #else
+    CGSize(width: 900, height: 620)
+    #endif
 }
 
 #if DEBUG
