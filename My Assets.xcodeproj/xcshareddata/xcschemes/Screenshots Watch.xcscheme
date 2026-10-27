@@ -56,11 +56,17 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1BE1623E2A74928B00E4907D"
             BuildableName = "My Assets.app"
-            BlueprintName = "My Assets (watchOS) Watch App"
             ReferencedContainer = "container:My Assets.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
+   <ProfileAction
+      buildConfiguration = "Release"
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      savedToolIdentifier = ""
+      useCustomWorkingDirectory = "NO"
+      debugDocumentVersioning = "YES">
+   </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
    </AnalyzeAction>
