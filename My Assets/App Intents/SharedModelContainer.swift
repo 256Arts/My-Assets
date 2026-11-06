@@ -14,7 +14,7 @@ let sharedModelContainer: ModelContainer = {
     #if targetEnvironment(simulator) || ((os(macOS) || targetEnvironment(macCatalyst)) && DEBUG)
     return previewContainer
     #else
-    return try! ModelContainer(for: Asset.self, Debt.self, Stock.self, UpcomingSpend.self, Income.self, Expense.self, CreditCard.self)
+    return try! ModelContainer(for: Asset.self, Debt.self, Stock.self, UpcomingSpend.self, Income.self, Expense.self, CreditCard.self, SpendingCategory.self)
     #endif
 }()
 

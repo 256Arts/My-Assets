@@ -42,7 +42,7 @@ Tests live in `My AssetsTests/` and use Swift Testing (`@Test` / `#expect`), not
 ### Persistence: SwiftData + CloudKit
 All user data is stored via **SwiftData** `@Model` classes, synced through CloudKit. Because of CloudKit's requirements, **every model property is optional or has a default** — expect `Bool?`, `Double?`, `String?` everywhere, with extensive `?? default` unwrapping in computed properties. Keep this pattern when adding model fields.
 
-The model container is configured in `MyAssetsApp.swift`. Note the build-conditional swap: simulator and macOS debug builds use the in-memory `previewContainer` (seeded sample data); device/release builds use the real CloudKit-backed container. The registered model types are: `Asset`, `Debt`, `Stock`, `UpcomingSpend`, `Income`, `Expense`, `CreditCard`.
+The model container is configured in `MyAssetsApp.swift`. Note the build-conditional swap: simulator and macOS debug builds use the in-memory `previewContainer` (seeded sample data); device/release builds use the real CloudKit-backed container. The registered model types are: `Asset`, `Debt`, `Stock`, `UpcomingSpend`, `Income`, `Expense`, `CreditCard`, `SpendingCategory`.
 
 ### The `FinancialData` aggregate (`Model/FinancialData.swift`)
 Views do **not** compute financial summaries directly from `@Query` results. Instead, `RootTabView` reads all the `@Query` arrays and constructs a single `@Observable FinancialData` object, injected via `.environment(financialData)`. This is the central calculation engine — net worth, balance, total/passive income & expenses, weighted-average interest, and projections all live here.

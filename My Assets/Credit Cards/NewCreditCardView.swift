@@ -7,7 +7,7 @@ struct NewCreditCardView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.requestReview) private var requestReview
     
-    @Bindable var creditCard: CreditCard = CreditCard()
+    @State var creditCard = CreditCard()
     
     var body: some View {
         List {
@@ -24,46 +24,7 @@ struct NewCreditCardView: View {
                     creditCard.notes = newValue
                 }))
             }
-            Section {
-                OptionalCurrencyField("Monthly Spend", value: $creditCard.monthlySpend)
-                OptionalCurrencyField("Card Fee (Yearly)", value: $creditCard.cardFee)
-                LabeledContent("Points/$") {
-                    TextField("", value: $creditCard.pointsPerDollar, format: .number)
-                        .multilineTextAlignment(.trailing)
-                        #if !os(macOS)
-                        .keyboardType(.decimalPad)
-                        #endif
-                }
-                LabeledContent("Point Value") {
-                    TextField("", value: $creditCard.pointValue, format: .number)
-                        .multilineTextAlignment(.trailing)
-                        #if !os(macOS)
-                        .keyboardType(.decimalPad)
-                        #endif
-                }
-                Picker("Reward Type", selection: $creditCard.rewardType) {
-                    Text("Cash")
-                        .tag(CreditCard.RewardType.cash)
-                    Text("Gift Cards")
-                        .tag(CreditCard.RewardType.giftCard)
-                }
-                LabeledContent("Minimum Redemption (Points)") {
-                    TextField("", value: $creditCard.minimumRedemption, format: .number)
-                        .multilineTextAlignment(.trailing)
-                        #if !os(macOS)
-                        .keyboardType(.numberPad)
-                        #endif
-                }
-                if creditCard.rewardType == .giftCard {
-                    LabeledContent("Time Holding Gift Card (Months)") {
-                        TextField("", value: $creditCard.timeHoldingGiftCard, format: .number)
-                            .multilineTextAlignment(.trailing)
-                            #if !os(macOS)
-                            .keyboardType(.decimalPad)
-                            #endif
-                    }
-                }
-            }
+            CreditCardRewardsSections(creditCard: creditCard)
         }
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {

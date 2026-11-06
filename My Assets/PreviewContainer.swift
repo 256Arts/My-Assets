@@ -122,7 +122,14 @@ let previewUpcomingSpends = [
 ]
 @MainActor
 let previewCreditCards = [
-    CreditCard(name: "VISA", colorName: .gray, cardFee: 50, pointsPerDollar: 2, pointValue: 0.01, monthlySpend: 1000),
+    {
+        let card = CreditCard(name: "VISA", colorName: .gray, cardFee: 50, pointsPerDollar: 2, pointValue: 0.01, monthlySpend: 1000)
+        card.spendingCategories = [
+            SpendingCategory(name: "Dining", monthlySpend: 400, pointsPerDollar: 4),
+            SpendingCategory(name: "Groceries", monthlySpend: 600, pointsPerDollar: 3),
+        ]
+        return card
+    }(),
     CreditCard(name: "Mastercard", colorName: .red, cardFee: 0, pointsPerDollar: 3, pointValue: 0.01, monthlySpend: 1000),
     CreditCard(name: "Amex", colorName: .blue, cardFee: 100, pointsPerDollar: 5, pointValue: 0.01, monthlySpend: 1000),
 ]
@@ -130,7 +137,7 @@ let previewCreditCards = [
 @MainActor
 let previewContainer: ModelContainer = {
     let config = ModelConfiguration(isStoredInMemoryOnly: true, cloudKitDatabase: .none)
-    let container = try! ModelContainer(for: Asset.self, Debt.self, Stock.self, UpcomingSpend.self, Income.self, Expense.self, CreditCard.self, configurations: config)
+    let container = try! ModelContainer(for: Asset.self, Debt.self, Stock.self, UpcomingSpend.self, Income.self, Expense.self, CreditCard.self, SpendingCategory.self, configurations: config)
 
     let models: [any PersistentModel] = previewAssets + previewDebts + previewIncome + previewExpenses + previewUpcomingSpends + previewCreditCards
     for model in models {

@@ -31,50 +31,11 @@ struct CreditCardView: View {
                     }
                 }
             }
-            Section {
-                OptionalCurrencyField("Monthly Spend", value: $creditCard.monthlySpend)
-                OptionalCurrencyField("Card Fee (Yearly)", value: $creditCard.cardFee)
-                LabeledContent("Points/$") {
-                    TextField("", value: $creditCard.pointsPerDollar, format: .number)
-                        .multilineTextAlignment(.trailing)
-                        #if !os(macOS)
-                        .keyboardType(.decimalPad)
-                        #endif
-                }
-                LabeledContent("Point Value") {
-                    TextField("", value: $creditCard.pointValue, format: .number)
-                        .multilineTextAlignment(.trailing)
-                        #if !os(macOS)
-                        .keyboardType(.decimalPad)
-                        #endif
-                }
-                Picker("Reward Type", selection: $creditCard.rewardType) {
-                    Text("Cash")
-                        .tag(CreditCard.RewardType.cash)
-                    Text("Gift Cards")
-                        .tag(CreditCard.RewardType.giftCard)
-                }
-                LabeledContent("Minimum Redemption (Points)") {
-                    TextField("", value: $creditCard.minimumRedemption, format: .number)
-                        .multilineTextAlignment(.trailing)
-                        #if !os(macOS)
-                        .keyboardType(.numberPad)
-                        #endif
-                }
-                if creditCard.rewardType == .giftCard {
-                    LabeledContent("Time Holding Gift Card (Months)") {
-                        TextField("", value: $creditCard.timeHoldingGiftCard, format: .number)
-                            .multilineTextAlignment(.trailing)
-                            #if !os(macOS)
-                            .keyboardType(.decimalPad)
-                            #endif
-                    }
-                }
-                LabeledContent("Liquid Assets Interest", value: insights.avgAnnualBalanceInterestString)
-            }
+            CreditCardRewardsSections(creditCard: creditCard)
             
             if let rewardsRate = creditCard.rewardsRate(avgAnnualBalanceInterest: insights.avgAnnualBalanceInterest) {
                 Section {
+                    LabeledContent("Liquid Assets Interest", value: insights.avgAnnualBalanceInterestString)
                     LabeledContent("Your Savings Rate", value: percentFormatter.string(from: NSNumber(value: rewardsRate))!)
                 } footer: {
                     Text("Savings rate includes interest you earn on your liquid assets while your purchase payments are being defered (by 1-2 months) by the credit card.")

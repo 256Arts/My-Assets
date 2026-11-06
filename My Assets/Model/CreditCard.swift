@@ -23,17 +23,37 @@ final class CreditCard {
     var timeHoldingGiftCard: Double?
     var monthlySpend: Double?
     
+    // MARK: Relationships
+    
+    /// Purchases earning their own rate. `monthlySpend` and `pointsPerDollar` cover everything else.
+    @Relationship(deleteRule: .cascade, inverse: \SpendingCategory.creditCard)
+    var spendingCategories: [SpendingCategory]?
+    
     // MARK: Computed Properties
     
+    /// SwiftData relationships are unordered, so sort for a stable display order.
+    var sortedSpendingCategories: [SpendingCategory] {
+        (spendingCategories ?? []).sorted { ($0.name ?? "") < ($1.name ?? "") }
+    }
+    var totalMonthlySpend: Double {
+        (spendingCategories ?? []).reduce(monthlySpend ?? 0) { $0 + ($1.monthlySpend ?? 0) }
+    }
+    var monthlyPoints: Double {
+        (spendingCategories ?? []).reduce((monthlySpend ?? 0) * (pointsPerDollar ?? 0)) { $0 + $1.monthlyPoints }
+    }
+    /// Points per dollar, weighted by spend across every category.
+    var blendedPointsPerDollar: Double? {
+        totalMonthlySpend > 0 ? monthlyPoints / totalMonthlySpend : nil
+    }
     var monthlyRewardsEarned: Double? {
-        guard let pointsPerDollar, let pointValue, let monthlySpend else { return nil }
+        guard let pointValue, totalMonthlySpend > 0 else { return nil }
         
-        return (pointsPerDollar * pointValue) * (monthlySpend * 12)
+        return monthlyPoints * pointValue * 12
     }
     var monthlyRewardsLost: Double? {
-        guard let monthlyRewardsEarned, let pointsPerDollar, let pointValue else { return nil }
+        guard let monthlyRewardsEarned, let blendedPointsPerDollar, let pointValue else { return nil }
         
-        return monthlyRewardsEarned * (pointsPerDollar * pointValue)
+        return monthlyRewardsEarned * (blendedPointsPerDollar * pointValue)
     }
     
     // MARK: Init
@@ -51,7 +71,9 @@ final class CreditCard {
     }
     
     func rewardsRate(avgAnnualBalanceInterest: Double) -> Double? {
-        guard let monthlyRewardsEarned, let cardFee, let monthlyRewardsLost, let rewardType, let minimumRedemption, let timeHoldingGiftCard, let monthlySpend else { return nil }
+        guard let monthlyRewardsEarned, let cardFee, let monthlyRewardsLost, let rewardType, let minimumRedemption, let timeHoldingGiftCard else { return nil }
+        
+        let monthlySpend = totalMonthlySpend
         
         let deferedPaymentInterest: Double = {
             let avgDeferedPaymentMonths = 1.5
@@ -75,6 +97,28 @@ final class CreditCard {
         }()
         
         return (deferedPaymentInterest + monthlyRewardsEarned - cardFee - interestLost - monthlyRewardsLost) / (monthlySpend * 12)
+    }
+    
+}
+
+/// A type of purchase (e.g. dining) that earns its own points rate on a credit card.
+@Model
+final class SpendingCategory {
+    
+    var name: String?
+    var monthlySpend: Double?
+    var pointsPerDollar: Double?
+    
+    var creditCard: CreditCard?
+    
+    var monthlyPoints: Double {
+        (monthlySpend ?? 0) * (pointsPerDollar ?? 0)
+    }
+    
+    init(name: String = "", monthlySpend: Double = 0, pointsPerDollar: Double = 1.0) {
+        self.name = name
+        self.monthlySpend = monthlySpend
+        self.pointsPerDollar = pointsPerDollar
     }
     
 }

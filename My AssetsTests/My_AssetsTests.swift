@@ -1,4 +1,5 @@
 import Foundation
+import SwiftData
 import Testing
 @testable import My_Assets
 
@@ -320,4 +321,75 @@ func testNilInterestKeepsNetWorthFinite() {
     #expect(debt.currentValue.rounded() == 400)
     #expect(data.netWorth(at: .now, type: .working).isFinite)
     #expect(data.netWorth(at: .init(timeIntervalSinceNow: .year), type: .working).isFinite)
+}
+
+// MARK: - Credit card spending categories
+
+@Test
+func testCreditCardWithoutCategoriesKeepsBaseRate() {
+    let card = CreditCard(cardFee: 0, pointsPerDollar: 2, pointValue: 0.01, monthlySpend: 1000)
+
+    #expect(card.totalMonthlySpend == 1000)
+    #expect(card.blendedPointsPerDollar == 2)
+    // $1,000 × 12 months × 2 pts/$ × $0.01 = $240 a year.
+    #expect(card.monthlyRewardsEarned == 240)
+}
+
+@Test
+func testCreditCardCategoriesEarnTheirOwnRates() {
+    let card = CreditCard(cardFee: 0, pointsPerDollar: 1, pointValue: 0.01, monthlySpend: 500)
+    card.spendingCategories = [
+        SpendingCategory(name: "Dining", monthlySpend: 300, pointsPerDollar: 4),
+        SpendingCategory(name: "Groceries", monthlySpend: 200, pointsPerDollar: 3),
+    ]
+
+    #expect(card.totalMonthlySpend == 1000)
+    // 500×1 + 300×4 + 200×3 = 2,300 points a month.
+    #expect(card.monthlyPoints == 2300)
+    #expect(card.blendedPointsPerDollar == 2.3)
+    #expect(abs(card.monthlyRewardsEarned! - 276) < 0.0001)
+    #expect(card.sortedSpendingCategories.map(\.name) == ["Dining", "Groceries"])
+}
+
+@Test
+func testCreditCardCategoryEqualsSameRateOnBase() {
+    // Moving spend into a category at the same rate must not change the result.
+    let flat = CreditCard(cardFee: 50, pointsPerDollar: 2, pointValue: 0.01, monthlySpend: 1000)
+    let split = CreditCard(cardFee: 50, pointsPerDollar: 2, pointValue: 0.01, monthlySpend: 600)
+    split.spendingCategories = [SpendingCategory(name: "Dining", monthlySpend: 400, pointsPerDollar: 2)]
+
+    let flatRate = flat.rewardsRate(avgAnnualBalanceInterest: 0.04)!
+    let splitRate = split.rewardsRate(avgAnnualBalanceInterest: 0.04)!
+    #expect(abs(flatRate - splitRate) < 0.0000001)
+}
+
+@Test
+func testCreditCardWithNoSpendHasNoRewardsRate() {
+    let card = CreditCard(monthlySpend: 0)
+    #expect(card.rewardsRate(avgAnnualBalanceInterest: 0.04) == nil)
+}
+
+@MainActor
+@Test
+func testSpendingCategoryPersistence() throws {
+    let config = ModelConfiguration(isStoredInMemoryOnly: true, cloudKitDatabase: .none)
+    let container = try ModelContainer(for: CreditCard.self, SpendingCategory.self, configurations: config)
+    let context = container.mainContext
+
+    // New card flow: the category is attached before the card is inserted.
+    let card = CreditCard(name: "New")
+    card.spendingCategories = [SpendingCategory(name: "Dining")]
+    context.insert(card)
+    try context.save()
+    #expect(try context.fetchCount(FetchDescriptor<SpendingCategory>()) == 1)
+
+    // Existing card flow: the category is attached after the card is inserted.
+    card.spendingCategories = (card.spendingCategories ?? []) + [SpendingCategory(name: "Groceries")]
+    try context.save()
+    #expect(try context.fetchCount(FetchDescriptor<SpendingCategory>()) == 2)
+
+    // Deleting the card removes its categories.
+    context.delete(card)
+    try context.save()
+    #expect(try context.fetchCount(FetchDescriptor<SpendingCategory>()) == 0)
 }
