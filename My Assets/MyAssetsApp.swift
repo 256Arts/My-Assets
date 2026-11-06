@@ -10,6 +10,9 @@ struct MyAssetsApp: App {
     @AppStorage(UserDefaults.Key.summaryScreenShowInsights) var summaryScreenShowInsights = true
     
     init() {
+        #if DEBUG
+        CloudKitSchemaInitializer.runIfRequested(containerID: "iCloud.com.jaydenirwin.myassets", types: [Asset.self, Debt.self, Stock.self, UpcomingSpend.self, Income.self, Expense.self, CreditCard.self])
+        #endif
         UserDefaults.standard.register()
     }
     
