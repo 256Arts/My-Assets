@@ -35,6 +35,10 @@ final class ScreenshotTests: XCTestCase {
         app.launch()
 
         #if os(macOS)
+        // A launch stays in the background unless its launcher is frontmost, and the shot is of the
+        // frontmost window. Before the window check: activating can bring up the held window, so
+        // pressing ⌘N first would make a second one, tabbed with it under "Prefer tabs: Always".
+        app.activate()
         openWindowIfNeeded()
         #endif
 
